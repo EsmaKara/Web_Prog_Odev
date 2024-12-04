@@ -20,7 +20,7 @@ namespace Web_Prog_Odev.Models
 
         // uzunluğu maksimum 60 olabilir ve zorunlu alan
         [StringLength(60), Required]
-        public string AddressCountry {  get; set; }
+        public string AddressCountry {  get; set; }    
 
 
         
