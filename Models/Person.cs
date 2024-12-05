@@ -32,6 +32,14 @@ namespace Web_Prog_Odev.Models
         [EmailAddress, Required]
         public string PersonMail { get; set; }
 
+        // bir person'ın professor mü asssitant mı olduğu bilgisini tutar
+        [Required]
+        public string PersonType { get; set; }
+
+        // admin paneline erişip erişemeyeceğinin belirleneceği değişken, zorunlu alan/boş geçilemez
+        [Required]
+        public bool IsApproved { get; set; }
+
 
 
 
@@ -41,7 +49,7 @@ namespace Web_Prog_Odev.Models
 
         // address ve person tabloları arası çoka-çok ilişki tanımlanır (virtual anahtar kelimesi ile)
         // bir person birden fazla address sahip olabilir, bir address birden fazla person 'a ait olabilir
-        public virtual List<Address> Addresses { get; set; }
+        public virtual List<Address> AddressList { get; set; }
 
     }
 }

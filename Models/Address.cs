@@ -30,7 +30,7 @@ namespace Web_Prog_Odev.Models
 
 
         // address ve person tabloları arası çoka-çok ilişki tanımlanır (virtual anahtar kelimesi ile)
-        // bir address birden fazla person 'a ait olabilir, bir person birden fazla address sahip olabilir
+        // bir address birden fazla person 'a ait olabilir, bir person birden fazla address 'e sahip olabilir
         public virtual List<Person> Persons { get; set; }
     }
 }

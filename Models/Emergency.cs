@@ -30,6 +30,6 @@ namespace Web_Prog_Odev.Models
 
         // emergency ve department arası bire-çok ilişki tanımlanır (virtual anahtar kelimesi ile)
         // bir emergency bir department 'a ait olabilir ama bir department birden fazla emergency sahip olabilir
-        public virtual Department Department { get; set; }
+        public virtual Department DepartmentList { get; set; }
     }
 }

@@ -16,12 +16,23 @@ namespace Web_Prog_Odev.Models
     public class Assistant:Person
     {
         // Primary Key olarak ayarlandı, Identity otomatik artılacak ve gerekli alan/boş geçilemez
-        [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity), Required]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity), Required]
         public int AssistantID { get; set; }
 
 
-        // admin paneline erişip erişemeyeceğinin belirleneceği değişken, zorunlu alan/boş geçilemez
-        [Required]
-        public bool IsApproved { get; set; }
+
+
+
+
+        // TABLOLAR ARASI İLİŞKİLER;;;
+
+
+        // shift ve assistant arası bire-çok ilişki tanımlanır (virtual anahtar kelimesi ile)
+        // bir assistant birden fazla shift 'e sahip olabilir ama bir shif bir assistant 'a ait olabilir
+        public virtual List<Shift> ShiftList { get; set; }
+
+        // assistant ve appointment arası bire-bir ilişki tanımlanır (virtual anahtar kelimesi ile)
+        // bir assistant bir appointment 'a sahip olabilir, bir appointment bir assistant 'a ait olabilir
+        public virtual Appointment Appointment { get; set; }
     }
 }

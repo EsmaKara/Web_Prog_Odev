@@ -16,13 +16,9 @@ namespace Web_Prog_Odev.Models
     public class Professor:Person
     {
         // Primary Key olarak ayarlandı, Identity otomatik artılacak ve gerekli alan/boş geçilemez
-        [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity), Required]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity), Required]
         public int ProfessorID { get; set; }
 
-
-        // admin paneline erişip erişemeyeceğinin belirleneceği değişken, zorunlu alan/boş geçilemez
-        [Required]
-        public bool IsApproved { get; set; }
 
 
 
@@ -32,6 +28,10 @@ namespace Web_Prog_Odev.Models
 
         // professor ve department arası bire-çok ilişki tanımlanır (virtual anahtar kelimesi ile)
         // bir professor bir department 'a ait olabilir ama bir department birden fazla professor 'e sahip olabilir
-        public virtual Department Department { get; set; }
+        public virtual Department DepartmentList { get; set; }
+
+        // available_prof ve professor arası çoka-çok ilişki tanımlanır (virtual anahtar kelimesi ile)
+        // bir professor birden fazla available_prof 'a sahip olabilir, bir available_prof birden fazla professor 'a ait olabilir
+        public virtual List<Available_Prof> AvailableProfList { get; set; }
     }
 }

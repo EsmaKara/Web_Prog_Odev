@@ -37,10 +37,14 @@ namespace Web_Prog_Odev.Models
 
         // emergency ve department arası bire-çok ilişki tanımlanır (virtual anahtar kelimesi ile)
         // bir department birden fazla emergency sahip olabilir ama bir emergency bir department 'a ait olabilir
-        public virtual List<Emergency> Emergencies { get; set; }
+        public virtual List<Emergency> EmergencyList { get; set; }
 
         // professor ve department arası bire-çok ilişki tanımlanır (virtual anahtar kelimesi ile)
         // bir department birden fazla professor 'e sahip olabilir ama bir professor bir department 'a ait olabilir
-        public virtual List<Professor> Professors { get; set; }
+        public virtual List<Professor> ProfessorList { get; set; }
+
+        // department ve shift arası bire-çok ilişki tanımlanır (virtual anahtar kelimesi ile
+        // bir department birden fazla shift 'e sahip olabilir ama bir shif bir department 'a ait olabilir
+        public virtual List<Shift> ShiftList { get; set; }
     }
 }
