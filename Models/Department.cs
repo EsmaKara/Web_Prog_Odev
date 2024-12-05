@@ -25,6 +25,10 @@ namespace Web_Prog_Odev.Models
         [Required]
         public int Dep_NumberOfBed {  get; set; }
 
+        // yatalak hasta sayısı
+        [Required]
+        public int Dep_NumberOfBedridden { get; set; }
+
         [Required]
         public int Dep_NumberOfEmptyBed { get; set; }
 

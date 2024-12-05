@@ -35,6 +35,7 @@ namespace Web_Prog_Odev.Models
 
         // available_prof ve appointment arası bire-bir ilişki tanımlanır (virtual anahtar kelimesi ile)
         // bir available_prof bir appointment 'a sahip olabilir, bir appointment bir available_prof 'a ait olabilir
-        public virtual Appointment Appointment { get; set; }
+        public virtual Appointment AppointmentR { get; set; }
+        // değişkenin sonuna R koyulma sebebi Relationship 'leri tuttuğu anlaşılsın diye
     }
 }

@@ -33,6 +33,7 @@ namespace Web_Prog_Odev.Models
 
         // assistant ve appointment arası bire-bir ilişki tanımlanır (virtual anahtar kelimesi ile)
         // bir assistant bir appointment 'a sahip olabilir, bir appointment bir assistant 'a ait olabilir
-        public virtual Appointment Appointment { get; set; }
+        public virtual Appointment AppointmentR { get; set; }
+        // değişkenin sonuna R koyulma sebebi Relationship 'leri tuttuğu anlaşılsın diye
     }
 }

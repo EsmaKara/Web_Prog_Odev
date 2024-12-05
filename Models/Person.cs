@@ -24,9 +24,9 @@ namespace Web_Prog_Odev.Models
         [StringLength(30)]
         public string PersonSurname { get; set; }
 
-        // sadece 11 haneli sayı girilebilir
-        [RegularExpression(@"^\d{11}$", ErrorMessage = "You can enter only an 11 digit numbers.")]
-        public int PersonTel {  get; set; }
+        // sadece 11 haneli bir veri girilebilir
+        [StringLength(11), MinLength(11)]
+        public string PersonTel {  get; set; }
 
         // geçerli bir email adresi girilmesi zorunlu kılınır ve boş geçilemez
         [EmailAddress, Required]
@@ -48,7 +48,7 @@ namespace Web_Prog_Odev.Models
 
 
         // address ve person tabloları arası çoka-çok ilişki tanımlanır (virtual anahtar kelimesi ile)
-        // bir person birden fazla address sahip olabilir, bir address birden fazla person 'a ait olabilir
+        // bir person birden fazla address sahip olabilir, bir address bir person 'a ait olabilir
         public virtual List<Address> AddressList { get; set; }
 
     }
