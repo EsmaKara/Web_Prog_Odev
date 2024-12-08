@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Web_Prog_Odev.Models;
+using Web_Prog_Odev.Models.Managers;
 
 namespace Web_Prog_Odev.Controllers
 {
@@ -50,5 +52,13 @@ namespace Web_Prog_Odev.Controllers
             return View();
         }
 
+        public ActionResult ShiftsPage()
+        {
+            DatabaseContext dbContext = new DatabaseContext();
+
+            List<Shift> model = dbContext.Shifts.ToList();
+
+            return View(model);
+        }
     }
 }

@@ -17,7 +17,8 @@ namespace Web_Prog_Odev.Models
 
         // zorunlu alan
         [Required]
-        public DateTime AvailableProfDate { get; set; }
+        public DateTime AvailableProfDateStart { get; set; }
+        public DateTime AvailableProfDateEnd { get; set; }
 
         // bu müsait olunan zaman dilimi randevu alınabilir mi yoksa daha önceden doldu mu, kontrol sağlayabilmek adına
         [Required]
@@ -31,10 +32,14 @@ namespace Web_Prog_Odev.Models
 
         // available_prof ve professor arası bire-çok ilişki tanımlanır (virtual anahtar kelimesi ile)
         // bir available_prof bir professor 'a ait olabilir, bir professor birden fazla available_prof 'a sahip olabilir
+        [ForeignKey("ProfessorR")]
+        public int PersonID { get; set; }
         public virtual Professor ProfessorR { get; set; }
 
         // available_prof ve appointment arası bire-bir ilişki tanımlanır (virtual anahtar kelimesi ile)
         // bir available_prof bir appointment 'a sahip olabilir, bir appointment bir available_prof 'a ait olabilir
+        [ForeignKey("AppointmentR")]
+        public int AppointmentID { get; set; }
         public virtual Appointment AppointmentR { get; set; }
         // değişkenin sonuna R koyulma sebebi Relationship 'leri tuttuğu anlaşılsın diye
     }

@@ -15,10 +15,9 @@ namespace Web_Prog_Odev.Models
     // Total Completeness - Bir Person, bir Professor ya da bir Assistant olmak zorundadır, ikisinden biri kesinlikle olmalıdır
     public class Professor:Person
     {
-        // Primary Key olarak ayarlandı, Identity otomatik artılacak ve gerekli alan/boş geçilemez
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity), Required]
-        public int ProfessorID { get; set; }
 
+        [Key]
+        public int PersonID { get; set; }
 
 
 
@@ -28,6 +27,8 @@ namespace Web_Prog_Odev.Models
 
         // professor ve department arası bire-çok ilişki tanımlanır (virtual anahtar kelimesi ile)
         // bir professor bir department 'a ait olabilir ama bir department birden fazla professor 'e sahip olabilir
+        [ForeignKey("DepartmentR")]
+        public int DepartmentID { get; set; }
         public virtual Department DepartmentR { get; set; }
         // değişkenin sonuna R koyulma sebebi Relationship 'leri tuttuğu anlaşılsın diye
 

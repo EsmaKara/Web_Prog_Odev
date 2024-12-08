@@ -10,7 +10,7 @@ namespace Web_Prog_Odev.Controllers
 {
     public class AppointmentController : Controller
     {
-        DatabaseContext db = new DatabaseContext();
+        private DatabaseContext db = new DatabaseContext();
 
         // Gerekli Fonksiyon Tanımlamaları;
         private void ControlViewBags(int result, string state)
@@ -25,7 +25,7 @@ namespace Web_Prog_Odev.Controllers
             {
                 ViewBag.Result = "The Appointment could not be " + state + ".";
                 ViewBag.Success = false;
-                ViewBag.Status = "Save failed!";
+                ViewBag.Status = "Fail !";
             }
         }
 
@@ -50,12 +50,14 @@ namespace Web_Prog_Odev.Controllers
         // View'dan Contrellar'a veri göndermek için post metodu tanımlanır
         [HttpPost]
         // Randevuları tutacak tabloya view'dan girilen verilerin eklenmesini sağlayacak metod
-        public ActionResult Add(Appointment Ap, int personId, int avaiId)
+        public ActionResult Add(Appointment Ap)
         {
-            Ap.Available_ProfR = db.AvailableProfs.Where(x => x.AvailableProfID == avaiId).FirstOrDefault();
-            Ap.AssistantR = db.Assistants.Where(x => x.AssistantID == personId).FirstOrDefault();
-            Ap.Available_ProfR.IsAvailable = false;
-            db.Appointments.Add(Ap);
+            Appointment newAppointment = new Appointment();
+
+            newAppointment.AvailableProfR = db.AvailableProfs.Where(x => x.AvailableProfID == Ap.AvailableProfR.AvailableProfID).FirstOrDefault();
+            newAppointment.AssistantR = db.Assistants.Where(x => x.PersonID == Ap.AssistantR.PersonID).FirstOrDefault();
+            newAppointment.AvailableProfR.IsAvailable = false;
+            db.Appointments.Add(newAppointment);
             int result = db.SaveChanges();
 
             ControlViewBags(result, "scheduled");
@@ -66,30 +68,37 @@ namespace Web_Prog_Odev.Controllers
 
         // Controller'dan View'a veriler gönderilir ki sayfada gösterilsin
         [HttpGet]
-        public ActionResult GetData(int apID)
+        public ActionResult GetDataToEdit(int apID)
         {
             Appointment Ap = null;
             Ap = db.Appointments.Where(x => x.AppointmentID == apID).FirstOrDefault();
 
-            // Randevu bilgilerinden asistanınkilere ulaşılıp gösterilmesini sağlamak için
-            ViewBag.Appo_PersonID = Ap.AssistantR.PersonID;
-            ViewBag.Appo_PersonName = Ap.AssistantR.PersonName;
-            ViewBag.Appo_PersonSur = Ap.AssistantR.PersonSurname;
-            ViewBag.Appo_PersonMail = Ap.AssistantR.PersonMail;
+            if (Ap != null)
+            {             
+                // Randevu bilgilerinden asistanınkilere ulaşılıp gösterilmesini sağlamak için
+                ViewBag.Appo_AssistID = Ap.AssistantR.PersonID;
+                ViewBag.Appo_AssistName = Ap.AssistantR.PersonName;
+                ViewBag.Appo_AssistSur = Ap.AssistantR.PersonSurname;
+                ViewBag.Appo_AssistMail = Ap.AssistantR.PersonMail;
 
-            // Bağlı olduğu Available_Prof'tan tarihin gönderilmesi
-            ViewBag.Appo_Date = Ap.Available_ProfR.AvailableProfDate;
-
-            return View();
+                // Bağlı olduğu Available_Prof'tan tarihin gönderilmesi
+                ViewBag.Appo_DateStart = Ap.AvailableProfR.AvailableProfDateStart;
+                ViewBag.Appo_DateEnd = Ap.AvailableProfR.AvailableProfDateEnd;
+            }
+            else
+            {
+                ViewBag.Appo_Error = "No appointment found.";
+            }
+            return View(Ap);
         }
 
 
         [HttpPost]
-        public ActionResult Delete(int apID)
+        public ActionResult Delete(int? apID)
         {
             Appointment Ap = db.Appointments.Where(x => x.AppointmentID == apID).FirstOrDefault();
             // Available_Prof yeniden true yapılarak randevu alınabilecek duruma getirilir
-            Ap.Available_ProfR.IsAvailable = true;
+            Ap.AvailableProfR.IsAvailable = true;
             db.Appointments.Remove(Ap);
             ResetIdentity("Appointment");
 

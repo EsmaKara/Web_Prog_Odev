@@ -1,0 +1,29 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>ShiftsPage</title>
+</head>
+<body>
+    <div>
+        @Html.ActionLink("shifts", "Index", "ShiftController", null, new { @class = "btn btn-primary"})
+    </div>
+    <div>
+        <ul class="list-group">
+            @foreach (var st in Model.Shift)
+            {
+                <li class="list-group-item">
+
+                    <span class="glyphicon"></span> @(st.ShiftStart + " " + st.ShiftEnd)
+                </li>
+            }
+        </ul>
+    </div>
+</body>
+</html>

@@ -1,0 +1,63 @@
+﻿@model Web_Prog_Odev.Models.Shift
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title></title>
+</head>
+<body>
+    @Html.ActionLink("shifts", "ShiftsPage", "MainController")
+
+    @using (Html.BeginForm("Edit", "ShiftController", FormMethod.Post))
+    {
+
+
+        <label for="ShiftStart">Shift Start:</label>
+        <input type="datetime-local" name="ShiftStart" id="ShiftStart" />
+
+        <label for="ShiftEnd">Shift End:</label>
+        <input type="datetime-local" name="ShiftEnd" id="ShiftEnd" />
+
+
+
+        @*<div class="input-group">
+                <span class="input-group-text" id="dateStrt">Basla Tarih</span>
+                @Html.TextBoxFor(model => model.ShiftStart, new { @type = "date", @class = "form-control", placeholder = "baslangıc tarihi", aria_label = "startdate", aria_describedby = "dateStrt" })
+            </div>
+
+            <div class="input-group">
+                <span class="input-group-text" id="dateEnd">bitis Tarih</span>
+                @Html.TextBoxFor(model => model.ShiftEnd, new { @type = "date", @class = "form-control", placeholder = "bitis tarihi", aria_label = "enddate", aria_describedby = "dateEnd" })
+            </div>*@
+
+
+
+
+        <div class="input-group">
+            <input type="submit" value="Kaydet" class="btn btn-success" />
+        </div>
+
+        <br />
+        <div class="inout-group">
+            @if (ViewBag.Result != null)
+            {
+                <div class="alert alert-@ViewBag.Status m5" role="alert">
+                    @ViewBag.Result
+                </div>
+            }
+        </div>
+
+        <br />
+        <br />
+        <br />
+        <br />
+
+    }
+
+</body>
+</html>

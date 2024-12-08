@@ -26,11 +26,24 @@ namespace Web_Prog_Odev.Models.Managers
         public DbSet<Emergency> Emergencies { get; set; }
 
         // constructer metoduna DatabaseCreator sınıfı eklenir ki çalışsın ve veri tabanı yoksa oluşturulsun
-        public DatabaseContext() 
+        public DatabaseContext() : base("name = WProgOdev_Database")
         { 
             Database.SetInitializer(new DatabaseCreator());
         }
+
+
+
+
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Available_Prof>()
+                .HasRequired(ap => ap.AppointmentR) // İlişki türünü belirtir (Required, Optional)
+                .WithRequiredPrincipal(a => a.AvailableProfR); // Diğer tarafın navigasyon özelliği
+        }
+
     }
+
+
 
 
     // Bu sınıf, veritabanı varlığını kontrol eder ve eğer veritabanı yoksa sınıf tanımlamalarına göre yeni bir veritabanı oluşturur (generic).
@@ -59,10 +72,10 @@ namespace Web_Prog_Odev.Models.Managers
             {
                 Department department = new Department();
                 department.DepartmentName = departmentNameArray[i];
-                department.Dep_NumberOfPatients = FakeData.NumberData.GetNumber(0 - 100);
-                department.Dep_NumberOfBed = FakeData.NumberData.GetNumber(1 - 50);
+                department.Dep_NumberOfPatients = FakeData.NumberData.GetNumber(100);
+                department.Dep_NumberOfBed = FakeData.NumberData.GetNumber(50);
 
-                int randomNumber = FakeData.NumberData.GetNumber(1 - 50);
+                int randomNumber = FakeData.NumberData.GetNumber(50);
                 if (department.Dep_NumberOfBed >= randomNumber)
                     department.Dep_NumberOfBedridden = randomNumber;
 
@@ -133,8 +146,19 @@ namespace Web_Prog_Odev.Models.Managers
             }
             context.SaveChanges();
 
-            
-            
+
+
+            // Bütün tablolara en az bir veri eklenmesi gerekiyor;;;
+
+            // Shift için birkaç veri ekleyelim
+            Shift shift1 =  new Shift { ShiftStart = DateTime.Now, ShiftEnd = DateTime.Now.AddDays(1) };
+            Shift shift2 = new Shift { ShiftStart = DateTime.Now.AddDays(2), ShiftEnd = DateTime.Now.AddDays(3) };
+            context.Shifts.Add(shift1);
+            context.Shifts.Add(shift2);
+            context.SaveChanges();
+
+
+            base.Seed(context);
         }
     }
         

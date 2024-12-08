@@ -11,7 +11,7 @@ namespace Web_Prog_Odev.Controllers
 {
     public class AvailableProfController : Controller
     {
-        DatabaseContext db = new DatabaseContext();
+        private DatabaseContext db = new DatabaseContext();
 
         // Gerekli Fonksiyon Tanımlamaları;
         private void ControlViewBags (int result, string state)
@@ -26,7 +26,7 @@ namespace Web_Prog_Odev.Controllers
             {
                 ViewBag.Result = "The available time slot for professors could not be " + state + ".";
                 ViewBag.Success = false;
-                ViewBag.Status = "Save failed!";
+                ViewBag.Status = "Fail !";
             }
         }
 
@@ -51,26 +51,31 @@ namespace Web_Prog_Odev.Controllers
         // View'dan Contrellar'a veri göndermek için post metodu tanımlanır
         [HttpPost]
         // Profesörlerin müsait olduğu zaman dilimlerini tutacak tabloya view'dan girilen verilerin eklenmesini sağlayacak metod
-        public ActionResult Add(Available_Prof ViewAp, int personId, int? appoId)
+        public ActionResult Add(Available_Prof ViewAp)
         {
-            Available_Prof Ap = new Available_Prof();
+            Available_Prof newAP = new Available_Prof();
 
             // bugünün tarihinden daha eski veya 15 gün sonrasından daha ileri bir tarih atanamaz, eğer şartlar sağlanırsa atama gerçekleşir
-            if (ViewAp.AvailableProfDate >= DateTime.Now && ViewAp.AvailableProfDate <= DateTime.Now.AddHours(360))
+            if (ViewAp.AvailableProfDateStart >= DateTime.Now && ViewAp.AvailableProfDateStart <= DateTime.Now.AddHours(360))
             {
-                Ap.AvailableProfDate = ViewAp.AvailableProfDate;
+                newAP.AvailableProfDateStart = ViewAp.AvailableProfDateStart;
+                newAP.AvailableProfDateEnd = ViewAp.AvailableProfDateEnd;
+            }
+            else
+            {
+                ViewBag.Avai_DateError = "An incorrect date/time entry has been detected.";
             }
 
             // ıd ile eşleşen profesörler appointmente atanır
-            Ap.ProfessorR = db.Professors.Where(x => x.PersonID == personId).FirstOrDefault();
+            newAP.ProfessorR = db.Professors.Where(x => x.PersonID == ViewAp.ProfessorR.PersonID).FirstOrDefault();
             
             // randevu alınabilirliği false ise bir randevuya bağlı olması gerektiği anlamına gelir, bu yüzden eşleşen randevu ataması gerçekleştirilir
-            if(Ap.IsAvailable == false)
+            if(newAP.IsAvailable == false)
             {
-                Ap.AppointmentR = db.Appointments.Where(x => x.AppointmentID == appoId).FirstOrDefault();
+                newAP.AppointmentR = db.Appointments.Where(x => x.AppointmentID == ViewAp.AppointmentR.AppointmentID).FirstOrDefault();
             }
 
-            db.AvailableProfs.Add(Ap);
+            db.AvailableProfs.Add(newAP);
             int result = db.SaveChanges();
 
             ControlViewBags(result, "saved");
@@ -81,37 +86,43 @@ namespace Web_Prog_Odev.Controllers
 
         // Controller'dan View'a veriler gönderilir ki sayfada gösterilsin
         [HttpGet]
-        public ActionResult GetData(int apID)
+        public ActionResult GetDataToEdit(int apID)
         {
-            Available_Prof Ap = null;
-            Ap = db.AvailableProfs.Where(x => x.AvailableProfID == apID).FirstOrDefault();
+            Available_Prof AP = null;
+            AP = db.AvailableProfs.Where(x => x.AvailableProfID == apID).FirstOrDefault();
+            if (AP != null) {
+                // sayfada müsait olunan zaman dilimi ile eşleşen profesörlerin bilgisinin de görülmesi isteniyor, ViewBag ile bunlar gönderilir
+                ViewBag.Avai_ProfID = AP.ProfessorR.PersonID;
+                ViewBag.Avai_ProfName = AP.ProfessorR.PersonName;
+                ViewBag.Avai_ProfSur = AP.ProfessorR.PersonSurname;
+                ViewBag.Avai_ProfMail = AP.ProfessorR.PersonMail;
 
-            // sayfada müsait olunan zaman dilimi ile eşleşen profesörlerin bilgisinin de görülmesi isteniyor, ViewBag ile bunlar gönderilir
-            ViewBag.Avai_PersonID = Ap.ProfessorR.PersonID;
-            ViewBag.Avai_PersonName = Ap.ProfessorR.PersonName;
-            ViewBag.Avai_PersonSur = Ap.ProfessorR.PersonSurname;
-            ViewBag.Avai_PersonMail = Ap.ProfessorR.PersonMail;
-
-            // sayfada tarih de görülmeli mantıken
-            ViewBag.AvailableDate = Ap.AvailableProfDate;
-            // bu alınabilir mi durumu butonlarda kullanılacak 
-            ViewBag.AvailableState = Ap.IsAvailable;
-
-            return View();
+                // sayfada tarih de görülmeli mantıken
+                ViewBag.AvailableDateStart = AP.AvailableProfDateStart;
+                ViewBag.AvailableDateEnd = AP.AvailableProfDateEnd;
+                // bu alınabilir mi durumu butonlarda kullanılacak 
+                ViewBag.AvailableState = AP.IsAvailable;
+            }
+            else
+            {
+                ViewBag.Appo_Error = "No professor is available.";
+            }
+            return View(AP);
         }
 
 
         [HttpPost]
-        public ActionResult Edit(Available_Prof ViewAp, int apID)
+        public ActionResult Edit(Available_Prof ViewAp)
         {
-            Available_Prof Ap = db.AvailableProfs.Where(x => x.AvailableProfID == apID).FirstOrDefault();
+            Available_Prof tempAP = db.AvailableProfs.Where(x => x.AvailableProfID == ViewAp.AvailableProfID).FirstOrDefault();
 
             // böyle bir veri satırı varsa değiştirilen tarih verisi atanır, kontrol sağlanarak
-            if(Ap != null)
+            if(tempAP != null)
             {
-                if (ViewAp.AvailableProfDate >= DateTime.Now && ViewAp.AvailableProfDate <= DateTime.Now.AddHours(360))
+                if (ViewAp.AvailableProfDateStart >= DateTime.Now && ViewAp.AvailableProfDateStart <= DateTime.Now.AddHours(360))
                 {
-                    Ap.AvailableProfDate = ViewAp.AvailableProfDate;
+                    tempAP.AvailableProfDateStart = ViewAp.AvailableProfDateStart;
+                    tempAP.AvailableProfDateEnd = ViewAp.AvailableProfDateEnd;
                 }
                 int result = db.SaveChanges();
 
@@ -122,17 +133,17 @@ namespace Web_Prog_Odev.Controllers
 
 
         [HttpPost]
-        public ActionResult Delete(int apID)
+        public ActionResult Delete(int? apID)
         {
-            Available_Prof Ap = db.AvailableProfs.Where(x => x.AvailableProfID == apID).FirstOrDefault();
+            Available_Prof AP = db.AvailableProfs.Where(x => x.AvailableProfID == apID).FirstOrDefault();
 
             // bağlı olduğu appointment boş değilse ve bu müsaitlik durumu silinirse müsaitliğe bağlı randevu da silinmeli
-            if (Ap.AppointmentR != null)
+            if (AP.AppointmentR != null)
             {
-                db.Appointments.Remove(Ap.AppointmentR);
+                db.Appointments.Remove(AP.AppointmentR);
                 ResetIdentity("Appointment");
             }
-            db.AvailableProfs.Remove(Ap);
+            db.AvailableProfs.Remove(AP);
             ResetIdentity("Available_Prof");
 
             int result = db.SaveChanges();

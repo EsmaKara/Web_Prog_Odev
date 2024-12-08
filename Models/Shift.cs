@@ -30,10 +30,14 @@ namespace Web_Prog_Odev.Models
 
         // shift ve assistant arası bire-çok ilişki tanımlanır (virtual anahtar kelimesi ile)
         // bir shif bir assistant 'a ait olabilir ama bir assistant birden fazla shift 'e sahip olabilir
+        [ForeignKey("AssistantR")]
+        public int PersonID { get; set; }
         public virtual Assistant AssistantR { get; set; }
 
         // department ve shift arası bire-çok ilişki tanımlanır (virtual anahtar kelimesi ile
         // bir shif bir department 'a ait olabilir ama bir department birden fazla shift 'e sahip olabilir
+        [ForeignKey("DepartmentR")]
+        public int DepartmentID { get; set; }
         public virtual Department DepartmentR { get; set; }
         // değişkenin sonuna R koyulma sebebi Relationship 'leri tuttuğu anlaşılsın diye
     }

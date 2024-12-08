@@ -20,10 +20,10 @@ namespace Web_Prog_Odev.Models
 
         // uzunluğu maksimum 60 olabilir ve zorunlu alan
         [StringLength(60), Required]
-        public string AddressCountry {  get; set; }    
+        public string AddressCountry {  get; set; }
 
 
-        
+
 
 
         // TABLOLAR ARASI İLİŞKİLER;;;
@@ -31,6 +31,9 @@ namespace Web_Prog_Odev.Models
 
         // address ve person tabloları arası bire-çok ilişki tanımlanır (virtual anahtar kelimesi ile)
         // bir address bir person 'a ait olabilir, bir person birden fazla address 'e sahip olabilir
+        [ForeignKey("PersonR")]
+        public int PersonID { get; set; }
+
         public virtual Person PersonR { get; set; }
         // değişkenin sonuna R koyulma sebebi Relationship 'leri tuttuğu anlaşılsın diye
     }

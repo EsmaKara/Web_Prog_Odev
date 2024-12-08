@@ -16,8 +16,8 @@ namespace Web_Prog_Odev.Models
     public class Assistant:Person
     {
         // Primary Key olarak ayarlandı, Identity otomatik artılacak ve gerekli alan/boş geçilemez
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity), Required]
-        public int AssistantID { get; set; }
+        [Key]
+        public int PersonID { get; set; }
 
 
 
@@ -32,8 +32,7 @@ namespace Web_Prog_Odev.Models
         public virtual List<Shift> ShiftList { get; set; }
 
         // assistant ve appointment arası bire-bir ilişki tanımlanır (virtual anahtar kelimesi ile)
-        // bir assistant bir appointment 'a sahip olabilir, bir appointment bir assistant 'a ait olabilir
-        public virtual Appointment AppointmentR { get; set; }
-        // değişkenin sonuna R koyulma sebebi Relationship 'leri tuttuğu anlaşılsın diye
+        // bir assistant birden çok appointment 'a sahip olabilir, bir appointment bir assistant 'a ait olabilir
+        public virtual List<Appointment> AppointmentList { get; set; }
     }
 }
