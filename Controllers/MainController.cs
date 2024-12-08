@@ -8,10 +8,47 @@ namespace Web_Prog_Odev.Controllers
 {
     public class MainController : Controller
     {
-        // GET: Main
-        public ActionResult Index()
+        // Anasayfa tasarımı
+        public ActionResult HomePage()
         {
             return View();
         }
+
+        // Asistan ve nöbet bilgilerinin takvim yapısında gösterileceği sayfa tasarımı
+        public ActionResult SchedulePage()
+        {
+            return View();
+        }
+
+        // Asistanların tanıtıldığı sayfa tasarımı
+        public ActionResult AssistantPage()
+        {
+            return View();
+        }
+
+        // Profesörlerin tanıtıldığı sayfa tasarımı
+        public ActionResult ProfessorPage()
+        {
+            return View();
+        }
+
+        // Bölümlerin tanıtıldığı sayfa tasarımı
+        public ActionResult DepartmentPage()
+        {
+            return View();
+        }
+
+        // Ramndevu Alım sayfası tasarımı
+        public ActionResult AppointmentPage()
+        {
+            return View();
+        }
+
+        // Acil durumların girileceği sayfa tasrımı
+        public ActionResult EmergencyPage()
+        {
+            return View();
+        }
+
     }
 }

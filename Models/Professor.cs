@@ -31,8 +31,8 @@ namespace Web_Prog_Odev.Models
         public virtual Department DepartmentR { get; set; }
         // değişkenin sonuna R koyulma sebebi Relationship 'leri tuttuğu anlaşılsın diye
 
-        // available_prof ve professor arası çoka-çok ilişki tanımlanır (virtual anahtar kelimesi ile)
-        // bir professor birden fazla available_prof 'a sahip olabilir, bir available_prof birden fazla professor 'a ait olabilir
+        // available_prof ve professor arası bire-çok ilişki tanımlanır (virtual anahtar kelimesi ile)
+        // bir professor birden fazla available_prof 'a sahip olabilir, bir available_prof bir professor 'a ait olabilir
         public virtual List<Available_Prof> AvailableProfList { get; set; }
     }
 }

@@ -29,9 +29,9 @@ namespace Web_Prog_Odev.Models
         // TABLOLAR ARASI İLİŞKİLER;;;
 
 
-        // available_prof ve professor arası çoka-çok ilişki tanımlanır (virtual anahtar kelimesi ile)
-        // bir available_prof birden fazla professor 'a ait olabilir, bir professor birden fazla available_prof 'a sahip olabilir
-        public virtual List<Professor> ProfessorList { get; set; }
+        // available_prof ve professor arası bire-çok ilişki tanımlanır (virtual anahtar kelimesi ile)
+        // bir available_prof bir professor 'a ait olabilir, bir professor birden fazla available_prof 'a sahip olabilir
+        public virtual Professor ProfessorR { get; set; }
 
         // available_prof ve appointment arası bire-bir ilişki tanımlanır (virtual anahtar kelimesi ile)
         // bir available_prof bir appointment 'a sahip olabilir, bir appointment bir available_prof 'a ait olabilir
