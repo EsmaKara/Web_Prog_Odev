@@ -10,20 +10,42 @@ namespace Web_Prog_Odev.Models
     // veri tabanındaki tablo ismi ataması
     [Table("Professor")]
 
-    // Person sınıfından kalıtım alır, veritabanındaki disjoint (ayrık) ve total completeness (toplam bütünlük) ilişkisini sağlamak için 
-    // Disjoint - Bir Person ya Professor olabilir ya da Assistant olabilir, iki aynı anda olamaz
-    // Total Completeness - Bir Person, bir Professor ya da bir Assistant olmak zorundadır, ikisinden biri kesinlikle olmalıdır
-    public class Professor:Person
+    public class Professor
     {
 
-        [Key]
-        public int PersonID { get; set; }
+        // Primary Key olarak ayarlandı, Identity otomatik artılacak ve gerekli alan/boş geçilemez
+        [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity), Required]
+        public int ProfessorID { get; set; }
+
+        // uzunluğu maksimum 30 olabilir
+        [StringLength(30)]
+        public string ProfName { get; set; }
+
+        [StringLength(30)]
+        public string ProfSurname { get; set; }
+
+        // sadece 11 haneli bir veri girilebilir
+        [StringLength(12), MinLength(12)]
+        public string ProfTel { get; set; }
+
+        // geçerli bir email adresi girilmesi zorunlu kılınır ve boş geçilemez
+        [EmailAddress, Required]
+        public string ProfMail { get; set; }
+
+
+
+
 
 
 
 
         // TABLOLAR ARASI İLİŞKİLER;;;
 
+
+
+        // address ve person tabloları arası çoka-çok ilişki tanımlanır (virtual anahtar kelimesi ile)
+        // bir person birden fazla address sahip olabilir, bir address bir person 'a ait olabilir
+        public virtual List<Address> AddressList { get; set; }
 
         // professor ve department arası bire-çok ilişki tanımlanır (virtual anahtar kelimesi ile)
         // bir professor bir department 'a ait olabilir ama bir department birden fazla professor 'e sahip olabilir

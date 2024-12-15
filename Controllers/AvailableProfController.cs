@@ -67,7 +67,7 @@ namespace Web_Prog_Odev.Controllers
             }
 
             // ıd ile eşleşen profesörler appointmente atanır
-            newAP.ProfessorR = db.Professors.Where(x => x.PersonID == ViewAp.ProfessorR.PersonID).FirstOrDefault();
+            newAP.ProfessorR = db.Professors.Where(x => x.ProfessorID == ViewAp.ProfessorR.ProfessorID).FirstOrDefault();
             
             // randevu alınabilirliği false ise bir randevuya bağlı olması gerektiği anlamına gelir, bu yüzden eşleşen randevu ataması gerçekleştirilir
             if(newAP.IsAvailable == false)
@@ -92,10 +92,10 @@ namespace Web_Prog_Odev.Controllers
             AP = db.AvailableProfs.Where(x => x.AvailableProfID == apID).FirstOrDefault();
             if (AP != null) {
                 // sayfada müsait olunan zaman dilimi ile eşleşen profesörlerin bilgisinin de görülmesi isteniyor, ViewBag ile bunlar gönderilir
-                ViewBag.Avai_ProfID = AP.ProfessorR.PersonID;
-                ViewBag.Avai_ProfName = AP.ProfessorR.PersonName;
-                ViewBag.Avai_ProfSur = AP.ProfessorR.PersonSurname;
-                ViewBag.Avai_ProfMail = AP.ProfessorR.PersonMail;
+                ViewBag.Avai_ProfID = AP.ProfessorR.ProfessorID;
+                ViewBag.Avai_ProfName = AP.ProfessorR.ProfName;
+                ViewBag.Avai_ProfSur = AP.ProfessorR.ProfSurname;
+                ViewBag.Avai_ProfMail = AP.ProfessorR.ProfMail;
 
                 // sayfada tarih de görülmeli mantıken
                 ViewBag.AvailableDateStart = AP.AvailableProfDateStart;

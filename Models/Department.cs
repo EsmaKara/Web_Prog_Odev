@@ -12,12 +12,15 @@ namespace Web_Prog_Odev.Models
     public class Department
     {
         // Primary Key olarak ayarlandı, Identity otomatik artılacak ve gerekli alan/boş geçilemez
-        [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity), Required]
+        [Key, Required]
         public int DepartmentID { get; set; }
 
         // uzunluğu maksimum 60 olabilir ve zorunlu alan
         [StringLength(60), Required]
         public string DepartmentName { get; set; }
+
+        [StringLength(400), Required]
+        public string Dep_Description { get; set; }
 
         public int Dep_NumberOfPatients { get; set; }
 

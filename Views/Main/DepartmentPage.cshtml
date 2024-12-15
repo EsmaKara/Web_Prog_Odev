@@ -1,0 +1,44 @@
+﻿@using Web_Prog_Odev.Models
+@model List<Web_Prog_Odev.Models.Department>
+
+@{
+    Layout = null;
+}
+
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Departments</title>
+
+    @{ Html.RenderPartial("~/Views/Shared/_PartialPageCardCSS.cshtml"); }
+    @Html.Partial("~/Views/Shared/_PartialPageCardCSS.cshtml")
+</head>
+<body>
+
+    <!-- Kart yapısı -->
+    <div>
+        <h1 style="text-align: center; color: #333333;">Our Departments</h1>
+        <div class="container">
+
+            @foreach (Department department in Model.ToList())
+            {
+                <div class="card">
+
+                    <h3>@department.DepartmentName</h3>
+                    <p>@department.Dep_Description</p>
+                    <p>@department.Dep_NumberOfPatients</p>
+                    <p>@department.Dep_NumberOfBedridden</p>
+                    <p>@department.Dep_NumberOfEmptyBed</p>
+
+                    <button onclick="location.href='@Url.Action("DepartmentPage", "MainController", new { id = department.DepartmentID })'">
+                        Learn More
+                    </button>
+                </div>
+            }
+        </div>
+    </div>
+</body>
+</html>

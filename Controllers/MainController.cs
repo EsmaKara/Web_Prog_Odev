@@ -10,6 +10,9 @@ namespace Web_Prog_Odev.Controllers
 {
     public class MainController : Controller
     {
+        DatabaseContext db = new DatabaseContext();
+
+
         // Anasayfa tasarımı
         public ActionResult HomePage()
         {
@@ -37,7 +40,20 @@ namespace Web_Prog_Odev.Controllers
         // Bölümlerin tanıtıldığı sayfa tasarımı
         public ActionResult DepartmentPage()
         {
-            return View();
+            // farklı bir yöntem
+            //var departments = db.Departments.Select(d => new
+            //{
+            //    d.DepartmentName,
+            //    d.Dep_NumberOfPatients,
+            //    d.Dep_NumberOfBedridden,
+            //    d.Dep_NumberOfEmptyBed
+            //}).ToList();
+
+
+            List<Department> departments = db.Departments.ToList();
+
+
+            return View(departments);
         }
 
         // Ramndevu Alım sayfası tasarımı
@@ -54,11 +70,7 @@ namespace Web_Prog_Odev.Controllers
 
         public ActionResult ShiftsPage()
         {
-            DatabaseContext dbContext = new DatabaseContext();
-
-            List<Shift> model = dbContext.Shifts.ToList();
-
-            return View(model);
+            return View();
         }
     }
 }

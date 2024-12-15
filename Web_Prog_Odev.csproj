@@ -133,12 +133,22 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AppointmentController.cs" />
     <Compile Include="Controllers\AvailableProfController.cs" />
+    <Compile Include="Controllers\DepartmentController.cs" />
     <Compile Include="Controllers\EmergencyController.cs" />
     <Compile Include="Controllers\MainController.cs" />
     <Compile Include="Controllers\ShiftController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202412142054517_InitialCreate.cs" />
+    <Compile Include="Migrations\202412142054517_InitialCreate.Designer.cs">
+      <DependentUpon>202412142054517_InitialCreate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202412151028422_InitialCreate1.cs" />
+    <Compile Include="Migrations\202412151028422_InitialCreate1.Designer.cs">
+      <DependentUpon>202412151028422_InitialCreate1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Address.cs" />
     <Compile Include="Models\Appointment.cs" />
     <Compile Include="Models\Assistant.cs" />
@@ -146,7 +156,6 @@
     <Compile Include="Models\Department.cs" />
     <Compile Include="Models\Emergency.cs" />
     <Compile Include="Models\Managers\DatabaseContext.cs" />
-    <Compile Include="Models\Person.cs" />
     <Compile Include="Models\Professor.cs" />
     <Compile Include="Models\Shift.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -178,8 +187,12 @@
     <Content Include="Scripts\bootstrap.bundle.js.map" />
     <Content Include="Scripts\jquery-3.7.1.slim.min.map" />
     <Content Include="Scripts\jquery-3.7.1.min.map" />
-    <Content Include="Views\Shift\Index.cshtml" />
-    <Content Include="Views\Main\ShiftsPage.cshtml" />
+    <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Views\Main\DepartmentPage.cshtml" />
+    <Content Include="Views\Shared\_PartialPagePCard.cshtml" />
+    <Content Include="Views\Shared\_PartialPageCardCSS.cshtml" />
+    <Content Include="Views\Main\AssistantPage.cshtml" />
+    <Content Include="Views\Main\ProfessorPage.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -192,7 +205,17 @@
     <Folder Include="Models\ViewModels\" />
     <Folder Include="Views\Appointment\" />
     <Folder Include="Views\AvailableProf\" />
+    <Folder Include="Views\Department\" />
     <Folder Include="Views\Emergency\" />
+    <Folder Include="Views\Shift\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\202412142054517_InitialCreate.resx">
+      <DependentUpon>202412142054517_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202412151028422_InitialCreate1.resx">
+      <DependentUpon>202412151028422_InitialCreate1.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

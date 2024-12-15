@@ -1,0 +1,132 @@
+﻿@{
+    // varsayılan layout olacağına ilişkin tanım, layout tanımlanmayan (null olan) sayfalarda bu layout kullanılacak
+    Layout = "~/Views/_ViewStart.cshtml";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Site Layout</title>
+    <style>
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        /* Navbar */
+        .navbar {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #ffdb4d;
+            padding: 10px 20px;
+        }
+
+            .navbar .nav-links {
+                display: flex;
+                gap: 15px;
+                align-items: center;
+            }
+
+            .navbar a {
+                text-decoration: none;
+                color: #332900;
+                font-weight: bold;
+            }
+
+                .navbar a:hover {
+                    text-decoration: underline;
+                }
+
+            .navbar .buttons {
+                display: flex;
+                gap: 10px;
+                align-items: center;
+            }
+
+            .navbar .button-link {
+                padding: 8px 15px;
+                border: none;
+                border-radius: 5px;
+                background-color: #332900;
+                color: #ffdb4d;
+                font-weight: bold;
+                text-decoration: none;
+                display: inline-block;
+                text-align: center;
+            }
+
+                .navbar .button-link:hover {
+                    background-color: #4d3900;
+                }
+
+        /* Footer */
+        footer {
+            background-color: #e6b800;
+            padding: 20px;
+            color: #332900;
+            font-size: 14px;
+        }
+
+            footer .footer-content {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+
+            footer .footer-bottom {
+                text-align: center;
+                margin-top: 10px;
+                font-weight: bold;
+            }
+    </style>
+</head>
+<body>
+    <!-- Header/navbar bölümü -->
+    <header>
+        <div class="navbar">
+            <div class="logo">
+                <img src="/path/to/logo.png" alt="Logo" style="height: 40px;">
+            </div>
+            <div class="nav-links">
+                @Html.ActionLink("Assistants", "Index", "Assistants")
+                @Html.ActionLink("Professors", "Index", "Professors")
+                @Html.ActionLink("Departments", "Index", "Departments")
+                @Html.ActionLink("Schedule", "Index", "Schedule")
+                @Html.ActionLink("Emergency", "Index", "Emergency")
+            </div>
+            <div class="buttons">
+                <a href="/Appointment" class="button-link">Appointment</a>
+                <a href="/Admin/Login" class="button-link">Admin Login</a>
+            </div>
+        </div>
+    </header>
+
+    <div>
+        @RenderBody()
+    </div>
+
+    <!-- Footer bölümü -->
+    <footer>
+        <div class="footer-content">
+            <div>
+                <strong>Contact:</strong>
+                <p>Email: info@hospital.com</p>
+                <p>Phone: +90 555 123 45 67</p>
+            </div>
+            <div>
+                <strong>Address:</strong>
+                <p>Main Street 123</p>
+                <p>Ankara, Turkey</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <i>2024 All rights reserved.</i>
+        </div>
+    </footer>
+</body>
+</html>
+

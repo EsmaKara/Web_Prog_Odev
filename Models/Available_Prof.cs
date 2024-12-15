@@ -33,7 +33,7 @@ namespace Web_Prog_Odev.Models
         // available_prof ve professor arası bire-çok ilişki tanımlanır (virtual anahtar kelimesi ile)
         // bir available_prof bir professor 'a ait olabilir, bir professor birden fazla available_prof 'a sahip olabilir
         [ForeignKey("ProfessorR")]
-        public int PersonID { get; set; }
+        public int ProfessorID { get; set; }
         public virtual Professor ProfessorR { get; set; }
 
         // available_prof ve appointment arası bire-bir ilişki tanımlanır (virtual anahtar kelimesi ile)

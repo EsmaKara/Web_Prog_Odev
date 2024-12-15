@@ -31,10 +31,17 @@ namespace Web_Prog_Odev.Models
 
         // address ve person tabloları arası bire-çok ilişki tanımlanır (virtual anahtar kelimesi ile)
         // bir address bir person 'a ait olabilir, bir person birden fazla address 'e sahip olabilir
-        [ForeignKey("PersonR")]
-        public int PersonID { get; set; }
+        [ForeignKey("ProfessorR")]
+        public int? ProfessorID { get; set; }
 
-        public virtual Person PersonR { get; set; }
+        public virtual Professor ProfessorR { get; set; }
+
+        // address ve person tabloları arası bire-çok ilişki tanımlanır (virtual anahtar kelimesi ile)
+        // bir address bir person 'a ait olabilir, bir person birden fazla address 'e sahip olabilir
+        [ForeignKey("AssistantR")]
+        public int? AssistantID { get; set; }
+
+        public virtual Assistant AssistantR { get; set; }
         // değişkenin sonuna R koyulma sebebi Relationship 'leri tuttuğu anlaşılsın diye
     }
 }

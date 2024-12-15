@@ -55,7 +55,7 @@ namespace Web_Prog_Odev.Controllers
             Appointment newAppointment = new Appointment();
 
             newAppointment.AvailableProfR = db.AvailableProfs.Where(x => x.AvailableProfID == Ap.AvailableProfR.AvailableProfID).FirstOrDefault();
-            newAppointment.AssistantR = db.Assistants.Where(x => x.PersonID == Ap.AssistantR.PersonID).FirstOrDefault();
+            newAppointment.AssistantR = db.Assistants.Where(x => x.AssistantID == Ap.AssistantR.AssistantID).FirstOrDefault();
             newAppointment.AvailableProfR.IsAvailable = false;
             db.Appointments.Add(newAppointment);
             int result = db.SaveChanges();
@@ -76,10 +76,10 @@ namespace Web_Prog_Odev.Controllers
             if (Ap != null)
             {             
                 // Randevu bilgilerinden asistanınkilere ulaşılıp gösterilmesini sağlamak için
-                ViewBag.Appo_AssistID = Ap.AssistantR.PersonID;
-                ViewBag.Appo_AssistName = Ap.AssistantR.PersonName;
-                ViewBag.Appo_AssistSur = Ap.AssistantR.PersonSurname;
-                ViewBag.Appo_AssistMail = Ap.AssistantR.PersonMail;
+                ViewBag.Appo_AssistID = Ap.AssistantR.AssistantID;
+                ViewBag.Appo_AssistName = Ap.AssistantR.AssistName;
+                ViewBag.Appo_AssistSur = Ap.AssistantR.AssistSurname;
+                ViewBag.Appo_AssistMail = Ap.AssistantR.AssistMail;
 
                 // Bağlı olduğu Available_Prof'tan tarihin gönderilmesi
                 ViewBag.Appo_DateStart = Ap.AvailableProfR.AvailableProfDateStart;

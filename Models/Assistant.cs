@@ -10,22 +10,36 @@ namespace Web_Prog_Odev.Models
     // veri tabanındaki tablo ismi ataması
     [Table("Assistant")]
 
-    // Person sınıfından kalıtım alır, veritabanındaki disjoint (ayrık) ve total completeness (toplam bütünlük) ilişkisini sağlamak için 
-    // Disjoint - Bir Person ya Professor olabilir ya da Assistant olabilir, iki aynı anda olamaz
-    // Total Completeness - Bir Person, bir Professor ya da bir Assistant olmak zorundadır, ikisinden biri kesinlikle olmalıdır
-    public class Assistant:Person
+    public class Assistant
     {
         // Primary Key olarak ayarlandı, Identity otomatik artılacak ve gerekli alan/boş geçilemez
-        [Key]
-        public int PersonID { get; set; }
+        [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity), Required]
+        public int AssistantID { get; set; }
 
+        // uzunluğu maksimum 30 olabilir
+        [StringLength(30)]
+        public string AssistName { get; set; }
 
+        [StringLength(30)]
+        public string AssistSurname { get; set; }
+
+        // sadece 11 haneli bir veri girilebilir
+        [StringLength(12), MinLength(12)]
+        public string AssistTel { get; set; }
+
+        // geçerli bir email adresi girilmesi zorunlu kılınır ve boş geçilemez
+        [EmailAddress, Required]
+        public string AssistMail { get; set; }
 
 
 
 
         // TABLOLAR ARASI İLİŞKİLER;;;
 
+
+        // address ve person tabloları arası çoka-çok ilişki tanımlanır (virtual anahtar kelimesi ile)
+        // bir person birden fazla address sahip olabilir, bir address bir person 'a ait olabilir
+        public virtual List<Address> AddressList { get; set; }
 
         // shift ve assistant arası bire-çok ilişki tanımlanır (virtual anahtar kelimesi ile)
         // bir assistant birden fazla shift 'e sahip olabilir ama bir shif bir assistant 'a ait olabilir

@@ -1,0 +1,24 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>DepartmentView</title>
+
+    @{ Html.RenderPartial("~/Views/Shared/_PartialPageCardCSS.cshtml"); }
+    @Html.Partial("~/Views/Shared/_PartialPageCardCSS.cshtml")
+</head>
+<body>
+    <div>
+        @foreach (var assistant in Model.Assistants)
+        {
+            Html.RenderPartial("card_partial_view", new { ImageUrl = assistant.ImageUrl, Name = assistant.Name, Description = assistant.Description, DetailsUrl = Url.Action("Details", "Assistants", new { id = assistant.Id }) });
+        }
+    </div>
+</body>
+</html>

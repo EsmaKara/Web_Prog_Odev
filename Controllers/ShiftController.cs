@@ -51,7 +51,7 @@ namespace Web_Prog_Odev.Controllers
         private void AssistantControl(Shift newShift, Shift ViewSt)
         {
             // ıd ile eşleşen assistant'ı getir ve geçici değişkene ata
-            Assistant assisTemp = db.Assistants.Where(x => x.PersonID == ViewSt.AssistantR.PersonID).FirstOrDefault();
+            Assistant assisTemp = db.Assistants.Where(x => x.AssistantID == ViewSt.AssistantR.AssistantID).FirstOrDefault();
             List<Shift> shiftLassist = assisTemp.ShiftList.ToList();
             List<Appointment> appoLcond = assisTemp.AppointmentList.ToList();
 
@@ -176,10 +176,10 @@ namespace Web_Prog_Odev.Controllers
             if (shifData != null)
             {
                 // sayfada nöbet ile eşleşen asistanların bilgisinin de görülmesi isteniyor, ViewBag ile bunlar gönderilir
-                ViewBag.Shift_AssistID = shifData.AssistantR.PersonID;
-                ViewBag.Shift_AssistName = shifData.AssistantR.PersonName;
-                ViewBag.Shift_AssistSur = shifData.AssistantR.PersonSurname;
-                ViewBag.Shift_AssistMail = shifData.AssistantR.PersonMail;
+                ViewBag.Shift_AssistID = shifData.AssistantR.AssistantID;
+                ViewBag.Shift_AssistName = shifData.AssistantR.AssistName;
+                ViewBag.Shift_AssistSur = shifData.AssistantR.AssistSurname;
+                ViewBag.Shift_AssistMail = shifData.AssistantR.AssistMail;
 
                 // sayfada tarih ve departman adı de görünmeli mantıken
                 ViewBag.Shift_DateStart = shifData.ShiftStart;

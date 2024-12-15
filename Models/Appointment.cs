@@ -29,7 +29,7 @@ namespace Web_Prog_Odev.Models
         // assistant ve appointment arası bire-bir ilişki tanımlanır (virtual anahtar kelimesi ile)
         // bir appointment bir assistant 'a ait olabilir, bir assistant birden fazla appointment 'a sahip olabilir
         [ForeignKey("AssistantR")]
-        public int PersonID {  get; set; }
+        public int AssistantID {  get; set; }
         public virtual Assistant AssistantR { get; set; }
         // değişkenin sonuna R koyulma sebebi Relationship 'leri tuttuğu anlaşılsın diye
     }

@@ -31,7 +31,7 @@ namespace Web_Prog_Odev.Models
         // shift ve assistant arası bire-çok ilişki tanımlanır (virtual anahtar kelimesi ile)
         // bir shif bir assistant 'a ait olabilir ama bir assistant birden fazla shift 'e sahip olabilir
         [ForeignKey("AssistantR")]
-        public int PersonID { get; set; }
+        public int AssistantID { get; set; }
         public virtual Assistant AssistantR { get; set; }
 
         // department ve shift arası bire-çok ilişki tanımlanır (virtual anahtar kelimesi ile
