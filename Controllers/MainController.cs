@@ -28,7 +28,8 @@ namespace Web_Prog_Odev.Controllers
         // Asistanların tanıtıldığı sayfa tasarımı
         public ActionResult AssistantPage()
         {
-            return View();
+            List<Assistant> assistants = db.Assistants.ToList();
+            return View(assistants);
         }
 
         // Profesörlerin tanıtıldığı sayfa tasarımı

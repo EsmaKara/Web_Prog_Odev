@@ -139,8 +139,8 @@
             {
                 // Shift için birkaç veri ekleyelim
                 Shift shift1 = new Shift { ShiftStart = DateTime.Now, ShiftEnd = DateTime.Now.AddDays(1) };
-                shift1.AssistantID = 2;
-                shift1.DepartmentID = 3;
+                shift1.AssistantID = context.Assistants.ToList().FirstOrDefault().AssistantID;
+                shift1.DepartmentID = context.Departments.ToList().FirstOrDefault().DepartmentID; ;
                 context.Shifts.Add(shift1);
             }
             context.SaveChanges();

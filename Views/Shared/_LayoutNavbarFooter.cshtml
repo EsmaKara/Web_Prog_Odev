@@ -1,14 +1,17 @@
-﻿@{
+﻿@*
     // varsayılan layout olacağına ilişkin tanım, layout tanımlanmayan (null olan) sayfalarda bu layout kullanılacak
-    Layout = "~/Views/_ViewStart.cshtml";
-}
+    // _ViewStart RenderBody kabul etmediği için normal bir layout page kullanımı olarak tasarlanacak
+    Layout = "~/Views/Shared/_ViewStart.cshtml";
+*@
+
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Site Layout</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title></title>
+
     <style>
 
         body {
@@ -20,9 +23,9 @@
         .navbar {
             display: flex;
             align-items: center;
-            justify-content: center;
+            justify-content: space-between;
             background-color: #ffdb4d;
-            padding: 10px 20px;
+            padding: 20px 20px;
         }
 
             .navbar .nav-links {
@@ -73,25 +76,39 @@
 
             footer .footer-content {
                 display: flex;
-                justify-content: space-between;
+                justify-content: center;
                 align-items: center;
+            }
+
+            footer .footer-content div{
+                padding: 0 200px;
             }
 
             footer .footer-bottom {
                 text-align: center;
                 margin-top: 10px;
                 font-weight: bold;
+                margin-top: 5px;
+                color: rgb(255, 240, 179, 0.5);
             }
+
+        .renderBody{
+            padding: 30px;
+            margin-bottom: 15px;
+        }
+        
     </style>
+
 </head>
 <body>
+
     <!-- Header/navbar bölümü -->
     <header>
         <div class="navbar">
-            <div class="logo">
-                <img src="/path/to/logo.png" alt="Logo" style="height: 40px;">
-            </div>
             <div class="nav-links">
+                <div class="logo">
+                    <img src="/path/to/logo.png" alt="Logo" style="height: 40px;">
+                </div>
                 @Html.ActionLink("Assistants", "Index", "Assistants")
                 @Html.ActionLink("Professors", "Index", "Professors")
                 @Html.ActionLink("Departments", "Index", "Departments")
@@ -105,7 +122,7 @@
         </div>
     </header>
 
-    <div>
+    <div class="renderBody">
         @RenderBody()
     </div>
 
@@ -127,6 +144,6 @@
             <i>2024 All rights reserved.</i>
         </div>
     </footer>
+
 </body>
 </html>
-

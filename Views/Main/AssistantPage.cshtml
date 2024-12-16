@@ -1,8 +1,9 @@
-﻿
-@{
-    Layout = null;
-}
+﻿@using Web_Prog_Odev.Models
+@model List<Web_Prog_Odev.Models.Assistant>
 
+@{
+    Layout = "~/Views/Shared/_LayoutNavbarFooter.cshtml";
+}
 <!DOCTYPE html>
 
 <html>
@@ -10,15 +11,63 @@
     <meta name="viewport" content="width=device-width" />
     <title>DepartmentView</title>
 
-    @{ Html.RenderPartial("~/Views/Shared/_PartialPageCardCSS.cshtml"); }
-    @Html.Partial("~/Views/Shared/_PartialPageCardCSS.cshtml")
+    @{ Html.RenderPartial("~/Views/Shared/CSS/_PartialPageCardCSS.cshtml"); }
+    @Html.Partial("~/Views/Shared/CSS/_PartialPageCardCSS.cshtml")
 </head>
 <body>
+
+    <!-- Kart yapısı -->
     <div>
-        @foreach (var assistant in Model.Assistants)
-        {
-            Html.RenderPartial("card_partial_view", new { ImageUrl = assistant.ImageUrl, Name = assistant.Name, Description = assistant.Description, DetailsUrl = Url.Action("Details", "Assistants", new { id = assistant.Id }) });
-        }
+        <h1 style="text-align: center; color: #333333;">Our Assistants</h1>
+        <div class="container">
+
+            @foreach (Assistant assistant in Model.ToList())
+            {
+                <div class="card">
+
+                    <h3 style= "display:inline; text-align:center;">@assistant.AssistName @assistant.AssistSurname</h3>
+
+                    <div class="information">
+                        <b>Contact Number: </b><span>@assistant.AssistTel</span>
+                    </div>
+                    <div class="information">
+                        <b>Mail Address: </b><span>@assistant.AssistMail</span>
+                    </div>
+                    <div class="information">
+                        <b>Shifting State: </b>
+                        @{
+                            var varsa = assistant.ShiftList.Where(s => s.ShiftStart <= DateTime.Now && s.ShiftEnd > DateTime.Now).Select(s => new
+                            {
+                                s.ShiftEnd,
+                                s.DepartmentR.DepartmentName
+                            }).Distinct().ToList().FirstOrDefault();
+
+                            string statement;
+                            string statementInfo;
+                            string style;
+
+                            if (varsa != null)
+                            {
+                                statement = "On Shift.";
+                                statementInfo = "Has a shift in the " + varsa.DepartmentName.ToString() + " Department until " + varsa.ShiftEnd;
+                                style = "color: #ff6600;";
+                            }
+                            else
+                            {
+                                statement = "Available now.";
+                                statementInfo = null;
+                                style = "color: #99cc00;";
+                            }
+                        }
+                        <span style="@style">  @statement </span>
+                        <i style="display:block;">@statementInfo</i>
+                    </div>
+
+                </div>
+            }
+        </div>
     </div>
+
+
 </body>
 </html>
