@@ -110,14 +110,14 @@
                     <img src="/path/to/logo.png" alt="Logo" style="height: 40px;">
                 </div>
                 @Html.ActionLink("Assistants", "AssistantPage", "Assistants")
-                @Html.ActionLink("Professors", "ProfessorPage", "MainController")
-                @Html.ActionLink("Departments", "DepartmentPage", "MainController")
-                @Html.ActionLink("Schedule", "Index", "MainController")
+                @Html.ActionLink("Professors", "ProfessorPage", "Main")
+                @Html.ActionLink("Departments", "DepartmentPage", "Maint")
+                @Html.ActionLink("Schedule", "Index", "Main")
                 @Html.ActionLink("Emergency", "Index", "MainController")
             </div>
             <div class="buttons">
-                <a href="@Url.Action("AppointmentPage", "MainController")" class="button-link">Appointment</a>
-                <a href="@Url.Action("Login", "AdminController")" class="button-link">Admin Login</a>
+                <a href="@Url.Action("AppointmentPage", "Appointment")" class="button-link">Appointment</a>
+                <a href="@Url.Action("Login", "Admin")" class="button-link">Admin Login</a>
             </div>
         </div>
     </header>

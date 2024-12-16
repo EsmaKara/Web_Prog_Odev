@@ -133,12 +133,12 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\AppointmentController.cs" />
+    <Compile Include="Controllers\AssistantController.cs" />
     <Compile Include="Controllers\AvailableProfController.cs" />
     <Compile Include="Controllers\DepartmentController.cs" />
     <Compile Include="Controllers\EmergencyController.cs" />
-    <Compile Include="Controllers\MainController.cs" />
+    <Compile Include="Controllers\ProfessorController.cs" />
     <Compile Include="Controllers\ShiftController.cs" />
-    <Compile Include="Filters\AdminFilter.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -189,16 +189,16 @@
     <Content Include="Scripts\bootstrap.bundle.js.map" />
     <Content Include="Scripts\jquery-3.7.1.slim.min.map" />
     <Content Include="Scripts\jquery-3.7.1.min.map" />
-    <Content Include="Views\Main\DepartmentPage.cshtml" />
-    <Content Include="Views\Main\AssistantPage.cshtml" />
-    <Content Include="Views\Main\ProfessorPage.cshtml" />
     <Content Include="Views\Shared\_LayoutNavbarFooter.cshtml" />
     <Content Include="Views\Shared\PartialPages\CSS\CardsCSS.cshtml" />
     <Content Include="Views\Shared\PartialPages\AppointmentButton.cshtml" />
     <Content Include="Views\Shared\PartialPages\CSS\AppointmentButtonCSS.cshtml" />
     <Content Include="Views\Shared\PartialPages\CRUDButtons.cshtml" />
     <Content Include="Views\Shared\PartialPages\CSS\CRUDButtonsCSS.cshtml" />
-    <Content Include="Views\Admin\AdminLoginPage.cshtml" />
+    <Content Include="Views\Admin\Login.cshtml" />
+    <Content Include="Views\Professor\ProfessorPage.cshtml" />
+    <Content Include="Views\Assistant\AssistantPage.cshtml" />
+    <Content Include="Views\Department\DepartmentPage.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -211,7 +211,6 @@
     <Folder Include="Models\ViewModels\" />
     <Folder Include="Views\Appointment\" />
     <Folder Include="Views\AvailableProf\" />
-    <Folder Include="Views\Department\" />
     <Folder Include="Views\Emergency\" />
     <Folder Include="Views\Shift\" />
   </ItemGroup>

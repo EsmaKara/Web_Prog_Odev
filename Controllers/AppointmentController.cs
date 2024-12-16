@@ -45,6 +45,13 @@ namespace Web_Prog_Odev.Controllers
 
 
 
+        // Randevu Alım sayfası tasarımı
+        public ActionResult AppointmentPage() 
+        {
+            return View();
+        }
+
+
 
 
         // View'dan Contrellar'a veri göndermek için post metodu tanımlanır

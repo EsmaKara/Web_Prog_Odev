@@ -1,5 +1,4 @@
 ﻿using System.Web.Mvc;
-using Web_Prog_Odev.Filters;
 
 namespace Web_Prog_Odev.Controllers
 {
@@ -24,16 +23,17 @@ namespace Web_Prog_Odev.Controllers
             {
                 // Oturum bilgilerini sakla
                 Session["IsAdmin"] = true;
-                return RedirectToAction("Dashboard", "Admin"); // Admin Dashboard'a yönlendirme
+                return RedirectToAction("HomePage", "Home");
             }
 
             // Hatalı giriş mesajı
             ViewBag.ErrorMessage = "Invalid username or password.";
-            return View();
+            return RedirectToAction("Login");
         }
 
+
+
         // giriş için admin kontrolü
-        [AdminAuthorize]
         public ActionResult Dashboard()
         {
             // Admin oturumu kontrol et
@@ -42,14 +42,16 @@ namespace Web_Prog_Odev.Controllers
                 return RedirectToAction("Login"); // Oturum yoksa login sayfasına yönlendir
             }
 
-            return View(); // Admin panelini göster
+            return RedirectToAction("HomePage", "Home"); // anasayfaya döndür
         }
+
+
 
         // Admin çıkışı
         public ActionResult Logout()
         {
             Session.Clear(); // Oturum bilgilerini temizle
-            return RedirectToAction("Login"); // Login sayfasına dön
+            return RedirectToAction("HomePage", "Home"); // Login sayfasına dön
         }
     }
 }

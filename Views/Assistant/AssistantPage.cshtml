@@ -19,7 +19,7 @@
 </head>
 <body>
 
-    @{ 
+    @{
         // ViewBag ile admin CRUD işlemleri butonları URL'leri tanımlanıyor
         ViewBag.AddUrl = Url.Action("Create", "AssistantController");
         ViewBag.EditUrl = Url.Action("Edit", "AssistantController");
@@ -35,7 +35,7 @@
             {
                 <div class="card">
 
-                    <h3 style= "display:inline; text-align:center;">@assistant.AssistName @assistant.AssistSurname</h3>
+                    <h3 style="display:inline; text-align:center;">@assistant.AssistName @assistant.AssistSurname</h3>
 
                     <div class="information">
                         <b>Contact Number: </b><span>@assistant.AssistTel</span>

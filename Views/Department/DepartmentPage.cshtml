@@ -1,4 +1,5 @@
-﻿@using Web_Prog_Odev.Models
+﻿
+@using Web_Prog_Odev.Models
 @model List<Web_Prog_Odev.Models.Department>
 
 @{
@@ -20,7 +21,7 @@
         @{ Html.RenderPartial("~/Views/Shared/PartialPages/CSS/CRUDButtonsCSS.cshtml"); }
         @Html.Partial("~/Views/Shared/PartialPages/CSS/CRUDButtonsCSS.cshtml")
     </style>
-    
+
 </head>
 <body>
 
@@ -53,7 +54,7 @@
                         }
                         else
                         {
-                            <button onclick="location.href='@Url.Action("ProfessorPage", "MainController", new { id = department.DepartmentID })'">
+                            <button onclick="location.href='@Url.Action("ProfessorPage", "Professor", new { id = department.DepartmentID })'">
                                 Professors
                             </button>
                         }

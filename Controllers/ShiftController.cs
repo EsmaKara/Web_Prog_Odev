@@ -16,6 +16,7 @@ namespace Web_Prog_Odev.Controllers
     {
         private DatabaseContext db = new DatabaseContext();
 
+
         // Gerekli Fonksiyon Tanımlamaları;
         private void ControlViewBags(int result, string state)
         {
@@ -137,13 +138,14 @@ namespace Web_Prog_Odev.Controllers
 
 
 
-
-        public ActionResult Index()
+        // Asistan ve nöbet bilgilerinin takvim yapısında gösterileceği sayfa tasarımı  +randevular da eklenebilir
+        public ActionResult SchedulePage()
         {
 
 
             return View();
         }
+
 
 
 

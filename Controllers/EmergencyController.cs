@@ -8,8 +8,10 @@ namespace Web_Prog_Odev.Controllers
 {
     public class EmergencyController : Controller
     {
-        // GET: Emergency
-        public ActionResult Index()
+
+
+        // Acil durumların girileceği sayfa tasarımı
+        public ActionResult EmergencyPage()
         {
             return View();
         }

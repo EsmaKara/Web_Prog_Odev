@@ -14,27 +14,20 @@ namespace Web_Prog_Odev.Controllers
 
 
 
-        // GET: Department
-        public ActionResult Index()
+        // Bölümlerin tanıtıldığı sayfa tasarımı
+        public ActionResult DepartmentPage()
         {
-            return View();
-        }
-
-
-
-        [HttpGet]
-        public ActionResult Details(int id)
-        {
-            var departments = db.Departments.Select(d => new
-            {
-                d.DepartmentName,
-                d.Dep_Description,
-                d.Dep_NumberOfPatients,
-                d.Dep_NumberOfBedridden,
-                d.Dep_NumberOfEmptyBed
-            }).ToList();
-
+            List<Department> departments = db.Departments.ToList();
             return View(departments);
+
+            // farklı bir yöntem
+            //var departments = db.Departments.Select(d => new
+            //{
+            //    d.DepartmentName,
+            //    d.Dep_NumberOfPatients,
+            //    d.Dep_NumberOfBedridden,
+            //    d.Dep_NumberOfEmptyBed
+            //}).ToList();
         }
 
 
