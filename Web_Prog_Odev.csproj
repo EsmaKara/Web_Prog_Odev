@@ -131,12 +131,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\AppointmentController.cs" />
     <Compile Include="Controllers\AvailableProfController.cs" />
     <Compile Include="Controllers\DepartmentController.cs" />
     <Compile Include="Controllers\EmergencyController.cs" />
     <Compile Include="Controllers\MainController.cs" />
     <Compile Include="Controllers\ShiftController.cs" />
+    <Compile Include="Filters\AdminFilter.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -191,7 +193,12 @@
     <Content Include="Views\Main\AssistantPage.cshtml" />
     <Content Include="Views\Main\ProfessorPage.cshtml" />
     <Content Include="Views\Shared\_LayoutNavbarFooter.cshtml" />
-    <Content Include="Views\Shared\CSS\_PartialPageCardCSS.cshtml" />
+    <Content Include="Views\Shared\PartialPages\CSS\CardsCSS.cshtml" />
+    <Content Include="Views\Shared\PartialPages\AppointmentButton.cshtml" />
+    <Content Include="Views\Shared\PartialPages\CSS\AppointmentButtonCSS.cshtml" />
+    <Content Include="Views\Shared\PartialPages\CRUDButtons.cshtml" />
+    <Content Include="Views\Shared\PartialPages\CSS\CRUDButtonsCSS.cshtml" />
+    <Content Include="Views\Admin\AdminLoginPage.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -206,7 +213,6 @@
     <Folder Include="Views\AvailableProf\" />
     <Folder Include="Views\Department\" />
     <Folder Include="Views\Emergency\" />
-    <Folder Include="Views\Shared\PartialPages\" />
     <Folder Include="Views\Shift\" />
   </ItemGroup>
   <ItemGroup>

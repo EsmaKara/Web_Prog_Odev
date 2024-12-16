@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Eventing.Reader;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -33,9 +34,18 @@ namespace Web_Prog_Odev.Controllers
         }
 
         // Profesörlerin tanıtıldığı sayfa tasarımı
-        public ActionResult ProfessorPage()
+        public ActionResult ProfessorPage(int? id)
         {
-            return View();
+            if (id == null)
+            {
+                List<Professor> professor = db.Professors.ToList();
+                return View(professor);
+            }
+            else
+            {
+                List<Professor> professors = db.Professors.Where(p => p.DepartmentR.DepartmentID == id).ToList();
+                return View(professors);
+            }
         }
 
         // Bölümlerin tanıtıldığı sayfa tasarımı
@@ -52,23 +62,23 @@ namespace Web_Prog_Odev.Controllers
 
 
             List<Department> departments = db.Departments.ToList();
-
-
             return View(departments);
         }
 
-        // Ramndevu Alım sayfası tasarımı
+        // Randevu Alım sayfası tasarımı
         public ActionResult AppointmentPage()
         {
             return View();
         }
 
-        // Acil durumların girileceği sayfa tasrımı
+        // Acil durumların girileceği sayfa tasarımı
         public ActionResult EmergencyPage()
         {
             return View();
         }
 
+
+        // Randevuların takvim şeklinde gösterileceği sayfa tasarımı
         public ActionResult ShiftsPage()
         {
             return View();

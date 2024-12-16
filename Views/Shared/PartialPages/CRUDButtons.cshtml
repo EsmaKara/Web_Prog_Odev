@@ -1,0 +1,42 @@
+﻿
+@using System.Web.Mvc
+@{
+    // Controller ve Action bilgileri Partial View'e parametre olarak gönderilecek
+    var addUrl = ViewBag.AddUrl as string;
+    var editUrl = ViewBag.EditUrl as string;
+    var deleteUrl = ViewBag.DeleteUrl as string;
+}
+
+<div class="admin-actions" style="text-align: center; margin: 20px 0;">
+    <!-- Ekleme Butonu -->
+    @if (addUrl != null)
+    {
+        <button class="btn btn-success" onclick="location.href='@addUrl'">
+            <i class="fas fa-plus-circle"></i> Add New
+        </button>
+    }
+
+    <!-- Düzenleme Butonu -->
+    @if (editUrl != null)
+    {
+        <button class="btn btn-warning" onclick="location.href='@editUrl'">
+            <i class="fas fa-edit"></i> Edit Selected
+        </button>
+    }
+
+    <!-- Silme Butonu -->
+    @if (deleteUrl != null)
+    {
+        <button class="btn btn-danger" onclick="confirmDelete('@deleteUrl')">
+            <i class="fas fa-trash-alt"></i> Delete Selected
+        </button>
+    }
+</div>
+
+<script>
+    function confirmDelete(url) {
+        if (confirm("Are you sure you want to delete the selected item?")) {
+            location.href = url;
+        }
+    }
+</script>

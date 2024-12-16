@@ -11,10 +11,20 @@
     <meta name="viewport" content="width=device-width" />
     <title>DepartmentView</title>
 
-    @{ Html.RenderPartial("~/Views/Shared/CSS/_PartialPageCardCSS.cshtml"); }
-    @Html.Partial("~/Views/Shared/CSS/_PartialPageCardCSS.cshtml")
+    <style>
+        @{ Html.RenderPartial("~/Views/Shared/PartialPages/CSS/CardsCSS.cshtml"); }
+        @Html.Partial("~/Views/Shared/PartialPages/CSS/CardsCSS.cshtml")
+    </style>
+
 </head>
 <body>
+
+    @{ 
+        // ViewBag ile admin CRUD işlemleri butonları URL'leri tanımlanıyor
+        ViewBag.AddUrl = Url.Action("Create", "AssistantController");
+        ViewBag.EditUrl = Url.Action("Edit", "AssistantController");
+        ViewBag.DeleteUrl = Url.Action("Delete", "AssistantController");
+    }
 
     <!-- Kart yapısı -->
     <div>
