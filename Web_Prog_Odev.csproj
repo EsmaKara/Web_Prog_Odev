@@ -137,6 +137,7 @@
     <Compile Include="Controllers\AvailableProfController.cs" />
     <Compile Include="Controllers\DepartmentController.cs" />
     <Compile Include="Controllers\EmergencyController.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ProfessorController.cs" />
     <Compile Include="Controllers\ShiftController.cs" />
     <Compile Include="Global.asax.cs">
@@ -191,14 +192,13 @@
     <Content Include="Scripts\jquery-3.7.1.min.map" />
     <Content Include="Views\Shared\_LayoutNavbarFooter.cshtml" />
     <Content Include="Views\Shared\PartialPages\CSS\CardsCSS.cshtml" />
-    <Content Include="Views\Shared\PartialPages\AppointmentButton.cshtml" />
-    <Content Include="Views\Shared\PartialPages\CSS\AppointmentButtonCSS.cshtml" />
     <Content Include="Views\Shared\PartialPages\CRUDButtons.cshtml" />
     <Content Include="Views\Shared\PartialPages\CSS\CRUDButtonsCSS.cshtml" />
     <Content Include="Views\Admin\Login.cshtml" />
     <Content Include="Views\Professor\ProfessorPage.cshtml" />
     <Content Include="Views\Assistant\AssistantPage.cshtml" />
     <Content Include="Views\Department\DepartmentPage.cshtml" />
+    <Content Include="Views\Home\HomePage.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

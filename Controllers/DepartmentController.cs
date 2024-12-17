@@ -30,6 +30,14 @@ namespace Web_Prog_Odev.Controllers
             //}).ToList();
         }
 
+        // Vİew'dan Controller'a gelen veriler kaydolacak
+        [HttpPost]
+        public ActionResult AddData()
+        {
+            return View();
+        }
+
+        // boş yatak sayısını gelen verilerle hesaplayıp atamasını yap arka planda EDİT'TE DE ADD'DE DE
 
     }
 }

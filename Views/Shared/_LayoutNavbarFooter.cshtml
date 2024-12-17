@@ -66,6 +66,11 @@
                     background-color: #4d3900;
                 }
 
+            .page-info{
+                text-align: end;
+            }
+
+
         /* Footer */
         footer {
             background-color: #e6b800;
@@ -109,15 +114,21 @@
                 <div class="logo">
                     <img src="/path/to/logo.png" alt="Logo" style="height: 40px;">
                 </div>
-                @Html.ActionLink("Assistants", "AssistantPage", "Assistants")
-                @Html.ActionLink("Professors", "ProfessorPage", "Main")
-                @Html.ActionLink("Departments", "DepartmentPage", "Maint")
-                @Html.ActionLink("Schedule", "Index", "Main")
-                @Html.ActionLink("Emergency", "Index", "MainController")
+                @Html.ActionLink("Assistants", "AssistantPage", "Assistant")
+                @Html.ActionLink("Professors", "ProfessorPage", "Professor")
+                @Html.ActionLink("Departments", "DepartmentPage", "Department")
+                @Html.ActionLink("Schedule", "SchedulePage", "Shift")
+                @Html.ActionLink("Emergency", "EmergencyPage", "Emergency")
             </div>
             <div class="buttons">
                 <a href="@Url.Action("AppointmentPage", "Appointment")" class="button-link">Appointment</a>
                 <a href="@Url.Action("Login", "Admin")" class="button-link">Admin Login</a>
+            </div>
+        </div>
+        <div>
+            <div class="page-info">
+                <span style="color: rgb(77, 61, 0, 0.5)">@Session["AdminLogged"] </span>
+                <span style="color: rgb(77, 61, 0, 0.5)">@Html.ActionLink("Log Out", "Logout", "Admin")</span>
             </div>
         </div>
     </header>

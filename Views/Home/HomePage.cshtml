@@ -1,0 +1,108 @@
+﻿
+
+@using Web_Prog_Odev.Models
+@model List<Web_Prog_Odev.Models.Emergency>
+
+@{
+    Layout = "~/Views/Shared/_LayoutNavbarFooter.cshtml";
+}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ana Sayfa</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+
+
+        .banner {
+            background-image: url('https://via.placeholder.com/1920x600');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            text-align: center;
+            padding: 100px 20px;
+        }
+
+        .quick-access {
+            margin-top: -50px;
+            position: relative;
+        }
+
+            .quick-access .card {
+                border-radius: 15px;
+            }
+    </style>
+</head>
+<body>
+
+
+    <!-- Banner Alanı -->
+    <div class="banner">
+        <h1>Pediatrics Assistant-Shift Management System</h1>
+        <p>Easily find department's information, your appointment and shift times.</p>
+    </div>
+
+    <!-- Hızlı Erişim Alanı -->
+    <div class="container quick-access">
+        <div class="row text-center">
+            <div class="col-md-4">
+                <div class="card shadow p-3 mb-5 bg-white">
+                    <div class="card-body">
+                        <h5 class="card-title">Departments</h5>
+                        <p class="card-text">View Pediatric Departments in our Hospital.</p>
+                        <a href="@Url.Action("DepartmentPage", "Department")" class="btn btn-primary">Departments</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card shadow p-3 mb-5 bg-white">
+                    <div class="card-body">
+                        <h5 class="card-title">Professors</h5>
+                        <p class="card-text">View Professors in all Departments.</p>
+                        <a href="@Url.Action("ProfessorPage", "Professor")" class="btn btn-primary">Professors</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card shadow p-3 mb-5 bg-white">
+                    <div class="card-body">
+                        <h5 class="card-title">Assistans</h5>
+                        <p class="card-text">View Professors in all Departments.</p>
+                        <a href="@Url.Action("AssistantPage", "Assistant")" class="btn btn-primary">Assistants</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    @{
+        List<Emergency> emergencies = Model.ToList();
+
+        foreach (Emergency emg in emergencies)
+        {
+        <div class="emergency-info">
+            <h3>@emg.EmergencyName</h3>
+            <p>@emg.EmergencyDescription</p>
+            <div class="information">
+                <b>Patient Number: </b><span></span>
+            </div>
+            <div class="information">
+                <b>@emg.DepartmentR.DepartmentName</b>
+            </div>
+            <div class="information">
+                <b>@emg.DepartmentR.ShiftList.Where(s => s.ShiftStart <= emg.EmergencyDate && s.ShiftEnd > emg.EmergencyDate)</b>
+            </div>
+        </div>
+        }
+     }
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

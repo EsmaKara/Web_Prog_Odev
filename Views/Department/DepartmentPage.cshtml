@@ -15,53 +15,127 @@
     <title>Departments</title>
 
     <style>
-        @{ Html.RenderPartial("~/Views/Shared/PartialPages/CSS/CardsCSS.cshtml"); }
-        @Html.Partial("~/Views/Shared/PartialPages/CSS/CardsCSS.cshtml")
-
-        @{ Html.RenderPartial("~/Views/Shared/PartialPages/CSS/CRUDButtonsCSS.cshtml"); }
-        @Html.Partial("~/Views/Shared/PartialPages/CSS/CRUDButtonsCSS.cshtml")
+        @{ Html.RenderPartial("~/Views/Shared/PartialPages/CSS/CardsCSS.cshtml"); 
+           Html.RenderPartial("~/Views/Shared/PartialPages/CSS/CRUDButtonsCSS.cshtml"); }
     </style>
 
 </head>
 <body>
+
+    @{
+        // ViewBag ile admin CRUD işlemleri butonları URL'leri tanımlanıyor
+        ViewBag.AddUrl = Url.Action("Add", "Department");
+        ViewBag.EditUrl = Url.Action("Edit", "Department");
+        ViewBag.DeleteUrl = Url.Action("Delete", "Department");
+    }
+
 
     <!-- Kart yapısı -->
     <div>
         <h1 style="text-align: center; color: #333333;">Our Departments</h1>
         <div class="container">
 
-            @foreach (Department department in Model.ToList())
-            {
-                <div class="card">
+            @{
+                // admin girişi yapılmadıysa sadece verileri görüntüler
+                if (Session["IsAdmin"] == null || !(bool)Session["IsAdmin"])
+                {
+                    // Department verilerini görüntülemek için
+                    foreach (Department department in Model.ToList())
+                    {
+                        <div class="card">
+                            <h3>@department.DepartmentName</h3>
+                            <p>@department.Dep_Description</p>
+                            <div class="information">
+                                <b>Patient Number: </b><span>@department.Dep_NumberOfPatients</span>
+                            </div>
+                            <div class="information">
+                                <b>Bedridden Patient Number: </b><span>@department.Dep_NumberOfBedridden</span>
+                            </div>
+                            <div class="information">
+                                <b>Empty Bed: </b><span>@department.Dep_NumberOfEmptyBed</span>
+                            </div>
 
-                    <h3>@department.DepartmentName</h3>
-                    <p>@department.Dep_Description</p>
-                    <div class="information">
-                        <b>Patient Number: </b><span>@department.Dep_NumberOfPatients</span>
-                    </div>
-                    <div class="information">
-                        <b>Bedridden Patient Number: </b><span>@department.Dep_NumberOfBedridden</span>
-                    </div>
-                    <div class="information">
-                        <b>Empty Bed: </b><span>@department.Dep_NumberOfEmptyBed</span>
-                    </div>
-
-                    @{
-                        if (Session["IsAdmin"] != null)
-                        {
-                            Html.RenderPartial("~/Views/Shared/PartialPages/CRUDButtons.cshtml");
-                            Html.Partial("~/Views/Shared/PartialPages/CRUDButtons.cshtml");
-                        }
-                        else
-                        {
                             <button onclick="location.href='@Url.Action("ProfessorPage", "Professor", new { id = department.DepartmentID })'">
                                 Professors
                             </button>
-                        }
+                        </div>
+                    }
+                }
+
+                // admin girişi yapıldıysa CRUD işlemleri yapılabilmeli
+                else
+                {
+                    // Eklemek için ilgili card yapısı
+                    <div class="card">
+                        <form method="post" action="@Url.Action("AddData", "Department")">
+                            <div class="form-group">
+                                <label for="name">Department Name: </label>
+                                <input type="text" name="name" id="name" placeholder="Pediatric Emergency" required />
+                            </div>
+                            <div class="form-group">
+                                <label for="desc">Description: </label>
+                                <input type="text" name="desc" id="desc" required />
+                            </div>
+                            <div class="form-group">
+                                <label for="numPatient">Number Of Patients: </label>
+                                <input type="text" name="numPatient" id="numPatient" required />
+                            </div>
+                            <div class="form-group">
+                                <label for="numBeds">Number Of Beds: </label>
+                                <input type="text" name="numBeds" id="numBeds" required />
+                            </div>
+                            <div class="form-group">
+                                <label for="numBedridden">Number Of Bedridden: </label>
+                                <input type="text" name="numBedridden" id="numBedridden" required />
+                            </div>
+
+
+                            <button type="submit">Submit</button>
+
+                            @if (ViewBag.ErrorMessage != null)
+                            {
+                                <p class="error-message">@ViewBag.ErrorMessage</p>
+                            }
+                        </form>
+                    </div>
+
+                    // Düzenlemek için ilgili card yapısı
+                    foreach (Department department in Model.ToList())
+                    {
+                        <div class="card">
+                            <form method="post" action="@Url.Action("EditData", "Department")">
+                                <div class="form-group">
+                                    <input type="text" name="name" id="name" value="@department.DepartmentName" required />
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" name="desc" id="desc" value="@department.Dep_Description" required />
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" name="numPatient" id="numPatient" value="@department.Dep_NumberOfPatients" required />
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" name="numBeds" id="numBeds" value="@department.Dep_NumberOfBed" required />
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" name="numBedridden" id="numBedridden" value="@department.Dep_NumberOfBedridden" required />
+                                </div>
+
+                                @{ Html.RenderPartial("~/Views/Shared/PartialPages/CRUDButtons.cshtml"); }
+                            
+                                <button type="submit">Submit</button>
+
+                                @if (ViewBag.ErrorMessage != null)
+                                {
+                                    <p class="error-message">@ViewBag.ErrorMessage</p>
+                                }
+                            </form>
+                        </div>
                     }
 
-                </div>
+                    
+                }
             }
+
 
         </div>
     </div>

@@ -138,6 +138,10 @@ namespace Web_Prog_Odev.Controllers
 
 
 
+
+
+
+
         // Asistan ve nöbet bilgilerinin takvim yapısında gösterileceği sayfa tasarımı  +randevular da eklenebilir
         public ActionResult SchedulePage()
         {

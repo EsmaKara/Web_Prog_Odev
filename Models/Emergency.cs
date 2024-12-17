@@ -9,7 +9,7 @@ namespace Web_Prog_Odev.Models
 {
     // veri tabanındaki tablo ismi ataması
     [Table("Emergency")]
-    public class Emergency
+    public class Emergency 
     {
         // Primary Key olarak ayarlandı, Identity otomatik artılacak ve gerekli alan/boş geçilemez
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity), Required]
@@ -21,6 +21,10 @@ namespace Web_Prog_Odev.Models
 
         [StringLength(200)]
         public string EmergencyDescription { get; set; }
+
+        [Required]
+        DateTime EmergencyDate { get; set; }
+
 
 
 
