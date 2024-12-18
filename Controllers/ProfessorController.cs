@@ -20,29 +20,16 @@ namespace Web_Prog_Odev.Controllers
         {
             if (result == 0)
             {
-                TempData["Result"] = "The shift has been " + state + ".";
-                TempData["Success"] = true;
-                TempData["Status"] = "Success :)";
+                ViewBag.Result = "The Professor has been " + state + ".";
+                ViewBag.Success = true;
+                ViewBag.Status = "Success :)";
             }
             else
             {
-                TempData["Result"] = "The shift could not be " + state + ".";
-                TempData["Success"] = false;
-                TempData["Status"] = "Fail !";
+                ViewBag.Result = "The Professor could not be " + state + ".";
+                ViewBag.Success = false;
+                ViewBag.Status = "Fail !";
             }
-        }
-
-        // Identity tanımlı olduğunda veri silindiği durumda ID'ler resetlenmeli ki yeni eklemelerde sorun yaşanmasın
-        public ActionResult ResetIdentity(string tableName)
-        {
-            string sql = $"DBCC CHECKIDENT ('{tableName}', RESEED, 0)";
-
-            using (var context = new DatabaseContext())
-            {
-                context.Database.ExecuteSqlCommand(sql);
-            }
-
-            return RedirectToAction("Index");
         }
 
         // E-posta doğrulama yöntemi
@@ -164,7 +151,7 @@ namespace Web_Prog_Odev.Controllers
             {
                 Professor professor = db.Professors.Where(prof => prof.ProfessorID == profId).FirstOrDefault();
                 db.Professors.Remove(professor);
-                ResetIdentity("Professor");
+                //ResetIdentity("Professor");
 
                 int result = db.SaveChanges();
 

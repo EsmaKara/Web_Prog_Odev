@@ -143,9 +143,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\202412180938322_InitialCreate.cs" />
-    <Compile Include="Migrations\202412180938322_InitialCreate.Designer.cs">
-      <DependentUpon>202412180938322_InitialCreate.cs</DependentUpon>
+    <Compile Include="Migrations\202412181610298_InitialCreate.cs" />
+    <Compile Include="Migrations\202412181610298_InitialCreate.Designer.cs">
+      <DependentUpon>202412181610298_InitialCreate.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Address.cs" />
@@ -199,6 +199,8 @@
     <Content Include="Views\Department\EditData.cshtml" />
     <Content Include="Views\Professor\EditData.cshtml" />
     <Content Include="Views\Professor\AddData.cshtml" />
+    <Content Include="Views\Assistant\AddData.cshtml" />
+    <Content Include="Views\Assistant\EditData.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -215,8 +217,8 @@
     <Folder Include="Views\Shift\" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\202412180938322_InitialCreate.resx">
-      <DependentUpon>202412180938322_InitialCreate.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202412181610298_InitialCreate.resx">
+      <DependentUpon>202412181610298_InitialCreate.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

@@ -18,15 +18,15 @@ namespace Web_Prog_Odev.Controllers
         {
             if (result == 0)
             {
-                TempData["Result"] = "The shift has been " + state + ".";
-                TempData["Success"] = true;
-                TempData["Status"] = "Success :)";
+                ViewBag.Result = "The Department has been " + state + ".";
+                ViewBag.Success = true;
+                ViewBag.Status = "Success :)";
             }
             else
             {
-                TempData["Result"] = "The shift could not be " + state + ".";
-                TempData["Success"] = false;
-                TempData["Status"] = "Fail !";
+                ViewBag.Result = "The Department could not be " + state + ".";
+                ViewBag.Success = false;
+                ViewBag.Status = "Fail !";
             }
         }
 

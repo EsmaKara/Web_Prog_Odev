@@ -18,7 +18,7 @@
                         AssistantID = c.Int(),
                     })
                 .PrimaryKey(t => t.AddressID)
-                .ForeignKey("dbo.Assistant", t => t.AssistantID)
+                .ForeignKey("dbo.Assistant", t => t.AssistantID, cascadeDelete: true)
                 .ForeignKey("dbo.Professor", t => t.ProfessorID, cascadeDelete: true)
                 .Index(t => t.ProfessorID)
                 .Index(t => t.AssistantID);

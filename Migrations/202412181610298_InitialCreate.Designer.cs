@@ -13,7 +13,7 @@ namespace Web_Prog_Odev.Migrations
         
         string IMigrationMetadata.Id
         {
-            get { return "202412180938322_InitialCreate"; }
+            get { return "202412181610298_InitialCreate"; }
         }
         
         string IMigrationMetadata.Source

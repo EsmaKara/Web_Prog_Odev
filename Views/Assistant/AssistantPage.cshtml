@@ -9,112 +9,147 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
-    <title>DepartmentView</title>
+    <title>AssistantView</title>
 
     <style>
-        @{ Html.RenderPartial("~/Views/Shared/PartialPages/CSS/CardsCSS.cshtml"); }
+        @{ 
+            Html.RenderPartial("~/Views/Shared/PartialPages/CSS/CardsCSS.cshtml");
+            Html.RenderPartial("~/Views/Shared/PartialPages/CSS/CRUDButtonsCSS.cshtml");
+         }
+
+
+
+        .add-data{
+            display:block;
+        }
+            .add-data btn {
+                background-color: #007bff;
+                color: #fff; /* Yazı rengi */
+                border: none; /* Çerçeveyi kaldır */
+                border-radius: 5px; /* Yuvarlatılmış köşeler */
+                padding: 10px 20px; /* İç boşluklar */
+                font-size: 18px; /* Yazı boyutu */
+                cursor: pointer; /* İmleç tipi */
+            }
+
+        .button-container {
+            display: flex;
+            justify-content: center; /* Yatayda ortalama */
+            align-items: center; /* Dikeyde ortalama (div'in yüksekliği ayarlanmışsa) */
+            width: 100%; /* Tam genişlik */
+            padding: 20px 0; /* Üst-alt boşluk */
+        }
     </style>
 
 </head>
 <body>
 
-    @{
-        // ViewBag ile admin CRUD işlemleri butonları URL'leri tanımlanıyor
-        ViewBag.AddUrl = Url.Action("Create", "AssistantController");
-        ViewBag.EditUrl = Url.Action("Edit", "AssistantController");
-        ViewBag.DeleteUrl = Url.Action("Delete", "AssistantController");
-    }
-
     <!-- Kart yapısı -->
     <div>
         <h1 style="text-align: center; color: #333333;">Our Assistants</h1>
-        <div class="container">
 
-            @foreach (Assistant assistant in Model.ToList())
+
+        @{
+            if (Session["IsAdmin"] == null || !(bool)Session["IsAdmin"])
             {
-                <div class="card">
 
-                    <h3 style="display:inline; text-align:center;">@assistant.AssistName @assistant.AssistSurname</h3>
+            }
+            else
+            {
+                // yeni bir veri eklemek için
+                <div class="add-data">
+                    @{
+                        ViewBag.AddUrl = Url.Action("AddData", "Assistant");
 
-                    <div class="information">
-                        <b>Contact Number: </b><span>@assistant.AssistTel</span>
-                    </div>
-                    <div class="information">
-                        <b>Mail Address: </b><span>@assistant.AssistMail</span>
-                    </div>
-                    <div class="information">
-                        <b>Shifting State: </b>
-                        @{
-                            var varsa = assistant.ShiftList.Where(s => s.ShiftStart <= DateTime.Now && s.ShiftEnd > DateTime.Now).Select(s => new
-                            {
-                                s.ShiftEnd,
-                                s.DepartmentR.DepartmentName
-                            }).Distinct().ToList().FirstOrDefault();
-
-                            string statement;
-                            string statementInfo;
-                            string style;
-
-                            if (varsa != null)
-                            {
-                                statement = "On Shift.";
-                                statementInfo = "Has a shift in the " + varsa.DepartmentName.ToString() + " Department until " + varsa.ShiftEnd;
-                                style = "color: #ff6600;";
-                            }
-                            else
-                            {
-                                statement = "Available now.";
-                                statementInfo = null;
-                                style = "color: #99cc00;";
-                            }
-                        }
-                        <span style="@style">  @statement </span>
-                        <i style="display:block;">@statementInfo</i>
-                    </div>
-
+                        Html.RenderPartial("~/Views/Shared/PartialPages/AddButton.cshtml");
+                    }
                 </div>
             }
+        }
 
 
-
-
-
-
-            // Eklemek için ilgili card yapısı
-            <div class="card">
-                <form method="post" action="@Url.Action("AddData", "Department")">
-                    <div class="form-group">
-                        <label for="name">Department Name: </label>
-                        <input type="text" name="name" id="name" placeholder="Pediatric Emergency" required />
-                    </div>
-                    <div class="form-group">
-                        <label for="desc">Description: </label>
-                        <input type="text" name="desc" id="desc" required />
-                    </div>
-                    <div class="form-group">
-                        <label for="numPatient">Number Of Patients: </label>
-                        <input type="text" name="numPatient" id="numPatient" required />
-                    </div>
-                    <div class="form-group">
-                        <label for="numBeds">Number Of Beds: </label>
-                        <input type="text" name="numBeds" id="numBeds" required />
-                    </div>
-                    <div class="form-group">
-                        <label for="numBedridden">Number Of Bedridden: </label>
-                        <input type="text" name="numBedridden" id="numBedridden" required />
-                    </div>
-
-
-                    <button type="submit">Submit</button>
-
-                    @if (ViewBag.ErrorMessage != null)
+        <div class="container">
+            @{
+                // admin girişi yapılmadıysa sadece verileri görüntüler
+                if (Session["IsAdmin"] == null || !(bool)Session["IsAdmin"])
+                {
+                    foreach (Assistant assistant in Model.ToList())
                     {
-                        <p class="error-message">@ViewBag.ErrorMessage</p>
+                        <div class="card">
+
+                            <h3 style="display:inline; text-align:center;">@assistant.AssistName @assistant.AssistSurname</h3>
+
+                            <div class="information">
+                                <b>Contact Number: </b><span>@assistant.AssistTel</span>
+                            </div>
+                            <div class="information">
+                                <b>Mail Address: </b><span>@assistant.AssistMail</span>
+                            </div>
+                            <div class="information">
+                                <b>Shifting State: </b>
+                                @{
+                                    var varsa = assistant.ShiftList.Where(s => s.ShiftStart <= DateTime.Now && s.ShiftEnd > DateTime.Now).Select(s => new
+                                    {
+                                        s.ShiftEnd,
+                                        s.DepartmentR.DepartmentName
+                                    }).Distinct().ToList().FirstOrDefault();
+
+                                    string statement;
+                                    string statementInfo;
+                                    string style;
+
+                                    if (varsa != null)
+                                    {
+                                        statement = "On Shift.";
+                                        statementInfo = "Has a shift in the " + varsa.DepartmentName.ToString() + " Department until " + varsa.ShiftEnd;
+                                        style = "color: #ff6600;";
+                                    }
+                                    else
+                                    {
+                                        statement = "Available now.";
+                                        statementInfo = null;
+                                        style = "color: #99cc00;";
+                                    }
+                                }
+                                <span style="@style">  @statement </span>
+                                <i style="display:block;">@statementInfo</i>
+                            </div>
+
+                        </div>
                     }
-                </form>
-            </div>
+                }
 
 
+                // admin girişi yapıldıysa CRUD işlemleri yapılabilmeli
+                else
+                {
+
+                    // Düzenlemek için ilgili card yapısı
+                    foreach (Assistant assistant in Model.ToList())
+                    {
+                        <div class="card">
+                            <h3 style="display:inline; text-align:center;">@assistant.AssistName @assistant.AssistSurname</h3>
+
+                            <div class="information">
+                                <b>Contact Number: </b><span>@assistant.AssistTel</span>
+                            </div>
+                            <div class="information">
+                                <b>Mail Address: </b><span>@assistant.AssistMail</span>
+                            </div>
+
+
+                            @{
+                                // ViewBag ile admin CRUD işlemleri butonları URL'leri tanımlanıyor
+                                ViewBag.EditUrl = Url.Action("EditData", "Assistant", new { assistId = assistant.AssistantID });
+                                ViewBag.DeleteUrl = Url.Action("Delete", "Assistant", new { assistId = assistant.AssistantID });
+
+                                Html.RenderPartial("~/Views/Shared/PartialPages/CRUDButtons.cshtml");
+                            }
+
+                        </div>
+                    }
+                }
+            }
 
         </div>
     </div>

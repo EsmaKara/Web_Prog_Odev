@@ -13,8 +13,22 @@
 
     <style>
         @{ Html.RenderPartial("~/Views/Shared/PartialPages/CSS/CardsCSS.cshtml");
-            Html.RenderPartial("~/Views/Shared/PartialPages/CSS/CRUDButtonsCSS.cshtml"); }
+            Html.RenderPartial("~/Views/Shared/PartialPages/CSS/CRUDButtonsCSS.cshtml");
+        }
 
+
+        .add-data{
+            display:block;
+        }
+            .add-data btn {
+                background-color: #007bff;
+                color: #fff; /* Yazı rengi */
+                border: none; /* Çerçeveyi kaldır */
+                border-radius: 5px; /* Yuvarlatılmış köşeler */
+                padding: 10px 20px; /* İç boşluklar */
+                font-size: 18px; /* Yazı boyutu */
+                cursor: pointer; /* İmleç tipi */
+            }
 
         .button-container {
             display: flex;
@@ -47,6 +61,27 @@
     <!-- Kart yapısı -->
     <div>
         <h1 style="text-align: center; color: #333333;">Our Professors</h1>
+
+        @{
+            if (Session["IsAdmin"] == null || !(bool)Session["IsAdmin"])
+            {
+
+            }
+            else
+            {
+                // yeni bir veri eklemek için
+                <div class="add-data">
+                    @{
+                        ViewBag.AddUrl = Url.Action("AddData", "Professor");
+
+                        Html.RenderPartial("~/Views/Shared/PartialPages/AddButton.cshtml");
+                    }
+                </div>
+            }
+        }
+
+
+
         <div class="container">
             @{
                 // admin girişi yapılmadıysa sadece verileri görüntüler
@@ -81,14 +116,6 @@
                 // admin girişi yapıldıysa CRUD işlemleri yapılabilmeli
                 else
                 {
-                    // yeni bir veri eklemek için
-                    <div>
-                        @{
-                            ViewBag.AddUrl = Url.Action("AddData", "Professor");
-
-                            Html.RenderPartial("~/Views/Shared/PartialPages/AddButton.cshtml");
-                        }
-                    </div>
 
                     // Düzenlemek için ilgili card yapısı
                     foreach (Professor professor in Model.ToList())

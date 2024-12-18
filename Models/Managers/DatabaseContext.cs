@@ -83,7 +83,7 @@ namespace Web_Prog_Odev.Models.Managers
                 .HasOptional(a => a.AssistantR) // Address, Assistant ile opsiyonel ilişkilidir
                 .WithMany(p => p.AddressList)   // Bir Assistant birden fazla Address'e sahip olabilir
                 .HasForeignKey(a => a.AssistantID)  // Foreign Key
-                .WillCascadeOnDelete(false);    // Assistant silinince bağlı Address kayıtları silinir
+                .WillCascadeOnDelete(true);    // Assistant silinince bağlı Address kayıtları silinir
 
             modelBuilder.Entity<Shift>()
                 .HasRequired(s => s.AssistantR) // Shift bir Assistant ile ilişkilidir (zorunlu)
