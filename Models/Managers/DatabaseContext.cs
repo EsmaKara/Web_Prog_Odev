@@ -35,9 +35,107 @@ namespace Web_Prog_Odev.Models.Managers
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
+            // Bire bir ilişki tanımlayabilmek adına
             modelBuilder.Entity<Available_Prof>()
-                .HasRequired(ap => ap.AppointmentR) // İlişki türünü belirtir (Required, Optional)
-                .WithRequiredPrincipal(a => a.AvailableProfR); // Diğer tarafın navigasyon özelliği
+                .HasOptional(ap => ap.AppointmentR) // Available_Prof bir Appointment ile ilişkili olabilir (Opsiyonel)
+                .WithRequired(a => a.AvailableProfR) // Appointment, Available_Prof ile ilişkili olmak zorunda
+                .WillCascadeOnDelete(true); // Cascade silme davranışı
+
+
+
+
+
+
+
+
+            modelBuilder.Entity<Assistant>()
+                .HasMany(a => a.AppointmentList) // Bir Assistant'ın birden fazla Appointment'ı olabilir
+                .WithRequired(ap => ap.AssistantR) // Her Appointment bir Assistant ile ilişkilidir
+                .HasForeignKey(ap => ap.AssistantID) // Yabancı anahtar
+                .WillCascadeOnDelete(true); // Assistant silinince, bağlı Appointment'lar da silinir
+
+            modelBuilder.Entity<Emergency>()
+                .HasRequired(e => e.DepartmentR) // Her Emergency bir Department ile ilişkilidir
+                .WithMany(d => d.EmergencyList) // Bir Department birçok Emergency'ye sahip olabilir
+                .HasForeignKey(e => e.DepartmentID) // Foreign Key
+                .WillCascadeOnDelete(true); // Department silindiğinde Emergency'ler de silinir
+
+
+
+
+
+
+
+
+
+
+
+            // gerekli FK ilişkileri çünkü silme durumlarında cascade belirlenmeli
+            modelBuilder.Entity<Address>()
+                .HasOptional(a => a.ProfessorR) // Optional ilişki
+                .WithMany(p => p.AddressList)
+                .HasForeignKey(a => a.ProfessorID)
+                .WillCascadeOnDelete(false); // Silinen adres, professor'da null olur
+
+            modelBuilder.Entity<Address>()
+                .HasOptional(a => a.AssistantR) // Optional ilişki
+                .WithMany(p => p.AddressList)
+                .HasForeignKey(a => a.AssistantID)
+                .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<Assistant>()
+                .HasMany(a => a.ShiftList)
+                .WithRequired(s => s.AssistantR)
+                .HasForeignKey(s => s.AssistantID)
+                .WillCascadeOnDelete(true); // Assistant silinince shiftler silinir
+
+
+            modelBuilder.Entity<Shift>()
+                .HasRequired(s => s.AssistantR)
+                .WithMany(a => a.ShiftList)
+                .HasForeignKey(s => s.AssistantID)
+                .WillCascadeOnDelete(false); // Shift silinince Assistant null olur
+
+
+            modelBuilder.Entity<Professor>()
+                .HasRequired(p => p.DepartmentR)
+                .WithMany(d => d.ProfessorList)
+                .HasForeignKey(p => p.DepartmentID)
+                .WillCascadeOnDelete(false); // Professor silinince Department null olur
+
+            modelBuilder.Entity<Professor>()
+                .HasMany(p => p.AvailableProfList)
+                .WithRequired(ap => ap.ProfessorR)
+                .HasForeignKey(ap => ap.ProfessorID)
+                .WillCascadeOnDelete(true); // Professor silinince Available_Prof silinir
+
+            modelBuilder.Entity<Professor>()
+                .HasMany(p => p.AddressList)
+                .WithOptional(a => a.ProfessorR)
+                .HasForeignKey(a => a.ProfessorID)
+                .WillCascadeOnDelete(true); // Professor silinince adresler silinir
+
+
+            modelBuilder.Entity<Available_Prof>()
+                .HasOptional(ap => ap.ProfessorR)
+                .WithMany(p => p.AvailableProfList)
+                .HasForeignKey(ap => ap.ProfessorID)
+                .WillCascadeOnDelete(false); // Available_Prof silinince Professor null olur
+
+
+
+            modelBuilder.Entity<Department>()
+                .HasMany(d => d.ProfessorList)
+                .WithRequired(p => p.DepartmentR)
+                .HasForeignKey(p => p.DepartmentID)
+                .WillCascadeOnDelete(true); // Department silinince Professors silinir
+
+            modelBuilder.Entity<Department>()
+                .HasMany(d => d.ShiftList)
+                .WithRequired(s => s.DepartmentR)
+                .HasForeignKey(s => s.DepartmentID)
+                .WillCascadeOnDelete(true); // Department silinince Shifts silinir
+
         }
 
     }

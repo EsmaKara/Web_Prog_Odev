@@ -18,7 +18,6 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
 
-
         .banner {
             background-image: url('https://via.placeholder.com/1920x600');
             background-size: cover;
@@ -36,6 +35,59 @@
             .quick-access .card {
                 border-radius: 15px;
             }
+
+        .card-body {
+            background-color: #fff8cc;
+        }
+            .button {
+                padding: 8px 15px;
+                border: none;
+                border-radius: 5px;
+                background-color: #332900;
+                color: #ffdb4d;
+                font-weight: bold;
+                text-decoration: none;
+                display: inline-block;
+                text-align: center;
+            }
+
+
+
+        .emergency-flex {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+            .emergency {
+                width: 400px;
+                padding: 10px;
+                border-radius: 20px;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            }
+
+            .emergency-info {
+                background-color: #fff8cc;
+                padding: 20px;
+                margin: 5px;
+                transition: transform 0.3s ease, box-shadow 0.3s ease;
+            }
+
+                .emergency-info h3 {
+                    font-size: 1.5em;
+                    margin: 10px 0;
+                    color: #333333;
+                }
+
+                .emergency-info p {
+                    font-size: 1em;
+                    color: #666666;
+                    line-height: 1.5;
+                }
+
+        .information {
+            padding: 2px 15px;
+        }
+
     </style>
 </head>
 <body>
@@ -44,7 +96,7 @@
     <!-- Banner Alanı -->
     <div class="banner">
         <h1>Pediatrics Assistant-Shift Management System</h1>
-        <p>Easily find department's information, your appointment and shift times.</p>
+        <p>Easily find information about departments, appointments and shift times.</p>
     </div>
 
     <!-- Hızlı Erişim Alanı -->
@@ -53,27 +105,27 @@
             <div class="col-md-4">
                 <div class="card shadow p-3 mb-5 bg-white">
                     <div class="card-body">
-                        <h5 class="card-title">Departments</h5>
+                        <h2 class="card-title">Departments</h2>
                         <p class="card-text">View Pediatric Departments in our Hospital.</p>
-                        <a href="@Url.Action("DepartmentPage", "Department")" class="btn btn-primary">Departments</a>
+                        <a href="@Url.Action("DepartmentPage", "Department")" class="button">Departments</a>
                     </div>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="card shadow p-3 mb-5 bg-white">
                     <div class="card-body">
-                        <h5 class="card-title">Professors</h5>
+                        <h2 class="card-title">Professors</h2>
                         <p class="card-text">View Professors in all Departments.</p>
-                        <a href="@Url.Action("ProfessorPage", "Professor")" class="btn btn-primary">Professors</a>
+                        <a href="@Url.Action("ProfessorPage", "Professor")" class="button">Professors</a>
                     </div>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="card shadow p-3 mb-5 bg-white">
                     <div class="card-body">
-                        <h5 class="card-title">Assistans</h5>
+                        <h2 class="card-title">Assistans</h2>
                         <p class="card-text">View Professors in all Departments.</p>
-                        <a href="@Url.Action("AssistantPage", "Assistant")" class="btn btn-primary">Assistants</a>
+                        <a href="@Url.Action("AssistantPage", "Assistant")" class="button">Assistants</a>
                     </div>
                 </div>
             </div>
@@ -81,26 +133,51 @@
     </div>
 
 
-    @{
-        List<Emergency> emergencies = Model.ToList();
 
-        foreach (Emergency emg in emergencies)
-        {
-        <div class="emergency-info">
-            <h3>@emg.EmergencyName</h3>
-            <p>@emg.EmergencyDescription</p>
-            <div class="information">
-                <b>Patient Number: </b><span></span>
-            </div>
-            <div class="information">
-                <b>@emg.DepartmentR.DepartmentName</b>
-            </div>
-            <div class="information">
-                <b>@emg.DepartmentR.ShiftList.Where(s => s.ShiftStart <= emg.EmergencyDate && s.ShiftEnd > emg.EmergencyDate)</b>
+
+    <div>
+        <h1 style="text-align: center">Emergency Calls</h1>
+        <div class="emergency-flex">
+            <div class="emergency">
+                @{
+                    List<Emergency> emergencies = Model.ToList();
+                    foreach (Emergency emg in emergencies)
+                    {
+                        <div class="emergency-info">
+                            <h2>@emg.EmergencyName</h2>
+                            <p>@emg.EmergencyDescription</p>
+                            <div class="information">
+                                <h4>@emg.DepartmentR.DepartmentName</h4>
+                            </div>
+                            <div class="information">
+                                <b>Entered Time: </b><span>@emg.EmergencyDate</span>
+                            </div>
+                            <div class="information">
+                                <b>Details of the on-shift Assistant: </b>
+                                <div>
+                                    @emg.DepartmentR.ShiftList.Where(s => s.ShiftStart <= emg.EmergencyDate && s.ShiftEnd >= emg.EmergencyDate).ToList().FirstOrDefault().AssistantR.AssistName
+                                    @emg.DepartmentR.ShiftList.Where(s => s.ShiftStart <= emg.EmergencyDate && s.ShiftEnd >= emg.EmergencyDate).ToList().FirstOrDefault().AssistantR.AssistSurname
+                                    <div>
+                                        <span>Contact: </span>
+                                        @emg.DepartmentR.ShiftList.Where(s => s.ShiftStart <= emg.EmergencyDate && s.ShiftEnd >= emg.EmergencyDate).ToList().FirstOrDefault().AssistantR.AssistTel ;
+                                        @emg.DepartmentR.ShiftList.Where(s => s.ShiftStart <= emg.EmergencyDate && s.ShiftEnd >= emg.EmergencyDate).ToList().FirstOrDefault().AssistantR.AssistMail
+                                    </div>
+
+                                    @*  Farklı bir şekilde veri çekme ancak çıktıyı istediğim şekilde düzenleyebilmek adına bir değişkene atamayı tercih ettim
+                             @emg.DepartmentR.ShiftList.Where(s => s.ShiftStart <= emg.EmergencyDate && s.ShiftEnd >= emg.EmergencyDate).Select(assist => new
+                            {
+                                assist.AssistantR.AssistName,
+                                assist.AssistantR.AssistSurname,
+                                assist.AssistantR.AssistTel
+                            }).ToList().FirstOrDefault().ToString();*@
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
             </div>
         </div>
-        }
-     }
+    </div>
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>

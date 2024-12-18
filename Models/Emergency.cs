@@ -23,7 +23,7 @@ namespace Web_Prog_Odev.Models
         public string EmergencyDescription { get; set; }
 
         [Required]
-        DateTime EmergencyDate { get; set; }
+        public DateTime EmergencyDate { get; set; }
 
 
 

@@ -1,0 +1,131 @@
+﻿
+@using Web_Prog_Odev.Models
+@model Web_Prog_Odev.Models.Department
+
+@{
+    Layout = "~/Views/Shared/_LayoutNavbarFooter.cshtml";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>EditDataDepartment</title>
+
+    <style>
+
+        .card {
+            background-color: #ffffff; /* Beyaz kart arka planı */
+            border: 2px solid #ffd633; /* Tema rengine uygun kenarlık */
+            border-radius: 10px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+            width: 400px;
+            padding: 20px;
+            text-align: center;
+        }
+
+            .card .form-group {
+                margin-bottom: 20px;
+            }
+
+                .card .form-group input[type="text"],
+                .card .form-group textarea {
+                    width: 100%;
+                    padding: 10px;
+                    border: 1px solid #ffd633;
+                    border-radius: 5px;
+                    box-sizing: border-box;
+                    font-size: 14px;
+                }
+
+                .card .form-group textarea {
+                    resize: none;
+                    height: 80px;
+                }
+
+            .card span {
+                display: block;
+                margin-bottom: 5px;
+                font-weight: bold;
+                color: #333333;
+            }
+
+        button {
+            background-color: #ffd633; /* Tema rengi */
+            color: #333333;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+            button:hover {
+                background-color: #ffcc00; /* Daha koyu bir sarı ton */
+                box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+            }
+
+        .alert {
+            margin-top: 20px;
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        .alert-success {
+            background-color: #dff0d8;
+            color: #3c763d;
+        }
+
+        .alert-danger {
+            background-color: #f2dede;
+            color: #a94442;
+        }
+
+
+    </style>
+
+</head>
+<body>
+    <div>
+        <div class="card">
+            @using (Html.BeginForm("Edit", "Department", new { depId = Model.DepartmentID }, FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+
+                <div class="form-group">
+                    @Html.TextBoxFor(model => model.DepartmentName, new { @class = "form-control", value = Model.DepartmentName, aria_label = "DepName" })
+                </div>
+                <div class="form-group">
+                    @Html.TextAreaFor(model => model.Dep_Description, new { @class = "form-control", value = Model.Dep_Description, aria_label = "DepDesc" })
+                </div>
+                <div class="form-group">
+                    <span id="DepNumPtn">Number of Patients: </span>
+                    @Html.TextBoxFor(model => model.Dep_NumberOfPatients, new { @class = "form-control", value = Model.Dep_NumberOfPatients, aria_label = "DepNumPtn" })
+                </div>
+                <div class="form-group">
+                    <span id="DepNumBed">Number of Bed: </span>
+                    @Html.TextBoxFor(model => model.Dep_NumberOfBed, new { @class = "form-control", value = Model.Dep_NumberOfBed, aria_label = "DepNumBed" })
+                </div>
+                <div class="form-group">
+                    <span id="DepNumBedrid">Number of Bedridden: </span>
+                    @Html.TextBoxFor(model => model.Dep_NumberOfBedridden, new { @class = "form-control", value = Model.Dep_NumberOfBedridden, aria_label = "DepNumBedrid" })
+                </div>
+
+                <button type="submit">Submit</button>
+
+                <div class="form-group">
+                    @if (TempData["Result"] != null)
+                    {
+                    <div class="alert alert-@TempData["Status"] m-5" role="alert">@TempData["Result"]</div>
+                    }
+                </div>
+            }
+        </div>
+
+    </div>
+</body>
+</html>

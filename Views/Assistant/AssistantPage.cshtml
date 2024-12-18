@@ -74,6 +74,48 @@
 
                 </div>
             }
+
+
+
+
+
+
+            // Eklemek için ilgili card yapısı
+            <div class="card">
+                <form method="post" action="@Url.Action("AddData", "Department")">
+                    <div class="form-group">
+                        <label for="name">Department Name: </label>
+                        <input type="text" name="name" id="name" placeholder="Pediatric Emergency" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="desc">Description: </label>
+                        <input type="text" name="desc" id="desc" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="numPatient">Number Of Patients: </label>
+                        <input type="text" name="numPatient" id="numPatient" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="numBeds">Number Of Beds: </label>
+                        <input type="text" name="numBeds" id="numBeds" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="numBedridden">Number Of Bedridden: </label>
+                        <input type="text" name="numBedridden" id="numBedridden" required />
+                    </div>
+
+
+                    <button type="submit">Submit</button>
+
+                    @if (ViewBag.ErrorMessage != null)
+                    {
+                        <p class="error-message">@ViewBag.ErrorMessage</p>
+                    }
+                </form>
+            </div>
+
+
+
         </div>
     </div>
 

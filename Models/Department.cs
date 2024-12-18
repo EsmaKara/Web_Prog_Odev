@@ -12,7 +12,7 @@ namespace Web_Prog_Odev.Models
     public class Department
     {
         // Primary Key olarak ayarlandı, Identity otomatik artılacak ve gerekli alan/boş geçilemez
-        [Key, Required]
+        [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity), Required]
         public int DepartmentID { get; set; }
 
         // uzunluğu maksimum 60 olabilir ve zorunlu alan

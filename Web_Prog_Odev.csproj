@@ -143,15 +143,6 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\202412142054517_InitialCreate.cs" />
-    <Compile Include="Migrations\202412142054517_InitialCreate.Designer.cs">
-      <DependentUpon>202412142054517_InitialCreate.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202412151028422_InitialCreate1.cs" />
-    <Compile Include="Migrations\202412151028422_InitialCreate1.Designer.cs">
-      <DependentUpon>202412151028422_InitialCreate1.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Address.cs" />
     <Compile Include="Models\Appointment.cs" />
     <Compile Include="Models\Assistant.cs" />
@@ -199,6 +190,8 @@
     <Content Include="Views\Assistant\AssistantPage.cshtml" />
     <Content Include="Views\Department\DepartmentPage.cshtml" />
     <Content Include="Views\Home\HomePage.cshtml" />
+    <Content Include="Views\Shared\PartialPages\_AddButton.cshtml" />
+    <Content Include="Views\Department\EditData.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -213,14 +206,6 @@
     <Folder Include="Views\AvailableProf\" />
     <Folder Include="Views\Emergency\" />
     <Folder Include="Views\Shift\" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Migrations\202412142054517_InitialCreate.resx">
-      <DependentUpon>202412142054517_InitialCreate.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202412151028422_InitialCreate1.resx">
-      <DependentUpon>202412151028422_InitialCreate1.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
