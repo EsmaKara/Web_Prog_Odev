@@ -13,7 +13,7 @@
 
     <style>
         @{ Html.RenderPartial("~/Views/Shared/PartialPages/CSS/CardsCSS.cshtml");
-           Html.RenderPartial("~/Views/Shared/PartialPages/CSS/CRUDButtonsCSS.cshtml"); }
+            Html.RenderPartial("~/Views/Shared/PartialPages/CSS/CRUDButtonsCSS.cshtml"); }
 
 
         .button-container {
@@ -48,30 +48,75 @@
     <div>
         <h1 style="text-align: center; color: #333333;">Our Professors</h1>
         <div class="container">
+            @{
+                // admin girişi yapılmadıysa sadece verileri görüntüler
+                if (Session["IsAdmin"] == null || !(bool)Session["IsAdmin"])
+                {
+                    foreach (Professor professor in Model.ToList())
+                    {
+                        <div class="card">
 
-            @foreach (Professor professor in Model.ToList())
-            {
-                <div class="card">
+                            <h3 style="display:inline; text-align:center;">@professor.ProfName @professor.ProfSurname</h3>
 
-                    <h3 style="display:inline; text-align:center;">@professor.ProfName @professor.ProfSurname</h3>
+                            <div class="information">
+                                <b>Contact Number: </b><span>@professor.ProfTel</span>
+                            </div>
+                            <div class="information">
+                                <b>Mail Address: </b><span>@professor.ProfMail</span>
+                            </div>
+                            <div class="information">
+                                <b>Department: </b><span>@professor.DepartmentR.DepartmentName</span>
+                            </div>
 
-                    <div class="information">
-                        <b>Contact Number: </b><span>@professor.ProfTel</span>
+                            <div class="button-container">
+                                <button class="appointment-button" onclick="location.href='@Url.Action("Appointment", "Appointment")'">
+                                    Randevu Al
+                                </button>
+                            </div>
+
+                        </div>
+                    }
+                }
+
+                // admin girişi yapıldıysa CRUD işlemleri yapılabilmeli
+                else
+                {
+                    // yeni bir veri eklemek için
+                    <div>
+                        @{
+                            ViewBag.AddUrl = Url.Action("AddData", "Professor");
+
+                            Html.RenderPartial("~/Views/Shared/PartialPages/AddButton.cshtml");
+                        }
                     </div>
-                    <div class="information">
-                        <b>Mail Address: </b><span>@professor.ProfMail</span>
-                    </div>
-                    <div class="information">
-                        <b>Department: </b><span>@professor.DepartmentR.DepartmentName</span>
-                    </div>
 
-                    <div class="button-container">
-                        <button class="appointment-button" onclick="location.href='@Url.Action("Appointment", "Appointment")'">
-                            Randevu Al
-                        </button>
-                    </div>
+                    // Düzenlemek için ilgili card yapısı
+                    foreach (Professor professor in Model.ToList())
+                    {
+                        <div class="card">
+                            <h3 style="display:inline; text-align:center;">@professor.ProfName @professor.ProfSurname</h3>
 
-                </div>
+                            <div class="information">
+                                <b>Contact Number: </b><span>@professor.ProfTel</span>
+                            </div>
+                            <div class="information">
+                                <b>Mail Address: </b><span>@professor.ProfMail</span>
+                            </div>
+                            <div class="information">
+                                <b>Department: </b><span>@professor.DepartmentR.DepartmentName</span>
+                            </div>
+
+                            @{
+                                // ViewBag ile admin CRUD işlemleri butonları URL'leri tanımlanıyor
+                                ViewBag.EditUrl = Url.Action("EditData", "Professor", new { profId = professor.ProfessorID });
+                                ViewBag.DeleteUrl = Url.Action("Delete", "Professor", new { profId = professor.ProfessorID });
+
+                                Html.RenderPartial("~/Views/Shared/PartialPages/CRUDButtons.cshtml");
+                            }
+
+                        </div>
+                    }
+                }
             }
         </div>
     </div>

@@ -96,35 +96,39 @@ namespace Web_Prog_Odev.Controllers
                     // db.Entry(department).State = EntityState.Modified; // Güncelleme işlemi
 
                     Department department = db.Departments.Where(dep => dep.DepartmentID == depId).FirstOrDefault();
-                    department.DepartmentName = ViewDepartment.DepartmentName;
-                    department.Dep_Description = ViewDepartment.Dep_Description;
+                    
                     // kapasiteden fazla bir değer ya da negatif bir değer girilemez
-                    if(department.Dep_NumberOfPatients >= 0 && department.Dep_NumberOfPatients <= capasity)
-                        department.Dep_NumberOfPatients = ViewDepartment.Dep_NumberOfPatients;
-                    if(ViewDepartment.Dep_NumberOfBed >= 0 && ViewDepartment.Dep_NumberOfBed <= bedCapacity)
+                    if (department.Dep_NumberOfPatients >= 0 && department.Dep_NumberOfPatients <= capasity)
                     {
-                        // yatışı yapılan hasta sayısı yatak sayısından fazla olamaz
-                        if (ViewDepartment.Dep_NumberOfBedridden >= 0 && ViewDepartment.Dep_NumberOfBed >= ViewDepartment.Dep_NumberOfBedridden)
+                        department.Dep_NumberOfPatients = ViewDepartment.Dep_NumberOfPatients;
+                        if (ViewDepartment.Dep_NumberOfBed >= 0 && ViewDepartment.Dep_NumberOfBed <= bedCapacity)
                         {
-                            department.Dep_NumberOfBed = ViewDepartment.Dep_NumberOfBed;
-                            department.Dep_NumberOfBedridden = ViewDepartment.Dep_NumberOfBedridden;
-                            department.Dep_NumberOfEmptyBed = ViewDepartment.Dep_NumberOfBed - ViewDepartment.Dep_NumberOfBedridden;
-                        }                     
+                            // yatışı yapılan hasta sayısı yatak sayısından fazla olamaz
+                            if (ViewDepartment.Dep_NumberOfBedridden >= 0 && ViewDepartment.Dep_NumberOfBed >= ViewDepartment.Dep_NumberOfBedridden)
+                            {
+                                department.Dep_NumberOfBed = ViewDepartment.Dep_NumberOfBed;
+                                department.Dep_NumberOfBedridden = ViewDepartment.Dep_NumberOfBedridden;
+                                department.Dep_NumberOfEmptyBed = ViewDepartment.Dep_NumberOfBed - ViewDepartment.Dep_NumberOfBedridden;
+
+                                department.DepartmentName = ViewDepartment.DepartmentName;
+                                department.Dep_Description = ViewDepartment.Dep_Description;
+
+
+                                int result = db.SaveChanges(); // Değişiklikleri veritabanına kaydet
+                                ControlViewBags(result, "updated");
+                                return RedirectToAction("DepartmentPage");
+                            }
+                        }
                     }
                     else
                     {
                         TempData["Result"] = "Make sure that the values you entered are Valid.";
-                        return View();
+                        return RedirectToAction("EditData");
                     }
-
-
-                    int result = db.SaveChanges(); // Değişiklikleri veritabanına kaydet
-                    ControlViewBags(result, "updated");
-                    return RedirectToAction("DepartmentPage");
                     
                 }
             }
-            return View();
+            return RedirectToAction("EditData");
         }
 
 
