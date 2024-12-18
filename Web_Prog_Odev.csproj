@@ -143,6 +143,11 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202412180938322_InitialCreate.cs" />
+    <Compile Include="Migrations\202412180938322_InitialCreate.Designer.cs">
+      <DependentUpon>202412180938322_InitialCreate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Address.cs" />
     <Compile Include="Models\Appointment.cs" />
     <Compile Include="Models\Assistant.cs" />
@@ -206,6 +211,11 @@
     <Folder Include="Views\AvailableProf\" />
     <Folder Include="Views\Emergency\" />
     <Folder Include="Views\Shift\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\202412180938322_InitialCreate.resx">
+      <DependentUpon>202412180938322_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

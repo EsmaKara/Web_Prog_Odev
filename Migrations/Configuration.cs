@@ -137,11 +137,44 @@
             // Bütün tablolara en az bir veri eklenmesi gerekiyor;;;
 
             {
-                // Shift için birkaç veri ekleyelim
+                // Shift için bir veri ekleyelim
                 Shift shift1 = new Shift { ShiftStart = DateTime.Now, ShiftEnd = DateTime.Now.AddDays(1) };
                 shift1.AssistantID = context.Assistants.ToList().FirstOrDefault().AssistantID;
                 shift1.DepartmentID = context.Departments.ToList().FirstOrDefault().DepartmentID; ;
                 context.Shifts.Add(shift1);
+            }
+            context.SaveChanges();
+
+            {
+                // Emergency için bir veri ekleyelim
+                Emergency emergency = new Emergency { EmergencyName = "Help", EmergencyDescription = "Extra help needed!", EmergencyDate = DateTime.Now };
+                emergency.DepartmentID = context.Departments.ToList().FirstOrDefault().DepartmentID; ;
+                context.Emergencies.Add(emergency);
+            }
+            context.SaveChanges();
+
+            {
+                // Available_Prof için birkaç veri ekleyelim, biri için randevu alınmış olsun
+                Available_Prof available_Prof1 = new Available_Prof { AvailableProfDateStart = DateTime.Now, AvailableProfDateEnd = DateTime.Now.AddMinutes(120), IsAvailable = false };
+                available_Prof1.ProfessorID = context.Professors.ToList().FirstOrDefault().ProfessorID;
+                context.AvailableProfs.Add(available_Prof1);
+            }
+            context.SaveChanges();
+
+            {
+                // Appointment için bir veri ekleyelim
+                Appointment appointment = new Appointment();
+                appointment.AppointmentID = 1;
+                appointment.AssistantID = context.Assistants.ToList().FirstOrDefault().AssistantID;
+                appointment.AvailableProfR = context.AvailableProfs.ToList().FirstOrDefault();
+                context.Appointments.Add(appointment);
+            }
+            context.SaveChanges();
+
+            {
+                Available_Prof available_Prof2 = new Available_Prof { AvailableProfDateStart = DateTime.Now.AddMinutes(130), AvailableProfDateEnd = DateTime.Now.AddMinutes(250), IsAvailable = true };
+                available_Prof2.ProfessorID = context.Professors.ToList().FirstOrDefault().ProfessorID;
+                context.AvailableProfs.Add(available_Prof2);
             }
             context.SaveChanges();
 
@@ -152,3 +185,4 @@
 
     }
 }
+
