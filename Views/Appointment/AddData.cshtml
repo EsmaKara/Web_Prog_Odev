@@ -1,6 +1,6 @@
 ﻿
 @using Web_Prog_Odev.Models
-@model Web_Prog_Odev.Models.Assistant
+@model Web_Prog_Odev.Models.Appointment
 
 @{
     Layout = "~/Views/Shared/_LayoutNavbarFooter.cshtml";
@@ -11,9 +11,14 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
-    <title>EditDataAssistant</title>
+    <title>AddDataAppointment</title>
 
     <style>
+
+        .card-center {
+            display: flex;
+            justify-content: center;
+        }
 
         .card {
             background-color: #ffffff; /* Beyaz kart arka planı */
@@ -30,7 +35,8 @@
             }
 
                 .card .form-group input[type="text"],
-                .card .form-group textarea {
+                .card .form-group textarea,
+                .card .form-group .form-control {
                     width: 100%;
                     padding: 10px;
                     border: 1px solid #ffd633;
@@ -88,38 +94,40 @@
 
 </head>
 <body>
-    <div>
+    <div class="card-center">
         <div class="card">
-            @using (Html.BeginForm("Edit", "Assistant", new { assistId = Model.AssistantID }, FormMethod.Post))
+            @{ Available_Prof avaiProf = ViewBag.AvaiProf; }
+
+            @using (Html.BeginForm("Add", "Appointment", new { avaiId = avaiProf.AvailableProfID }, FormMethod.Post))
             {
                 @Html.AntiForgeryToken()
 
-                <div class="form-group">
-                    <span id="AssistName">Name: </span>
-                    @Html.TextBoxFor(model => model.AssistName, new { @class = "form-control", value = Model.AssistName, aria_label = "AssistName" })
-                </div>
-                <div class="form-group">
-                    <span id="AssistSurName">Surname: </span>
-                    @Html.TextBoxFor(model => model.AssistSurname, new { @class = "form-control", value = Model.AssistSurname, aria_label = "AssistSurName" })
-                </div>
-                <div class="form-group">
-                    @Html.TextAreaFor(model => model.AssistTel, new { @class = "form-control", value = Model.AssistTel, aria_label = "AssistTel" })
-                </div>
-                <div class="form-group">
-                    @Html.TextBoxFor(model => model.AssistMail, new { @class = "form-control", value = Model.AssistMail, aria_label = "AssistMail" })
-                </div>
+                <h3>@avaiProf.ProfessorR.ProfName @avaiProf.ProfessorR.ProfSurname</h3>
+                <p><strong>Email:</strong> @avaiProf.ProfessorR.ProfMail</p>
+                <p><strong>Appointment Start:</strong> @avaiProf.AvailableProfDateStart</p>
+                <p><strong>Appointment End:</strong> @avaiProf.AvailableProfDateEnd</p>
 
-                <button type="submit">Submit</button>
 
+                // Hangi assistan için -> selectList
                 <div class="form-group">
-                    @if (ViewBag.Result != null)
-                    {
-                        <div class="alert alert-@ViewBag.Status m-5" role="alert">@ViewBag.Result</div>
-                    }
+                    <span id="AssistantID">For Who (asistant): </span>
+                    @Html.DropDownListFor(model => model.AssistantID,
+                         new SelectList(ViewBag.AssistData, "AssistantID", "AssistName"),
+                         "Select Assistant", // Varsayılan seçenek      /dropdown ilk yüklendiğinde seçili olur.
+                         new { @class = "form-control" })
+
+
+                    <button type="submit">Submit</button>
+
+                    <div class="form-group">
+                        @if (ViewBag.Result != null)
+                        {
+                            <div class="alert alert-@ViewBag.Status m-5" role="alert">@ViewBag.Result</div>
+                        }
+                    </div>
                 </div>
             }
         </div>
-
     </div>
 </body>
 </html>

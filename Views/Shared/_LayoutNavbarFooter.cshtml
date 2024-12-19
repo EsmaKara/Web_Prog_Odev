@@ -150,22 +150,23 @@
                         @Html.ActionLink("Departments", "DepartmentPage", "Department")
                         @Html.ActionLink("Schedule", "SchedulePage", "Shift")
                         @Html.ActionLink("Emergency", "EmergencyPage", "Emergency")
-                        @Html.ActionLink("Appointment", "App", "Appintment")
+                        @Html.ActionLink("Appointments", "AppointmentPage", "Appintment")
                     </div>
                     <div class="buttons">
                         <a href="@Url.Action("Logout", "Admin")" class="button-link">Admin Log Out</a>
                     </div>
                 </div>
             </header>
+
+            <div>
+                <div class="page-info">
+                    <span style="color: rgb(77, 61, 0, 0.5)">@Session["AdminLogged"] </span>
+                    <!-- <span style="color: rgb(77, 61, 0, 0.5); margin-right: 20px;">@@Html.ActionLink("Log Out", "Logout", "Admin")</span> -->
+                </div>
+            </div>
         }
     }
 
-    <div>
-        <div class="page-info">
-            <span style="color: rgb(77, 61, 0, 0.5)">@Session["AdminLogged"] </span>
-            <span style="color: rgb(77, 61, 0, 0.5); margin-right: 20px;">@Html.ActionLink("Log Out", "Logout", "Admin")</span>
-        </div>
-    </div>
 
     <div class="renderBody">
         @RenderBody()

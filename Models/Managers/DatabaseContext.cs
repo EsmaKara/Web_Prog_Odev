@@ -39,7 +39,7 @@ namespace Web_Prog_Odev.Models.Managers
             modelBuilder.Entity<Available_Prof>()
                 .HasOptional(ap => ap.AppointmentR) // Available_Prof bir Appointment ile ilişkili olabilir (Opsiyonel)
                 .WithRequired(a => a.AvailableProfR) // Appointment, Available_Prof ile ilişkili olmak zorunda
-                .WillCascadeOnDelete(true); // Cascade silme davranışı
+                .WillCascadeOnDelete(true); // Available_Prof silinince, bağlı Appointment'lar da silinir
 
 
 

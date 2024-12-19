@@ -1,0 +1,120 @@
+﻿@using Web_Prog_Odev.Models
+@model List<Web_Prog_Odev.Models.Available_Prof>
+
+@{
+    Layout = "~/Views/Shared/_LayoutNavbarFooter.cshtml";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Appointment Page</title>
+    <style>
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            margin-top: 20px;
+        }
+
+        .card {
+            background-color: #ffffff;
+            border: 2px solid #ffd633; /* Tema rengi */
+            border-radius: 10px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+            width: 300px;
+            margin: 10px;
+            padding: 20px;
+            text-align: center;
+        }
+
+            .card h3 {
+                color: #333333;
+            }
+
+            .card p {
+                color: #666666;
+            }
+
+        button {
+            background-color: #ffd633;
+            color: #333333;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+            button:hover {
+                background-color: #ffcc00;
+                box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+            }
+
+            button:disabled {
+                background-color: #dddddd;
+                color: #aaaaaa;
+                cursor: not-allowed;
+            }
+
+
+        /* CRUD buttons'ta edit eklenmediği için ayrı olarak delete butonu ekledim, yoksa burada admin kontrolü yok */
+        .admin-actions button {
+            margin: 0 10px;
+            padding: 10px 20px;
+            font-size: 14px;
+            border-radius: 5px;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease-in-out;
+        }
+
+            .admin-actions button:hover {
+                transform: scale(1.1);
+                box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+            }
+
+    </style>
+</head>
+<body>
+    <h1 style="text-align: center;">Available Professors For an Appointment</h1>
+    <div class="container">
+        @foreach (var avaiProf in Model.ToList())
+        {
+            <div class="card">
+                <h3>@avaiProf.ProfessorR.ProfName @avaiProf.ProfessorR.ProfSurname</h3>
+                <p><strong>Email:</strong> @avaiProf.ProfessorR.ProfMail</p>
+                <p><strong>Appointment Start:</strong> @avaiProf.AvailableProfDateStart</p>
+                <p><strong>Appointment End:</strong> @avaiProf.AvailableProfDateEnd</p>
+
+                <p><strong>Status:</strong> @(avaiProf.IsAvailable ? "Available" : "Not Available")</p>
+
+                @if (avaiProf.IsAvailable)
+                {
+                    <button onclick="location.href='@Url.Action("AddData", "Appointment", new { avaiId = avaiProf.AvailableProfID })'">
+                        Create Appointment
+                    </button>
+                }
+                else
+                {
+                    List<Available_Prof> falseAvaiList = ViewBag.falseAvaiList;
+                    Assistant assistant = falseAvaiList.Where(x => x.AvailableProfID == avaiProf.AvailableProfID).ToList().FirstOrDefault().AppointmentR.AssistantR;
+
+
+                    <p><strong>Assistant who has the appointment:  </strong>@assistant.AssistName @assistant.AssistSurname</p>
+
+                    <button disabled>
+                        Not Available
+                    </button>
+
+                    <button class="btn btn-danger" onclick="location.href='@Url.Action("Delete", "Appointment", new { appoId = avaiProf.AppointmentR.AppointmentID })'">
+                        <i class="fas fa-trash-alt"></i> Delete Selected
+                    </button>
+                }
+            </div>
+        }
+    </div>
+</body>
+</html>

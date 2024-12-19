@@ -12,6 +12,8 @@ namespace Web_Prog_Odev.Controllers
     {
         private DatabaseContext db = new DatabaseContext();
 
+        int appoSayac = 2;
+
         // Gerekli Fonksiyon Tanımlamaları;
         private void ControlViewBags(int result, string state)
         {
@@ -29,91 +31,126 @@ namespace Web_Prog_Odev.Controllers
             }
         }
 
-        // Identity tanımlı olduğunda veri silindiği durumda ID'ler resetlenmeli ki yeni eklemelerde sorun yaşanmasın
-        public ActionResult ResetIdentity(string tableName)
-        {
-            string sql = $"DBCC CHECKIDENT ('{tableName}', RESEED, 0)";
 
-            using (var context = new DatabaseContext())
-            {
-                context.Database.ExecuteSqlCommand(sql);
-            }
 
-            return RedirectToAction("Index");
-        }
+
+
+
+
 
 
 
 
         // Randevu Alım sayfası tasarımı
-        public ActionResult AppointmentPage() 
+        public ActionResult AppointmentPage(int? profId) 
         {
-            return View();
+            if (profId == null)
+            {
+                List<Available_Prof> avaiList = db.AvailableProfs.ToList();
+                List<Available_Prof> falseAvaiList = avaiList.Where(x => x.IsAvailable == false).ToList();
+                ViewBag.falseAvaiList = falseAvaiList;
+                return View(avaiList);
+            }
+            else
+            {
+                Professor professor = db.Professors.Where(prof => prof.ProfessorID == profId).ToList().FirstOrDefault();
+                List<Available_Prof> avaiProfList = professor.AvailableProfList;
+                return View(avaiProfList);
+            }
         }
 
 
+
+
+        public ActionResult AddData(int? avaiId)
+        {
+            Available_Prof avaiProf = db.AvailableProfs.Where(x => x.AvailableProfID == avaiId).FirstOrDefault();
+            ViewBag.AvaiProf = avaiProf;
+
+            List<Assistant> assistants = db.Assistants.ToList();
+            ViewBag.AssistData = assistants;
+
+            return View();
+        }
 
 
         // View'dan Contrellar'a veri göndermek için post metodu tanımlanır
         [HttpPost]
+        [ValidateAntiForgeryToken]
         // Randevuları tutacak tabloya view'dan girilen verilerin eklenmesini sağlayacak metod
-        public ActionResult Add(Appointment Ap)
+        public ActionResult Add(Appointment ViewAp, int? avaiId)
         {
-            Appointment newAppointment = new Appointment();
+            Available_Prof avaiProf = db.AvailableProfs.Where(x => x.AvailableProfID == avaiId).FirstOrDefault();
 
-            newAppointment.AvailableProfR = db.AvailableProfs.Where(x => x.AvailableProfID == Ap.AvailableProfR.AvailableProfID).FirstOrDefault();
-            newAppointment.AssistantR = db.Assistants.Where(x => x.AssistantID == Ap.AssistantR.AssistantID).FirstOrDefault();
-            newAppointment.AvailableProfR.IsAvailable = false;
-            db.Appointments.Add(newAppointment);
-            int result = db.SaveChanges();
-
-            ControlViewBags(result, "scheduled");
-
-            return View();
-        }
-
-
-        // Controller'dan View'a veriler gönderilir ki sayfada gösterilsin
-        [HttpGet]
-        public ActionResult GetDataToEdit(int apID)
-        {
-            Appointment Ap = null;
-            Ap = db.Appointments.Where(x => x.AppointmentID == apID).FirstOrDefault();
-
-            if (Ap != null)
-            {             
-                // Randevu bilgilerinden asistanınkilere ulaşılıp gösterilmesini sağlamak için
-                ViewBag.Appo_AssistID = Ap.AssistantR.AssistantID;
-                ViewBag.Appo_AssistName = Ap.AssistantR.AssistName;
-                ViewBag.Appo_AssistSur = Ap.AssistantR.AssistSurname;
-                ViewBag.Appo_AssistMail = Ap.AssistantR.AssistMail;
-
-                // Bağlı olduğu Available_Prof'tan tarihin gönderilmesi
-                ViewBag.Appo_DateStart = Ap.AvailableProfR.AvailableProfDateStart;
-                ViewBag.Appo_DateEnd = Ap.AvailableProfR.AvailableProfDateEnd;
-            }
-            else
+            if (ModelState.IsValid)
             {
-                ViewBag.Appo_Error = "No appointment found.";
+                Appointment newAppointment = new Appointment();
+
+                Assistant assistant = db.Assistants.Where(x => x.AssistantID == ViewAp.AssistantID).FirstOrDefault();
+                // eğer seçilen asistanın bir nöbeti varsa getir
+                List<Shift> shifts = assistant.ShiftList.ToList();
+                if (shifts.Count > 0)
+                {
+                    foreach (Shift s in shifts)
+                    {
+                        // nöbetin başlangıç saati randevu bitiş saatinden sonra olmalı ya da randevunun başlangıç saati nöbetin bitiş saatinden sonra olmalı
+                        if (s.ShiftStart > avaiProf.AvailableProfDateEnd && s.ShiftEnd < avaiProf.AvailableProfDateStart && ViewAp.AssistantID != 0)
+                        {
+                            newAppointment.AppointmentID = appoSayac;
+                            newAppointment.AvailableProfR = avaiProf;
+                            newAppointment.AssistantR = assistant;
+                            newAppointment.AvailableProfR.IsAvailable = false;
+
+                            db.Appointments.Add(newAppointment);
+                            appoSayac += 1;
+                            int result = db.SaveChanges();
+
+                            ControlViewBags(result, "scheduled");
+                            return RedirectToAction("AppointmentPage");
+                        }
+                        else
+                        {
+                            ViewBag.Result = "Make sure that the assistant you selected has no shift on the exact time.";
+                            ViewBag.AvaiProf = avaiProf;
+                            return RedirectToAction("AddData", new { avaiId = avaiProf.AvailableProfID });
+                        }
+                    }
+                }
+                else
+                {
+                    newAppointment.AppointmentID = appoSayac;
+                    newAppointment.AvailableProfR = db.AvailableProfs.Where(x => x.AvailableProfID == avaiId).FirstOrDefault();
+                    newAppointment.AssistantR = assistant;
+                    newAppointment.AvailableProfR.IsAvailable = false;
+
+                    db.Appointments.Add(newAppointment);
+                    appoSayac += 1;
+                    int result = db.SaveChanges();
+
+                    ControlViewBags(result, "scheduled");
+                    return RedirectToAction("AppointmentPage");
+                }
             }
-            return View(Ap);
+            ViewBag.Result = "Make sure that t time.";
+
+            ViewBag.AvaiProf = avaiProf;
+            return RedirectToAction("AddData", new { avaiId = avaiProf.AvailableProfID });
         }
 
 
-        [HttpPost]
-        public ActionResult Delete(int? apID)
+
+        public ActionResult Delete(int? appoId)
         {
-            Appointment Ap = db.Appointments.Where(x => x.AppointmentID == apID).FirstOrDefault();
+            Appointment Ap = db.Appointments.Where(x => x.AppointmentID == appoId).FirstOrDefault();
             // Available_Prof yeniden true yapılarak randevu alınabilecek duruma getirilir
             Ap.AvailableProfR.IsAvailable = true;
             db.Appointments.Remove(Ap);
-            ResetIdentity("Appointment");
 
             int result = db.SaveChanges();
 
             ControlViewBags(result, "deleted");
 
-            return View();
+            return RedirectToAction("AppointmentPage");
         }
 
     }

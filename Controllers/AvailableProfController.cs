@@ -30,18 +30,6 @@ namespace Web_Prog_Odev.Controllers
             }
         }
 
-        // Identity tanımlı olduğunda veri silindiği durumda ID'ler resetlenmeli ki yeni eklemelerde sorun yaşanmasın
-        public ActionResult ResetIdentity(string tableName)
-        {
-            string sql = $"DBCC CHECKIDENT ('{tableName}', RESEED, 0)";
-
-            using (var context = new DatabaseContext())
-            {
-                context.Database.ExecuteSqlCommand(sql);
-            }
-
-            return RedirectToAction("Index");
-        }
 
 
 
@@ -86,7 +74,7 @@ namespace Web_Prog_Odev.Controllers
 
         // Controller'dan View'a veriler gönderilir ki sayfada gösterilsin
         [HttpGet]
-        public ActionResult GetDataToEdit(int apID)
+        public ActionResult EditData(int? apID)
         {
             Available_Prof AP = null;
             AP = db.AvailableProfs.Where(x => x.AvailableProfID == apID).FirstOrDefault();
@@ -127,8 +115,9 @@ namespace Web_Prog_Odev.Controllers
                 int result = db.SaveChanges();
 
                 ControlViewBags(result, "edited");
+                return RedirectToAction("AppointmentPage", "Appointment");
             }
-            return View();
+            return RedirectToAction("EditData");
         }
 
 
@@ -141,10 +130,8 @@ namespace Web_Prog_Odev.Controllers
             if (AP.AppointmentR != null)
             {
                 db.Appointments.Remove(AP.AppointmentR);
-                ResetIdentity("Appointment");
             }
             db.AvailableProfs.Remove(AP);
-            ResetIdentity("Available_Prof");
 
             int result = db.SaveChanges();
 

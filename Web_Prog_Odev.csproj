@@ -143,9 +143,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\202412181610298_InitialCreate.cs" />
-    <Compile Include="Migrations\202412181610298_InitialCreate.Designer.cs">
-      <DependentUpon>202412181610298_InitialCreate.cs</DependentUpon>
+    <Compile Include="Migrations\202412190634592_InitialCreate.cs" />
+    <Compile Include="Migrations\202412190634592_InitialCreate.Designer.cs">
+      <DependentUpon>202412190634592_InitialCreate.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Address.cs" />
@@ -201,6 +201,8 @@
     <Content Include="Views\Professor\AddData.cshtml" />
     <Content Include="Views\Assistant\AddData.cshtml" />
     <Content Include="Views\Assistant\EditData.cshtml" />
+    <Content Include="Views\Appointment\AppointmentPage.cshtml" />
+    <Content Include="Views\Appointment\AddData.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -211,14 +213,13 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Models\ViewModels\" />
-    <Folder Include="Views\Appointment\" />
     <Folder Include="Views\AvailableProf\" />
     <Folder Include="Views\Emergency\" />
     <Folder Include="Views\Shift\" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\202412181610298_InitialCreate.resx">
-      <DependentUpon>202412181610298_InitialCreate.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202412190634592_InitialCreate.resx">
+      <DependentUpon>202412190634592_InitialCreate.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

@@ -104,7 +104,7 @@ namespace Web_Prog_Odev.Controllers
             }
             else
             {
-                TempData["Result"] = "Make sure that the values you entered are Valid.";
+                ViewBag.Result = "Make sure that the values you entered are Valid.";
                 return RedirectToAction("AddData");
             }
         }
@@ -151,7 +151,6 @@ namespace Web_Prog_Odev.Controllers
             {
                 Professor professor = db.Professors.Where(prof => prof.ProfessorID == profId).FirstOrDefault();
                 db.Professors.Remove(professor);
-                //ResetIdentity("Professor");
 
                 int result = db.SaveChanges();
 

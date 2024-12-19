@@ -12,7 +12,7 @@ namespace Web_Prog_Odev.Models
     public class Appointment
     {
         // Primary Key olarak ayarlandı, Identity otomatik artılacak ve gerekli alan/boş geçilemez
-        [Key, Required]
+        [Key]
         public int AppointmentID { get; set; }
 
 
