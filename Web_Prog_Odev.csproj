@@ -217,6 +217,7 @@
     <Content Include="Views\Shift\EditData.cshtml" />
     <Content Include="Views\Emergency\EmergencyPage.cshtml" />
     <Content Include="Views\Emergency\AddData.cshtml" />
+    <Content Include="Views\Emergency\EditData.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

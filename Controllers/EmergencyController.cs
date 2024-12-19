@@ -62,8 +62,9 @@ namespace Web_Prog_Odev.Controllers
                 {
                     emergency.EmergencyName = ViewEmg.EmergencyName.ToString();
                     emergency.EmergencyDescription = ViewEmg.EmergencyDescription.ToString();
-                    emergency.DepartmentID = ViewEmg.DepartmentID;
                     emergency.EmergencyDate = DateTime.Now;
+
+                    emergency.DepartmentID = ViewEmg.DepartmentID;
 
                     db.Emergencies.Add(emergency);
 
@@ -75,6 +76,50 @@ namespace Web_Prog_Odev.Controllers
             }
             return RedirectToAction("AddData");
         }
+
+
+
+
+        public ActionResult EditData(int? emgId)
+        {
+            if (emgId != null)
+            {
+                Emergency emergency = db.Emergencies.Where(emg => emg.EmergencyID == emgId).FirstOrDefault();
+                List<Department> departments = db.Departments.ToList();
+                ViewBag.DepData = departments;
+                ViewBag.DepName = emergency.DepartmentR.DepartmentName;
+
+                return View(emergency);
+            }
+            return View();
+        }
+
+        // Vİew'dan Controller'a gelen veriler kaydolacak
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit(Emergency ViewEmergency, int? emgId)
+        {
+            if (ModelState.IsValid)
+            {
+                if (emgId != null)
+                {
+                    Emergency emergency = db.Emergencies.Where(emg => emg.EmergencyID == emgId).FirstOrDefault();
+                    emergency.EmergencyName = ViewEmergency.EmergencyName;
+                    emergency.EmergencyDescription = ViewEmergency.EmergencyDescription;
+                    emergency.EmergencyDate = DateTime.Now;
+
+                    emergency.DepartmentID = ViewEmergency.DepartmentID;
+
+                    int result = db.SaveChanges(); // Değişiklikleri veritabanına kaydet
+                    ControlViewBags(result, "updated");
+                    return RedirectToAction("EmergencyPage");
+
+                }
+            }
+            return RedirectToAction("EditData");
+        }
+
+
 
 
 
