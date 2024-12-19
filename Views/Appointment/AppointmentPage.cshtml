@@ -47,6 +47,7 @@
             font-weight: bold;
             cursor: pointer;
             transition: all 0.3s ease;
+            margin: 5px 0;
         }
 
             button:hover {
@@ -60,26 +61,29 @@
                 cursor: not-allowed;
             }
 
-
-        /* CRUD buttons'ta edit eklenmediği için ayrı olarak delete butonu ekledim, yoksa burada admin kontrolü yok */
-        .admin-actions button {
-            margin: 0 10px;
-            padding: 10px 20px;
-            font-size: 14px;
-            border-radius: 5px;
-            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
-            transition: all 0.3s ease-in-out;
-        }
-
-            .admin-actions button:hover {
-                transform: scale(1.1);
-                box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
-            }
-
     </style>
 </head>
 <body>
     <h1 style="text-align: center;">Available Professors For an Appointment</h1>
+
+    @{
+        if (Session["IsAdmin"] == null || !(bool)Session["IsAdmin"])
+        {
+
+        }
+        else
+        {
+            // yeni bir veri eklemek için
+            <div class="add-data">
+                @{
+                    ViewBag.AddUrl = Url.Action("AddData", "AvailableProf");
+
+                    Html.RenderPartial("~/Views/Shared/PartialPages/AddButton.cshtml");
+                }
+            </div>
+        }
+    }
+
     <div class="container">
         @foreach (var avaiProf in Model.ToList())
         {
@@ -110,9 +114,24 @@
                     </button>
 
                     <button class="btn btn-danger" onclick="location.href='@Url.Action("Delete", "Appointment", new { appoId = avaiProf.AppointmentR.AppointmentID })'">
-                        <i class="fas fa-trash-alt"></i> Delete Selected
+                        <i class="fas fa-trash-alt"></i> Delete Appointment
                     </button>
                 }
+
+                @{
+                    if (Session["IsAdmin"] == null || !(bool)Session["IsAdmin"])
+                    {
+
+                    }
+                    else
+                    {
+                         <button class="btn btn-danger" onclick="location.href='@Url.Action("Delete", "AvailableProf", new { avaiId = avaiProf.AvailableProfID })'">
+                              <i class="fas fa-trash-alt"></i> Delete Available Time Slot
+                         </button>
+
+                    }
+                }
+
             </div>
         }
     </div>

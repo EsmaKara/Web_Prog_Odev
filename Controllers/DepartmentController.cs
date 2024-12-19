@@ -16,7 +16,7 @@ namespace Web_Prog_Odev.Controllers
         // Gerekli Fonksiyon Tanımlamaları;
         private void ControlViewBags(int result, string state)
         {
-            if (result == 0)
+            if (result != 0)
             {
                 ViewBag.Result = "The Department has been " + state + ".";
                 ViewBag.Success = true;

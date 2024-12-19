@@ -155,7 +155,7 @@
 
             {
                 // Available_Prof için birkaç veri ekleyelim, biri için randevu alınmış olsun
-                Available_Prof available_Prof1 = new Available_Prof { AvailableProfDateStart = DateTime.Now, AvailableProfDateEnd = DateTime.Now.AddMinutes(120), IsAvailable = false };
+                Available_Prof available_Prof1 = new Available_Prof { AvailableProfDateStart = DateTime.Now, AvailableProfDateEnd = DateTime.Now.AddMinutes(90), IsAvailable = false };
                 available_Prof1.ProfessorID = context.Professors.ToList().FirstOrDefault().ProfessorID;
                 context.AvailableProfs.Add(available_Prof1);
             }

@@ -16,7 +16,7 @@ namespace Web_Prog_Odev.Controllers
         // Gerekli Fonksiyon Tanımlamaları;
         private void ControlViewBags (int result, string state)
         {
-            if (result == 0)
+            if (result != 0)
             {
                 ViewBag.Result = "The available time slot for professors has been " + state + ".";
                 ViewBag.Success = true;
@@ -33,42 +33,43 @@ namespace Web_Prog_Odev.Controllers
 
 
 
+        public ActionResult AddData()
+        {
+            List<Professor> professors = db.Professors.ToList();
+            ViewBag.Professors = professors;
 
+            return View();
+        }
 
 
         // View'dan Contrellar'a veri göndermek için post metodu tanımlanır
         [HttpPost]
         // Profesörlerin müsait olduğu zaman dilimlerini tutacak tabloya view'dan girilen verilerin eklenmesini sağlayacak metod
-        public ActionResult Add(Available_Prof ViewAp)
+        public ActionResult Add(Available_Prof ViewAvaiProf)
         {
             Available_Prof newAP = new Available_Prof();
 
             // bugünün tarihinden daha eski veya 15 gün sonrasından daha ileri bir tarih atanamaz, eğer şartlar sağlanırsa atama gerçekleşir
-            if (ViewAp.AvailableProfDateStart >= DateTime.Now && ViewAp.AvailableProfDateStart <= DateTime.Now.AddHours(360))
+            if (ViewAvaiProf.AvailableProfDateStart >= DateTime.Now && ViewAvaiProf.AvailableProfDateStart <= DateTime.Now.AddHours(360))
             {
-                newAP.AvailableProfDateStart = ViewAp.AvailableProfDateStart;
-                newAP.AvailableProfDateEnd = ViewAp.AvailableProfDateEnd;
+                newAP.AvailableProfDateStart = ViewAvaiProf.AvailableProfDateStart;
+                newAP.AvailableProfDateEnd = ViewAvaiProf.AvailableProfDateStart.AddMinutes(90);
+                newAP.IsAvailable = true;
+                // ıd ile eşleşen profesör atanır
+                newAP.ProfessorID = ViewAvaiProf.ProfessorID;
+
+                db.AvailableProfs.Add(newAP);
+                int result = db.SaveChanges();
+
+                ControlViewBags(result, "saved");
+
+                return RedirectToAction("AppointmentPage", "Appointment");
             }
             else
             {
                 ViewBag.Avai_DateError = "An incorrect date/time entry has been detected.";
+                return RedirectToAction("AddData");
             }
-
-            // ıd ile eşleşen profesörler appointmente atanır
-            newAP.ProfessorR = db.Professors.Where(x => x.ProfessorID == ViewAp.ProfessorR.ProfessorID).FirstOrDefault();
-            
-            // randevu alınabilirliği false ise bir randevuya bağlı olması gerektiği anlamına gelir, bu yüzden eşleşen randevu ataması gerçekleştirilir
-            if(newAP.IsAvailable == false)
-            {
-                newAP.AppointmentR = db.Appointments.Where(x => x.AppointmentID == ViewAp.AppointmentR.AppointmentID).FirstOrDefault();
-            }
-
-            db.AvailableProfs.Add(newAP);
-            int result = db.SaveChanges();
-
-            ControlViewBags(result, "saved");
-
-            return View();
         }
 
 
@@ -121,23 +122,17 @@ namespace Web_Prog_Odev.Controllers
         }
 
 
-        [HttpPost]
-        public ActionResult Delete(int? apID)
+        public ActionResult Delete(int? avaiId)
         {
-            Available_Prof AP = db.AvailableProfs.Where(x => x.AvailableProfID == apID).FirstOrDefault();
+            Available_Prof AP = db.AvailableProfs.Where(x => x.AvailableProfID == avaiId).FirstOrDefault();
 
-            // bağlı olduğu appointment boş değilse ve bu müsaitlik durumu silinirse müsaitliğe bağlı randevu da silinmeli
-            if (AP.AppointmentR != null)
-            {
-                db.Appointments.Remove(AP.AppointmentR);
-            }
             db.AvailableProfs.Remove(AP);
 
             int result = db.SaveChanges();
 
             ControlViewBags(result, "deleted");
 
-            return View();
+            return RedirectToAction("AppointmentPage", "Appointment");
         }
     }
 }
