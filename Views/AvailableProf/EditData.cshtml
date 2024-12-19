@@ -1,6 +1,6 @@
 ﻿
 @using Web_Prog_Odev.Models
-@model Web_Prog_Odev.Models.Professor
+@model Web_Prog_Odev.Models.Available_Prof
 
 @{
     Layout = "~/Views/Shared/_LayoutNavbarFooter.cshtml";
@@ -88,34 +88,29 @@
 
 </head>
 <body>
-    <div>
+    <div class="card-center">
         <div class="card">
-            @using (Html.BeginForm("Edit", "Professor", new { profId = Model.ProfessorID }, FormMethod.Post))
+            @using (Html.BeginForm("Edit", "AvailableProf", new { avaiId = Model.AvailableProfID }, FormMethod.Post))
             {
                 @Html.AntiForgeryToken()
 
                 <div class="form-group">
-                    <span id="ProfName">Name: </span>
-                    @Html.TextBoxFor(model => model.ProfName, new { @class = "form-control", value = Model.ProfName, aria_label = "ProfName" })
+                    <span id="startTime">Start Time: </span>
+                    @Html.TextBoxFor(model => model.AvailableProfDateStart, new { @type = "datetime-local", 
+                   @class = "form-control", value = Model.AvailableProfDateStart == DateTime.MinValue ? "" : Model.AvailableProfDateStart.ToString("yyyy-MM-ddTHH:mm"), aria_label = "startTime" })
                 </div>
                 <div class="form-group">
-                    <span id="ProfSurName">Surname: </span>
-                    @Html.TextBoxFor(model => model.ProfSurname, new { @class = "form-control", value = Model.ProfSurname, aria_label = "ProfSurName" })
-                </div>
-                <div class="form-group">
-                    @Html.TextAreaFor(model => model.ProfTel, new { @class = "form-control", value = Model.ProfTel, aria_label = "ProfTel" })
-                </div>
-                <div class="form-group">
-                    @Html.TextBoxFor(model => model.ProfMail, new { @class = "form-control", value = Model.ProfMail, aria_label = "ProfMail" })
+                    <span id="endTime">End Time: </span>
+                    @Html.LabelFor(model => model.AvailableProfDateEnd, Model.AvailableProfDateStart);
                 </div>
 
 
-                // Hangi department'tan olacak selectList
+
+                // Hangi professor için ayarlanıyor, selectList
                 <div class="form-group">
-                    <span id="DepartmentID">Department: </span>
-                    @Html.DropDownListFor(model => model.DepartmentID,
-                        new SelectList(ViewBag.DepData, "DepartmentID", "DepartmentName"),
-                        $"{ViewBag.DepName}", // Varsayılan seçenek      /dropdown ilk yüklendiğinde seçili olur.
+                    <span id="ProfessorID">Professor: </span>
+                    @Html.DropDownListFor(model => model.ProfessorID,
+                        new SelectList(ViewBag.Professors, "ProfessorID", "ProfName"),
                         new { @class = "form-control" })
                 </div>
 
@@ -130,7 +125,6 @@
                 </div>
             }
         </div>
-
     </div>
 </body>
 </html>

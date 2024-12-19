@@ -115,6 +115,10 @@ namespace Web_Prog_Odev.Controllers
             if (profId != null)
             {
                 Professor professor = db.Professors.Where(prof => prof.ProfessorID == profId).FirstOrDefault();
+                List<Department> departments = db.Departments.ToList();
+                ViewBag.DepData = departments;
+                ViewBag.DepName = professor.DepartmentR.DepartmentName;
+
                 return View(professor);
             }
             return View();
@@ -134,6 +138,8 @@ namespace Web_Prog_Odev.Controllers
                     professor.ProfSurname = ViewProfessor.ProfSurname;
                     professor.ProfTel = ViewProfessor.ProfTel;
                     professor.ProfMail = ViewProfessor.ProfMail;
+
+                    professor.DepartmentID = ViewProfessor.DepartmentID;
 
                     int result = db.SaveChanges(); // Değişiklikleri veritabanına kaydet
                     ControlViewBags(result, "updated");

@@ -204,6 +204,7 @@
     <Content Include="Views\Appointment\AppointmentPage.cshtml" />
     <Content Include="Views\Appointment\AddData.cshtml" />
     <Content Include="Views\AvailableProf\AddData.cshtml" />
+    <Content Include="Views\AvailableProf\EditData.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

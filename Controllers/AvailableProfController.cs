@@ -73,53 +73,59 @@ namespace Web_Prog_Odev.Controllers
         }
 
 
-        // Controller'dan View'a veriler gönderilir ki sayfada gösterilsin
-        [HttpGet]
-        public ActionResult EditData(int? apID)
-        {
-            Available_Prof AP = null;
-            AP = db.AvailableProfs.Where(x => x.AvailableProfID == apID).FirstOrDefault();
-            if (AP != null) {
-                // sayfada müsait olunan zaman dilimi ile eşleşen profesörlerin bilgisinin de görülmesi isteniyor, ViewBag ile bunlar gönderilir
-                ViewBag.Avai_ProfID = AP.ProfessorR.ProfessorID;
-                ViewBag.Avai_ProfName = AP.ProfessorR.ProfName;
-                ViewBag.Avai_ProfSur = AP.ProfessorR.ProfSurname;
-                ViewBag.Avai_ProfMail = AP.ProfessorR.ProfMail;
 
-                // sayfada tarih de görülmeli mantıken
-                ViewBag.AvailableDateStart = AP.AvailableProfDateStart;
-                ViewBag.AvailableDateEnd = AP.AvailableProfDateEnd;
-                // bu alınabilir mi durumu butonlarda kullanılacak 
-                ViewBag.AvailableState = AP.IsAvailable;
+
+
+
+
+        // Controller'dan View'a veriler gönderilir ki sayfada gösterilsin
+        public ActionResult EditData(int? avaiId)
+        {
+            Available_Prof AP = db.AvailableProfs.Where(x => x.AvailableProfID == avaiId).FirstOrDefault();
+            List<Professor> professors = db.Professors.ToList();
+
+            if (AP != null) {
+                // sayfada müsait olunan zaman dilimi ile eşleşen profesörlerin bilgisinin de görülmesi isteniyor, ViewBag ile profesör gönderilir
+                ViewBag.ProfName = AP.ProfessorR.ProfName;
+                ViewBag.ProfSurname = AP.ProfessorR.ProfSurname;
+
+                ViewBag.Professors = professors;
+                return View(AP);
             }
             else
             {
-                ViewBag.Appo_Error = "No professor is available.";
+                ViewBag.Result = "No professor is available.";
+                return RedirectToAction("EditData");
             }
-            return View(AP);
         }
 
 
         [HttpPost]
-        public ActionResult Edit(Available_Prof ViewAp)
+        public ActionResult Edit(Available_Prof ViewAp, int? avaiId)
         {
-            Available_Prof tempAP = db.AvailableProfs.Where(x => x.AvailableProfID == ViewAp.AvailableProfID).FirstOrDefault();
+            Available_Prof tempAP = db.AvailableProfs.Where(x => x.AvailableProfID == avaiId).FirstOrDefault();
 
             // böyle bir veri satırı varsa değiştirilen tarih verisi atanır, kontrol sağlanarak
             if(tempAP != null)
             {
                 if (ViewAp.AvailableProfDateStart >= DateTime.Now && ViewAp.AvailableProfDateStart <= DateTime.Now.AddHours(360))
                 {
-                    tempAP.AvailableProfDateStart = ViewAp.AvailableProfDateStart;
-                    tempAP.AvailableProfDateEnd = ViewAp.AvailableProfDateEnd;
-                }
-                int result = db.SaveChanges();
+                    tempAP.AvailableProfDateStart = (DateTime) ViewAp.AvailableProfDateStart;
+                    tempAP.AvailableProfDateEnd = (DateTime) ViewAp.AvailableProfDateStart.AddMinutes(90);
 
-                ControlViewBags(result, "edited");
-                return RedirectToAction("AppointmentPage", "Appointment");
+                    tempAP.ProfessorID = ViewAp.ProfessorID;
+
+                    int result = db.SaveChanges();
+
+                    ControlViewBags(result, "edited");
+                    return RedirectToAction("AppointmentPage", "Appointment");
+                }             
             }
-            return RedirectToAction("EditData");
+            return RedirectToAction("EditData", new { avaiId = ViewAp.AvailableProfID });
+
         }
+
+
 
 
         public ActionResult Delete(int? avaiId)

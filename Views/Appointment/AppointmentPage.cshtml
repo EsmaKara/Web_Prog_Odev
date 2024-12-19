@@ -11,6 +11,12 @@
     <meta name="viewport" content="width=device-width" />
     <title>Appointment Page</title>
     <style>
+
+        @{ 
+            Html.RenderPartial("~/Views/Shared/PartialPages/CSS/CardsCSS.cshtml");
+            Html.RenderPartial("~/Views/Shared/PartialPages/CSS/CRUDButtonsCSS.cshtml");
+        }
+
         .container {
             display: flex;
             flex-wrap: wrap;
@@ -95,39 +101,42 @@
 
                 <p><strong>Status:</strong> @(avaiProf.IsAvailable ? "Available" : "Not Available")</p>
 
-                @if (avaiProf.IsAvailable)
-                {
-                    <button onclick="location.href='@Url.Action("AddData", "Appointment", new { avaiId = avaiProf.AvailableProfID })'">
-                        Create Appointment
-                    </button>
-                }
-                else
-                {
-                    List<Available_Prof> falseAvaiList = ViewBag.falseAvaiList;
-                    Assistant assistant = falseAvaiList.Where(x => x.AvailableProfID == avaiProf.AvailableProfID).ToList().FirstOrDefault().AppointmentR.AssistantR;
-
-
-                    <p><strong>Assistant who has the appointment:  </strong>@assistant.AssistName @assistant.AssistSurname</p>
-
-                    <button disabled>
-                        Not Available
-                    </button>
-
-                    <button class="btn btn-danger" onclick="location.href='@Url.Action("Delete", "Appointment", new { appoId = avaiProf.AppointmentR.AppointmentID })'">
-                        <i class="fas fa-trash-alt"></i> Delete Appointment
-                    </button>
-                }
 
                 @{
                     if (Session["IsAdmin"] == null || !(bool)Session["IsAdmin"])
                     {
+                        if (avaiProf.IsAvailable)
+                        {
+                            <button onclick="location.href='@Url.Action("AddData", "Appointment", new { avaiId = avaiProf.AvailableProfID })'">
+                                Create Appointment
+                            </button>
+                        }
+                        else
+                        {
+                            List<Available_Prof> falseAvaiList = ViewBag.falseAvaiList;
+                            Assistant assistant = falseAvaiList.Where(x => x.AvailableProfID == avaiProf.AvailableProfID).ToList().FirstOrDefault().AppointmentR.AssistantR;
 
+
+                            <p><strong>Assistant who has the appointment:  </strong>@assistant.AssistName @assistant.AssistSurname</p>
+
+                            <button disabled>
+                                Not Available
+                            </button>
+
+                            <button class="btn btn-danger" onclick="location.href='@Url.Action("Delete", "Appointment", new { appoId = avaiProf.AppointmentR.AppointmentID })'">
+                                <i class="fas fa-trash-alt"></i> Delete Appointment
+                            </button>
+                        }
                     }
                     else
                     {
-                         <button class="btn btn-danger" onclick="location.href='@Url.Action("Delete", "AvailableProf", new { avaiId = avaiProf.AvailableProfID })'">
-                              <i class="fas fa-trash-alt"></i> Delete Available Time Slot
-                         </button>
+
+                        // ViewBag ile admin CRUD işlemleri butonları URL'leri tanımlanıyor
+                        ViewBag.EditUrl = Url.Action("EditData", "AvailableProf", new { avaiId = avaiProf.AvailableProfID });
+                        ViewBag.DeleteUrl = Url.Action("Delete", "AvailableProf", new { avaiId = avaiProf.AvailableProfID });
+
+                        <p>Edit or Delete Available Time Slot</p>
+                        Html.RenderPartial("~/Views/Shared/PartialPages/CRUDButtons.cshtml");
 
                     }
                 }
