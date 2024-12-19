@@ -1,0 +1,187 @@
+﻿@using Web_Prog_Odev.Models
+@model List<Web_Prog_Odev.Models.Emergency>
+
+@{
+    Layout = "~/Views/Shared/_LayoutNavbarFooter.cshtml";
+}
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Emergency Page</title>
+
+    <style>
+        @{
+            Html.RenderPartial("~/Views/Shared/PartialPages/CSS/CardsCSS.cshtml");
+            Html.RenderPartial("~/Views/Shared/PartialPages/CSS/CRUDButtonsCSS.cshtml");
+        }
+
+
+        .add-data{
+            display:block;
+        }
+            .add-data btn {
+                background-color: #007bff;
+                color: #fff; /* Yazı rengi */
+                border: none; /* Çerçeveyi kaldır */
+                border-radius: 5px; /* Yuvarlatılmış köşeler */
+                padding: 10px 20px; /* İç boşluklar */
+                font-size: 18px; /* Yazı boyutu */
+                cursor: pointer; /* İmleç tipi */
+            }
+
+        .button-container {
+            display: flex;
+            justify-content: center; /* Yatayda ortalama */
+            align-items: center; /* Dikeyde ortalama (div'in yüksekliği ayarlanmışsa) */
+            width: 100%; /* Tam genişlik */
+            padding: 20px 0; /* Üst-alt boşluk */
+        }
+
+        .appointment-button {
+            background-color: #007bff; /* Butonun arka plan rengi */
+            color: #fff; /* Yazı rengi */
+            border: none; /* Çerçeveyi kaldır */
+            border-radius: 5px; /* Yuvarlatılmış köşeler */
+            padding: 10px 20px; /* İç boşluklar */
+            font-size: 18px; /* Yazı boyutu */
+            cursor: pointer; /* İmleç tipi */
+            transition: background-color 0.3s ease; /* Hover efekti için geçiş */
+            margin: 5px 0;
+        }
+
+            .appointment-button:hover {
+                background-color: #0056b3; /* Hover durumunda buton rengi */
+            }
+
+    </style>
+
+</head>
+<body>
+
+    <!-- Kart yapısı -->
+    <div>
+        <h1 style="text-align: center; color: #333333;">Emergencies</h1>
+
+        @{
+            if (Session["IsAdmin"] == null || !(bool)Session["IsAdmin"])
+            {
+
+            }
+            else
+            {
+                // yeni bir veri eklemek için
+                <div class="add-data">
+                    @{
+                        ViewBag.AddUrl = Url.Action("AddData", "Emergency");
+
+                        Html.RenderPartial("~/Views/Shared/PartialPages/AddButton.cshtml");
+                    }
+                </div>
+            }
+        }
+
+
+
+        <div class="container">
+            @{
+                // admin girişi yapılmadıysa sadece verileri görüntüler
+                if (Session["IsAdmin"] == null || !(bool)Session["IsAdmin"])
+                {
+                    foreach (Emergency emg in Model.ToList())
+                    {
+                        <div class="card">
+
+                            <h3 style="display:inline; text-align:center;">@emg.EmergencyName</h3>
+
+                            <div class="information">
+                                <p>@emg.EmergencyDescription</p>
+                            </div>
+                            <div class="information">
+                                <b>Emergency Entry Time: </b><span>@emg.EmergencyDate</span>
+                            </div>
+                            <div class="information">
+                                <b>Department: </b><span>@emg.DepartmentR.DepartmentName</span>
+                            </div>
+
+                            @{
+                                Shift shift = emg.DepartmentR.ShiftList.Where(s => s.ShiftStart <= emg.EmergencyDate && s.ShiftEnd >= emg.EmergencyDate).FirstOrDefault();
+                                if (shift != null)
+                                {
+                                    <div class="information">
+                                        <b>Details of the on-shift Assistant: </b>
+                                        <div>
+                                            @shift.AssistantR.AssistName
+                                            @shift.AssistantR.AssistSurname
+                                            <div>
+                                                <span>Contact: </span>
+                                                @shift.AssistantR.AssistTel ;
+                                                @shift.AssistantR.AssistMail
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            }
+
+                        </div>
+                    }
+                }
+
+                // admin girişi yapıldıysa CRUD işlemleri yapılabilmeli
+                else
+                {
+
+                    // Düzenlemek için ilgili card yapısı
+                    foreach (Emergency emg in Model.ToList())
+                    {
+                        <div class="card">
+                            <h3 style="display:inline; text-align:center;">@emg.EmergencyName</h3>
+
+                            <div class="information">
+                                <p>@emg.EmergencyDescription</p>
+                            </div>
+                            <div class="information">
+                                <b>Emergency Entry Time: </b><span>@emg.EmergencyDate</span>
+                            </div>
+                            <div class="information">
+                                <b>Department: </b><span>@emg.DepartmentR.DepartmentName</span>
+                            </div>
+
+                            @{
+                                Shift shift = emg.DepartmentR.ShiftList.Where(s => s.ShiftStart <= emg.EmergencyDate && s.ShiftEnd >= emg.EmergencyDate).FirstOrDefault();
+                                if (shift != null)
+                                {
+                                    <div class="information">
+                                        <b>Details of the on-shift Assistant: </b>
+                                        <div>
+                                            @shift.AssistantR.AssistName
+                                            @shift.AssistantR.AssistSurname
+                                            <div>
+                                                <span>Contact: </span>
+                                                @shift.AssistantR.AssistTel ;
+                                                @shift.AssistantR.AssistMail
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            }
+
+                            @{
+                                // ViewBag ile admin CRUD işlemleri butonları URL'leri tanımlanıyor
+                                ViewBag.EditUrl = Url.Action("EditData", "Emergency", new { emgId = emg.EmergencyID });
+                                ViewBag.DeleteUrl = Url.Action("Delete", "Emergency", new { emgId = emg.EmergencyID });
+
+                                Html.RenderPartial("~/Views/Shared/PartialPages/CRUDButtons.cshtml");
+                            }
+
+                        </div>
+                    }
+                }
+            }
+        </div>
+    </div>
+
+
+</body>
+</html>

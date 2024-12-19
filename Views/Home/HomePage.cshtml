@@ -143,36 +143,35 @@
                     List<Emergency> emergencies = Model.ToList();
                     foreach (Emergency emg in emergencies)
                     {
-                        <div class="emergency-info">
-                            <h2>@emg.EmergencyName</h2>
-                            <p>@emg.EmergencyDescription</p>
-                            <div class="information">
-                                <h4>@emg.DepartmentR.DepartmentName</h4>
-                            </div>
-                            <div class="information">
-                                <b>Entered Time: </b><span>@emg.EmergencyDate</span>
-                            </div>
-                            <div class="information">
-                                <b>Details of the on-shift Assistant: </b>
-                                <div>
-                                    @emg.DepartmentR.ShiftList.Where(s => s.ShiftStart <= emg.EmergencyDate && s.ShiftEnd >= emg.EmergencyDate).ToList().FirstOrDefault().AssistantR.AssistName
-                                    @emg.DepartmentR.ShiftList.Where(s => s.ShiftStart <= emg.EmergencyDate && s.ShiftEnd >= emg.EmergencyDate).ToList().FirstOrDefault().AssistantR.AssistSurname
-                                    <div>
-                                        <span>Contact: </span>
-                                        @emg.DepartmentR.ShiftList.Where(s => s.ShiftStart <= emg.EmergencyDate && s.ShiftEnd >= emg.EmergencyDate).ToList().FirstOrDefault().AssistantR.AssistTel ;
-                                        @emg.DepartmentR.ShiftList.Where(s => s.ShiftStart <= emg.EmergencyDate && s.ShiftEnd >= emg.EmergencyDate).ToList().FirstOrDefault().AssistantR.AssistMail
+                                <div class="emergency-info">
+                                    <h2>@emg.EmergencyName</h2>
+                                    <p>@emg.EmergencyDescription</p>
+                                    <div class="information">
+                                        <h4>@emg.DepartmentR.DepartmentName</h4>
                                     </div>
+                                    <div class="information">
+                                        <b>Entered Time: </b><span>@emg.EmergencyDate</span>
+                                    </div>
+                                    @{
+                                        Shift shift = emg.DepartmentR.ShiftList.Where(s => s.ShiftStart <= emg.EmergencyDate && s.ShiftEnd >= emg.EmergencyDate).FirstOrDefault();
+                                        if (shift != null)
+                                        {
+                                            <div class="information">
+                                                <b>Details of the on-shift Assistant: </b>
+                                                <div>
+                                                    @shift.AssistantR.AssistName
+                                                    @shift.AssistantR.AssistSurname
+                                                    <div>
+                                                        <span>Contact: </span>
+                                                        @shift.AssistantR.AssistTel ;
+                                                        @shift.AssistantR.AssistMail
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+                                    }
 
-                                    @*  Farklı bir şekilde veri çekme ancak çıktıyı istediğim şekilde düzenleyebilmek adına bir değişkene atamayı tercih ettim
-                             @emg.DepartmentR.ShiftList.Where(s => s.ShiftStart <= emg.EmergencyDate && s.ShiftEnd >= emg.EmergencyDate).Select(assist => new
-                            {
-                                assist.AssistantR.AssistName,
-                                assist.AssistantR.AssistSurname,
-                                assist.AssistantR.AssistTel
-                            }).ToList().FirstOrDefault().ToString();*@
                                 </div>
-                            </div>
-                        </div>
                     }
                 }
             </div>

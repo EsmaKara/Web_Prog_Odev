@@ -215,6 +215,8 @@
     <Content Include="Views\Shift\ShiftPage.cshtml" />
     <Content Include="Views\Shift\AddData.cshtml" />
     <Content Include="Views\Shift\EditData.cshtml" />
+    <Content Include="Views\Emergency\EmergencyPage.cshtml" />
+    <Content Include="Views\Emergency\AddData.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -225,7 +227,6 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Models\ViewModels\" />
-    <Folder Include="Views\Emergency\" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Migrations\202412190634592_InitialCreate.resx">

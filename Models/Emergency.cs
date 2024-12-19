@@ -15,7 +15,7 @@ namespace Web_Prog_Odev.Models
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity), Required]
         public int EmergencyID { get; set; }
 
-        // uzunluğu maksimum 200 karakter olabilir ve zorunlu alan
+        // uzunluğu maksimum 100 karakter olabilir ve zorunlu alan
         [StringLength(100), Required]
         public string EmergencyName { get; set; }
 
