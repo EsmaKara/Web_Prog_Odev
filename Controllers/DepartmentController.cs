@@ -67,6 +67,63 @@ namespace Web_Prog_Odev.Controllers
 
 
 
+
+
+        public ActionResult AddData()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult Add(Department ViewDepartment)
+        {
+            Department department = new Department();
+
+            int capasity = 100;
+            int bedCapacity = 50;
+
+            if (ModelState.IsValid)
+            {
+
+                // kapasiteden fazla bir değer ya da negatif bir değer girilemez
+                if (department.Dep_NumberOfPatients >= 0 && department.Dep_NumberOfPatients <= capasity)
+                {
+                    department.Dep_NumberOfPatients = ViewDepartment.Dep_NumberOfPatients;
+                    if (ViewDepartment.Dep_NumberOfBed >= 0 && ViewDepartment.Dep_NumberOfBed <= bedCapacity)
+                    {
+                        // yatışı yapılan hasta sayısı yatak sayısından fazla olamaz
+                        if (ViewDepartment.Dep_NumberOfBedridden >= 0 && ViewDepartment.Dep_NumberOfBed >= ViewDepartment.Dep_NumberOfBedridden)
+                        {
+                            department.Dep_NumberOfBed = ViewDepartment.Dep_NumberOfBed;
+                            department.Dep_NumberOfBedridden = ViewDepartment.Dep_NumberOfBedridden;
+                            department.Dep_NumberOfEmptyBed = ViewDepartment.Dep_NumberOfBed - ViewDepartment.Dep_NumberOfBedridden;
+
+                            department.DepartmentName = ViewDepartment.DepartmentName;
+                            department.Dep_Description = ViewDepartment.Dep_Description;
+
+                            db.Departments.Add(department);
+
+                            int result = db.SaveChanges(); // Değişiklikleri veritabanına kaydet
+                            ControlViewBags(result, "added");
+                            return RedirectToAction("DepartmentPage");
+                        }
+                    }
+                }
+                else
+                {
+                    ViewBag.Result = "Make sure that the values you entered are Valid.";
+                    return RedirectToAction("AddData");
+                }
+
+            }
+            
+            return RedirectToAction("AddData");
+        }
+
+
+
+
+
         public ActionResult EditData(int? depId)
         {
             // alternatif yöntem
@@ -122,7 +179,7 @@ namespace Web_Prog_Odev.Controllers
                     }
                     else
                     {
-                        TempData["Result"] = "Make sure that the values you entered are Valid.";
+                        ViewBag.Result = "Make sure that the values you entered are Valid.";
                         return RedirectToAction("EditData");
                     }
                     

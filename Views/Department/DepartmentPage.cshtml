@@ -65,6 +65,27 @@
     <!-- Kart yapısı -->
     <div>
         <h1 style="text-align: center; color: #333333;">Our Departments</h1>
+
+
+        @{
+            if (Session["IsAdmin"] == null || !(bool)Session["IsAdmin"])
+            {
+
+            }
+            else
+            {
+                // yeni bir veri eklemek için
+                <div class="add-data">
+                    @{
+                        ViewBag.AddUrl = Url.Action("AddData", "Department");
+
+                        Html.RenderPartial("~/Views/Shared/PartialPages/AddButton.cshtml");
+                    }
+                </div>
+            }
+        }
+
+
         <div class="container">
 
             @{
@@ -121,7 +142,7 @@
                                 <b>Empty Bed: </b><span>@department.Dep_NumberOfEmptyBed</span>
                             </div>
 
-                            @{                                
+                            @{
                                 // ViewBag ile admin CRUD işlemleri butonları URL'leri tanımlanıyor
                                 ViewBag.EditUrl = Url.Action("EditData", "Department", new { depId = department.DepartmentID });
                                 ViewBag.DeleteUrl = Url.Action("Delete", "Department", new { depId = department.DepartmentID });
@@ -130,8 +151,8 @@
                             }
 
                         </div>
-                     }
-                 }
+                    }
+                }
             }
 
         </div>
