@@ -168,14 +168,17 @@ namespace Web_Prog_Odev.Controllers
 
 
 
-
+        public ActionResult SchedulePage()
+        {
+            return View();
+        }
 
 
 
 
 
         // Asistan ve nöbet bilgilerinin takvim yapısında gösterileceği sayfa tasarımı  +randevular da eklenebilir
-        public JsonResult SchedulePage(DateTime? start, DateTime? end)
+        public JsonResult GetCalendarData(DateTime? start, DateTime? end)
         {
 
             if (!start.HasValue)
@@ -194,9 +197,9 @@ namespace Web_Prog_Odev.Controllers
                 .AsEnumerable()
                 .Select(s => new
                 {
-                    title = $"Shift For: Asst. {s.AssistantR.AssistName} {s.AssistantR.AssistSurname} on {s.DepartmentR.DepartmentName} Department",
+                    title = $"SHIFT For: Asst. {s.AssistantR.AssistName} {s.AssistantR.AssistSurname} on {s.DepartmentR.DepartmentName} Department",
                     start = s.ShiftStart.ToString("yyyy-MM-ddTHH:mm:ss"),
-                    end = s.ShiftEnd.ToString("yyyy-MM-ddTHH:mm:ss"), // Örnek bitiş süresi
+                    end = s.ShiftStart.AddHours(24).ToString("yyyy-MM-ddTHH:mm:ss"), // Örnek bitiş süresi
                     color = "#FFD700" // Sarı renk
                 }).ToList();
 
@@ -206,7 +209,7 @@ namespace Web_Prog_Odev.Controllers
                 .AsEnumerable()
                 .Select(a => new
                 {
-                    title = $"Appointment For: Prof. {a.AvailableProfR.ProfessorR.ProfName} {a.AvailableProfR.ProfessorR.ProfSurname} " +
+                    title = $"APPOINTMENT For: Prof. {a.AvailableProfR.ProfessorR.ProfName} {a.AvailableProfR.ProfessorR.ProfSurname} " +
                     $"and Asst. {a.AssistantR.AssistName} {a.AssistantR.AssistSurname}",
                     start = a.AvailableProfR.AvailableProfDateStart.ToString("yyyy-MM-ddTHH:mm:ss"),
                     end = a.AvailableProfR.AvailableProfDateStart.AddMinutes(90).ToString("yyyy-MM-ddTHH:mm:ss"), // Örnek bitiş süresi

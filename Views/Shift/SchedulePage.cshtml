@@ -1,48 +1,125 @@
-﻿
-@{
+﻿@{
     Layout = "~/Views/Shared/_LayoutNavbarFooter.cshtml";
 }
 
-
 <!DOCTYPE html>
-
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
-    <title>SchedulePage</title>
-
-
+    <title>Nöbet ve Randevu Takvimi</title>
 
     <style>
-        #calendar {
-            max-width: 900px;
-            margin: 20px auto;
+        body {
             font-family: 'Arial', sans-serif;
+            background-color: #fffbea;
+            color: #333;
         }
+
+        h2 {
+            text-align: center;
+            color: #ffd633;
+        }
+
+        #calendar {
+            width: 90%;
+            margin: 20px auto;
+            border-collapse: collapse;
+            background: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+
+            #calendar th, #calendar td {
+                width: 14.28%;
+                text-align: center;
+                padding: 10px;
+                border: 1px solid #ddd;
+            }
+
+            #calendar th {
+                background-color: #ffd633;
+                color: white;
+            }
+
+        .empty {
+            background-color: #f9f9f9;
+        }
+
+        .dolu {
+            background-color: #fff5cc;
+            position: relative;
+        }
+
+        .musait {
+            background-color: #e6ffe6;
+        }
+
+        .nobet-details {
+            font-size: 12px;
+            margin-top: 5px;
+        }
+
+        #monthControl {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 20px 0;
+        }
+
+            #monthControl button {
+                background-color: #ffd633;
+                color: white;
+                border: none;
+                padding: 10px 15px;
+                margin: 0 10px;
+                cursor: pointer;
+                border-radius: 5px;
+                font-size: 14px;
+            }
+
+                #monthControl button:hover {
+                    background-color: #e6b800;
+                }
+
+        #currentMonth {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        a#listebuton {
+            display: inline-block;
+            background-color: #ffd633;
+            color: white;
+            text-decoration: none;
+            padding: 10px 15px;
+            margin: 10px auto;
+            border-radius: 5px;
+            font-size: 14px;
+            text-align: center;
+        }
+
+            a#listebuton:hover {
+                background-color: #e6b800;
+            }
     </style>
-
-
 </head>
 <body>
-    <h2>Nöbet Takvimi</h2>
+    <h2>Nöbet ve Randevu Takvimi</h2>
 
-    <!-- Ay değiştir butonları -->
     <div id="monthControl">
         <button onclick="changeMonth(-1)">Önceki Ay</button>
         <span id="currentMonth"></span>
         <button onclick="changeMonth(1)">Sonraki Ay</button>
-
     </div>
 
     <div>
         @if (Session["IsAdmin"] != null && (bool)Session["IsAdmin"])
         {
-            <a href="@Url.Action("NobetListele", "Nobet")" id="listebuton">Nöbetleri Listele</a>
+            <a href="@Url.Action("NobetListele", "Nobet")" id="listebuton">List Shifts</a>
         }
     </div>
 
-    <!-- Takvim Alanı -->
-    <table id="calendar" class="calendar">
+    <table id="calendar">
         <thead>
             <tr>
                 <th>Paz</th>
@@ -55,43 +132,38 @@
             </tr>
         </thead>
         <tbody>
-            <!-- Günler buraya AJAX ile yüklenecek -->
+            <!-- Günler AJAX ile doldurulacak -->
         </tbody>
     </table>
 
-    <script src="~/Scripts/jquery-3.7.1.js"></script> <!-- Güncel jquery yolu -->
+    <script src="~/Scripts/jquery-3.7.1.js"></script> <!-- jQuery yolu -->
 
     <script>
         let currentMonth = new Date();
         let currentYear = currentMonth.getFullYear();
         let currentMonthIndex = currentMonth.getMonth();
 
-        // Takvimi güncellemek için
         function renderCalendar() {
-            // Ay adını güncelle
-            const monthName = new Date(currentYear, currentMonthIndex).toLocaleString('default', { month: 'long' });
-            document.getElementById('currentMonth').textContent = ${ monthName } ${ currentYear };
+            const monthName = new Date(currentYear, currentMonthIndex).toLocaleString('tr-TR', { month: 'long' });
+            document.getElementById('currentMonth').textContent = `${monthName} ${currentYear}`;
 
-            // AJAX ile nöbetleri al
             $.ajax({
-                url: '/Nobet/GetTakvimVerisi',
+                url: '@Url.Action("GetCalendarData", "Shift")',
                 method: 'GET',
                 data: {
-                    year: currentYear,
-                    month: currentMonthIndex + 1  // 0-11 arası olduğu için +1 yapıyoruz
+                    start: new Date(currentYear, currentMonthIndex, 1).toISOString(),
+                    end: new Date(currentYear, currentMonthIndex + 1, 0).toISOString()
                 },
                 success: function (events) {
                     generateCalendarDays(events);
                 },
                 error: function () {
-                    alert('Nöbetler alınırken bir hata oluştu.');
+                    alert('Takvim verisi alınırken bir hata oluştu.');
                 }
             });
         }
 
-        // Takvimi render et (günleri oluştur)
         function generateCalendarDays(events) {
-            // Takvimi sıfırlayalım
             const tbody = $('#calendar tbody');
             tbody.empty();
 
@@ -102,12 +174,10 @@
             let dayCounter = 1;
             let row = $('<tr></tr>');
 
-            // Ayın ilk günü için boş hücre ekleyelim
             for (let i = 0; i < firstDayOfWeek; i++) {
                 row.append('<td class="empty"></td>');
             }
 
-            // Günleri eklemeye başlayalım
             for (let day = firstDayOfWeek; day < 7; day++) {
                 if (dayCounter <= lastDateOfMonth) {
                     row.append(generateDayCell(dayCounter, events));
@@ -116,7 +186,6 @@
             }
             tbody.append(row);
 
-            // Diğer haftalar
             while (dayCounter <= lastDateOfMonth) {
                 row = $('<tr></tr>');
                 for (let day = 0; day < 7; day++) {
@@ -129,47 +198,31 @@
             }
         }
 
-        // Her bir gün hücresini oluşturma
         function generateDayCell(day, events) {
             const cell = $('<td></td>');
             const date = new Date(currentYear, currentMonthIndex, day);
-
-            // Nöbetler için güncellenecek id
-            const dayNobet = events.filter(n => new Date(n.start).toDateString() === date.toDateString());
+            const dayEvents = events.filter(event => new Date(event.start).toDateString() === date.toDateString());
 
             cell.text(day);
 
-            // Eğer o günün nöbeti varsa, nöbet bilgilerini ekleyelim
-            if (dayNobet.length > 0) {
-                const nobetText = dayNobet.map(n => {
-                    const startTime = new Date(n.start);
-                    const endTime = new Date(n.end);
-
-                    // Saat biçimi düzenlemesi: HH:mm formatı
-                    const startTimeFormatted = startTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-                    const endTimeFormatted = endTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-
-                    // Saat bilgilerini içeren metni oluştur
-                    return ${ n.title }: ${ startTimeFormatted } - ${ endTimeFormatted };
-                }).join("<br>");
-
+            if (dayEvents.length > 0) {
+                const eventDetails = dayEvents.map(event => `
+                        <div class="nobet-details">
+                            ${event.title}<br>
+                            ${new Date(event.start).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} -
+                            ${new Date(event.end).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                        </div>
+                    `).join("");
                 cell.addClass('dolu');
-                cell.append(<div class="nobet-details">${nobetText}</div>);
+                cell.append(eventDetails);
             } else {
                 cell.addClass('musait');
                 cell.append('<div>Müsait</div>');
             }
 
-            // Kullanıcı günü tıkladığında nöbet alma işlemi
-            cell.click(function () {
-                alert(Nöbet almak için ${ date.toLocaleDateString() } tarihinde uygun saatleri görebilirsiniz.);
-            });
-
             return cell;
         }
 
-
-        // Ayı değiştirmek için
         function changeMonth(offset) {
             currentMonthIndex += offset;
             if (currentMonthIndex < 0) {
@@ -182,10 +235,7 @@
             renderCalendar();
         }
 
-        // Sayfa yüklendiğinde takvimi render et
         renderCalendar();
-
     </script>
-
 </body>
 </html>
