@@ -142,12 +142,49 @@ namespace Web_Prog_Odev.Controllers
 
 
 
+
+
         // Asistan ve nöbet bilgilerinin takvim yapısında gösterileceği sayfa tasarımı  +randevular da eklenebilir
-        public ActionResult SchedulePage()
+        public JsonResult SchedulePage(DateTime? start, DateTime? end)
         {
 
+            if (!start.HasValue)
+            {
+                start = DateTime.Now.AddMonths(-1); // Varsayılan başlangıç tarihi (bir ay önce)
+            }
 
-            return View();
+            if (!end.HasValue)
+            {
+                end = DateTime.Now.AddMonths(1); // Varsayılan bitiş tarihi (bir ay sonra)
+            }
+
+            var shifts = db.Shifts
+                .Where(s => s.ShiftStart >= start && s.ShiftEnd <= end)
+                .ToList()
+                .AsEnumerable()
+                .Select(s => new
+                {
+                    title = $"Shift For: Asst. {s.AssistantR.AssistName} {s.AssistantR.AssistSurname} on {s.DepartmentR.DepartmentName} Department",
+                    start = s.ShiftStart.ToString("yyyy-MM-ddTHH:mm:ss"),
+                    end = s.ShiftEnd.ToString("yyyy-MM-ddTHH:mm:ss"), // Örnek bitiş süresi
+                    color = "#FFD700" // Sarı renk
+                }).ToList();
+
+            var appointments = db.Appointments
+                .Where(a => a.AvailableProfR.AvailableProfDateStart >= start && a.AvailableProfR.AvailableProfDateEnd <= end)
+                .ToList()
+                .AsEnumerable()
+                .Select(a => new
+                {
+                    title = $"Appointment For: Prof. {a.AvailableProfR.ProfessorR.ProfName} {a.AvailableProfR.ProfessorR.ProfSurname} " +
+                    $"and Asst. {a.AssistantR.AssistName} {a.AssistantR.AssistSurname}",
+                    start = a.AvailableProfR.AvailableProfDateStart.ToString("yyyy-MM-ddTHH:mm:ss"),
+                    end = a.AvailableProfR.AvailableProfDateStart.AddMinutes(90).ToString("yyyy-MM-ddTHH:mm:ss"), // Örnek bitiş süresi
+                    color = "#fff5cc" // Daha açık sarı renk
+                }).ToList();
+
+            var events = shifts.Concat(appointments);
+            return Json(events, JsonRequestBehavior.AllowGet);
         }
 
 

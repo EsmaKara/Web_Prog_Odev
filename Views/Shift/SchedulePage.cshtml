@@ -1,0 +1,191 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_LayoutNavbarFooter.cshtml";
+}
+
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>SchedulePage</title>
+
+
+
+    <style>
+        #calendar {
+            max-width: 900px;
+            margin: 20px auto;
+            font-family: 'Arial', sans-serif;
+        }
+    </style>
+
+
+</head>
+<body>
+    <h2>Nöbet Takvimi</h2>
+
+    <!-- Ay değiştir butonları -->
+    <div id="monthControl">
+        <button onclick="changeMonth(-1)">Önceki Ay</button>
+        <span id="currentMonth"></span>
+        <button onclick="changeMonth(1)">Sonraki Ay</button>
+
+    </div>
+
+    <div>
+        @if (Session["IsAdmin"] != null && (bool)Session["IsAdmin"])
+        {
+            <a href="@Url.Action("NobetListele", "Nobet")" id="listebuton">Nöbetleri Listele</a>
+        }
+    </div>
+
+    <!-- Takvim Alanı -->
+    <table id="calendar" class="calendar">
+        <thead>
+            <tr>
+                <th>Paz</th>
+                <th>Pzt</th>
+                <th>Sal</th>
+                <th>Çar</th>
+                <th>Per</th>
+                <th>Cum</th>
+                <th>Cmt</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Günler buraya AJAX ile yüklenecek -->
+        </tbody>
+    </table>
+
+    <script src="~/Scripts/jquery-3.7.1.js"></script> <!-- Güncel jquery yolu -->
+
+    <script>
+        let currentMonth = new Date();
+        let currentYear = currentMonth.getFullYear();
+        let currentMonthIndex = currentMonth.getMonth();
+
+        // Takvimi güncellemek için
+        function renderCalendar() {
+            // Ay adını güncelle
+            const monthName = new Date(currentYear, currentMonthIndex).toLocaleString('default', { month: 'long' });
+            document.getElementById('currentMonth').textContent = ${ monthName } ${ currentYear };
+
+            // AJAX ile nöbetleri al
+            $.ajax({
+                url: '/Nobet/GetTakvimVerisi',
+                method: 'GET',
+                data: {
+                    year: currentYear,
+                    month: currentMonthIndex + 1  // 0-11 arası olduğu için +1 yapıyoruz
+                },
+                success: function (events) {
+                    generateCalendarDays(events);
+                },
+                error: function () {
+                    alert('Nöbetler alınırken bir hata oluştu.');
+                }
+            });
+        }
+
+        // Takvimi render et (günleri oluştur)
+        function generateCalendarDays(events) {
+            // Takvimi sıfırlayalım
+            const tbody = $('#calendar tbody');
+            tbody.empty();
+
+            const firstDayOfMonth = new Date(currentYear, currentMonthIndex, 1);
+            const lastDateOfMonth = new Date(currentYear, currentMonthIndex + 1, 0).getDate();
+            const firstDayOfWeek = firstDayOfMonth.getDay();
+
+            let dayCounter = 1;
+            let row = $('<tr></tr>');
+
+            // Ayın ilk günü için boş hücre ekleyelim
+            for (let i = 0; i < firstDayOfWeek; i++) {
+                row.append('<td class="empty"></td>');
+            }
+
+            // Günleri eklemeye başlayalım
+            for (let day = firstDayOfWeek; day < 7; day++) {
+                if (dayCounter <= lastDateOfMonth) {
+                    row.append(generateDayCell(dayCounter, events));
+                    dayCounter++;
+                }
+            }
+            tbody.append(row);
+
+            // Diğer haftalar
+            while (dayCounter <= lastDateOfMonth) {
+                row = $('<tr></tr>');
+                for (let day = 0; day < 7; day++) {
+                    if (dayCounter <= lastDateOfMonth) {
+                        row.append(generateDayCell(dayCounter, events));
+                        dayCounter++;
+                    }
+                }
+                tbody.append(row);
+            }
+        }
+
+        // Her bir gün hücresini oluşturma
+        function generateDayCell(day, events) {
+            const cell = $('<td></td>');
+            const date = new Date(currentYear, currentMonthIndex, day);
+
+            // Nöbetler için güncellenecek id
+            const dayNobet = events.filter(n => new Date(n.start).toDateString() === date.toDateString());
+
+            cell.text(day);
+
+            // Eğer o günün nöbeti varsa, nöbet bilgilerini ekleyelim
+            if (dayNobet.length > 0) {
+                const nobetText = dayNobet.map(n => {
+                    const startTime = new Date(n.start);
+                    const endTime = new Date(n.end);
+
+                    // Saat biçimi düzenlemesi: HH:mm formatı
+                    const startTimeFormatted = startTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                    const endTimeFormatted = endTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+                    // Saat bilgilerini içeren metni oluştur
+                    return ${ n.title }: ${ startTimeFormatted } - ${ endTimeFormatted };
+                }).join("<br>");
+
+                cell.addClass('dolu');
+                cell.append(<div class="nobet-details">${nobetText}</div>);
+            } else {
+                cell.addClass('musait');
+                cell.append('<div>Müsait</div>');
+            }
+
+            // Kullanıcı günü tıkladığında nöbet alma işlemi
+            cell.click(function () {
+                alert(Nöbet almak için ${ date.toLocaleDateString() } tarihinde uygun saatleri görebilirsiniz.);
+            });
+
+            return cell;
+        }
+
+
+        // Ayı değiştirmek için
+        function changeMonth(offset) {
+            currentMonthIndex += offset;
+            if (currentMonthIndex < 0) {
+                currentMonthIndex = 11;
+                currentYear--;
+            } else if (currentMonthIndex > 11) {
+                currentMonthIndex = 0;
+                currentYear++;
+            }
+            renderCalendar();
+        }
+
+        // Sayfa yüklendiğinde takvimi render et
+        renderCalendar();
+
+    </script>
+
+</body>
+</html>

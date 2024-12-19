@@ -127,6 +127,10 @@
     <Content Include="Scripts\jquery-3.7.1.slim.js" />
     <Content Include="Scripts\jquery-3.7.1.slim.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
+    <Content Include="Scripts\moment-with-locales.js" />
+    <Content Include="Scripts\moment-with-locales.min.js" />
+    <Content Include="Scripts\moment.js" />
+    <Content Include="Scripts\moment.min.js" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -205,6 +209,9 @@
     <Content Include="Views\Appointment\AddData.cshtml" />
     <Content Include="Views\AvailableProf\AddData.cshtml" />
     <Content Include="Views\AvailableProf\EditData.cshtml" />
+    <Content Include="Views\Shift\SchedulePage.cshtml" />
+    <Content Include="Scripts\moment.min.js.map" />
+    <Content Include="Scripts\moment-with-locales.min.js.map" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -216,7 +223,6 @@
     <Folder Include="App_Data\" />
     <Folder Include="Models\ViewModels\" />
     <Folder Include="Views\Emergency\" />
-    <Folder Include="Views\Shift\" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Migrations\202412190634592_InitialCreate.resx">
