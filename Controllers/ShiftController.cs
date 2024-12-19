@@ -34,101 +34,131 @@ namespace Web_Prog_Odev.Controllers
             }
         }
 
-        // Identity tanımlı olduğunda veri silindiği durumda ID'ler resetlenmeli ki yeni eklemelerde sorun yaşanmasın
-        public ActionResult ResetIdentity(string tableName)
-        {
-            string sql = $"DBCC CHECKIDENT ('{tableName}', RESEED, 0)";
-
-            using (var context = new DatabaseContext())
-            {
-                context.Database.ExecuteSqlCommand(sql);
-            }
-
-            return RedirectToAction("Index");
-        }
-
         // Departman için de nöbet kontrolü yapabilmek için bunun bir fonksiyon olarak tanımlanması gerekliydi
         // Bir asistanın atanacak tarihler arasında randevusu veya nöbeti var mı kontrolü sağlama
         private void AssistantControl(Shift newShift, Shift ViewSt)
         {
             // ıd ile eşleşen assistant'ı getir ve geçici değişkene ata
-            Assistant assisTemp = db.Assistants.Where(x => x.AssistantID == ViewSt.AssistantR.AssistantID).FirstOrDefault();
+            Assistant assisTemp = db.Assistants.Where(x => x.AssistantID == ViewSt.AssistantID).FirstOrDefault();
             List<Shift> shiftLassist = assisTemp.ShiftList.ToList();
             List<Appointment> appoLcond = assisTemp.AppointmentList.ToList();
 
-            foreach (Shift s in shiftLassist)
+            if (shiftLassist.Count > 0)
             {
-                if (s != null)
+                foreach (Shift s in shiftLassist)
                 {
+
                     // yeni nöbet ya var olan bir nöbetin bitişinden sonra başlayabilir ya da var olan nöbetin başlangıcından önce bitebilir
-                    if (ViewSt.ShiftStart > s.ShiftEnd || ViewSt.ShiftEnd < s.ShiftStart)
+                    if ((DateTime)ViewSt.ShiftStart > s.ShiftEnd || (DateTime)ViewSt.ShiftEnd < s.ShiftStart)
                     {
                         // bugünün tarihinden daha eski veya 15 gün sonrasından daha ileri bir tarih atanamaz
-                        if (ViewSt.ShiftStart >= DateTime.Now && ViewSt.ShiftStart <= DateTime.Now.AddHours(360))
+                        if ((DateTime)ViewSt.ShiftStart >= DateTime.Now && (DateTime)ViewSt.ShiftStart <= DateTime.Now.AddHours(360))
                         {
                             // başlangıç ve bitiş arasındaki fark 24 saat ise
-                            TimeSpan difference = ViewSt.ShiftEnd - ViewSt.ShiftStart;
+                            TimeSpan difference = (DateTime)ViewSt.ShiftEnd - (DateTime)ViewSt.ShiftStart;
                             if (difference.TotalHours == 24)
                             {
-                                // randevusu != null kontrolü çıkartılabilir sonradan bir KONTROL ET
-                                foreach (Appointment appo in appoLcond)
+                                if (appoLcond.Count > 0)
                                 {
-                                    // ancak asistan randevusu olduğu durumlarda da kontroller gerekli
-                                    if (appoLcond != null)
+                                    // randevusu != null kontrolü çıkartılabilir sonradan bir KONTROL ET
+                                    foreach (Appointment appo in appoLcond)
                                     {
-                                        // nöbet ya asistanın randevusundan sonra başlamalı ya da randevunun başlangıcından önce bitmeli
-                                        if (ViewSt.ShiftStart > appo.AvailableProfR.AvailableProfDateEnd || ViewSt.ShiftEnd < appo.AvailableProfR.AvailableProfDateStart)
+                                        // ancak asistan randevusu olduğu durumlarda da kontroller gerekli
+                                        if (appoLcond != null)
                                         {
-                                            newShift.AssistantR = assisTemp;
-                                            newShift.ShiftStart = ViewSt.ShiftStart;
-                                            newShift.ShiftEnd = ViewSt.ShiftEnd;
+                                            // nöbet ya asistanın randevusundan sonra başlamalı ya da randevunun başlangıcından önce bitmeli
+                                            if ((DateTime)ViewSt.ShiftStart > appo.AvailableProfR.AvailableProfDateEnd || (DateTime)ViewSt.ShiftEnd < appo.AvailableProfR.AvailableProfDateStart)
+                                            {
+                                                newShift.AssistantR = assisTemp;
+                                                newShift.ShiftStart = (DateTime)ViewSt.ShiftStart;
+                                                newShift.ShiftEnd = (DateTime)ViewSt.ShiftStart.AddHours(24);
+                                            }
+                                            else
+                                            {
+                                                ViewBag.Result = "The selected assistant is not available for the entered date range, has appointment and shift.";
+                                            }
                                         }
+                                        // randevusu yoksa da atama yapılabilir 
+                                        else if (appo == null && ((DateTime)ViewSt.ShiftStart > appo.AvailableProfR.AvailableProfDateEnd || (DateTime)ViewSt.ShiftEnd < appo.AvailableProfR.AvailableProfDateStart))
+                                        {
+                                            newShift.AssistantID = assisTemp.AssistantID;
+                                            newShift.ShiftStart = (DateTime)ViewSt.ShiftStart;
+                                            newShift.ShiftEnd = (DateTime)ViewSt.ShiftStart.AddHours(24);
+                                        }
+                                        // hiçbir şekilde atama yapılamadıysa doğru bir tarih girilmemiştir
                                         else
                                         {
-                                            ViewBag.DateError = "The selected assistant is not available for the entered date range, has appointment and shift.";
+                                            ViewBag.Result = "The selected assistant is not available for the entered date range, has shift.";
                                         }
-                                    }
-                                    // randevusu yoksa da atama yapılabilir 
-                                    else if (appo == null)
-                                    {
-                                        newShift.AssistantR = assisTemp;
-                                        newShift.ShiftStart = ViewSt.ShiftStart;
-                                        newShift.ShiftEnd = ViewSt.ShiftEnd;
-                                    }
-                                    // hiçbir şekilde atama yapılamadıysa doğru bir tarih girilmemiştir
-                                    else
-                                    {
-                                        ViewBag.DateError = "The selected assistant is not available for the entered date range, has shift.";
                                     }
                                 }
                             }
                         }
                     }
+                    
                 }
             }
+            else
+            {
+                if (appoLcond.Count > 0)
+                {
+                    // randevusu != null kontrolü çıkartılabilir sonradan bir KONTROL ET
+                    foreach (Appointment appo in appoLcond)
+                    {
+                        // ancak asistan randevusu olduğu durumlarda da kontroller gerekli
+                        if (appoLcond != null)
+                        {
+                            // nöbet ya asistanın randevusundan sonra başlamalı ya da randevunun başlangıcından önce bitmeli
+                            if ((DateTime)ViewSt.ShiftStart > appo.AvailableProfR.AvailableProfDateEnd || (DateTime)ViewSt.ShiftEnd < appo.AvailableProfR.AvailableProfDateStart)
+                            {
+                                newShift.AssistantR = assisTemp;
+                                newShift.ShiftStart = (DateTime)ViewSt.ShiftStart;
+                                newShift.ShiftEnd = (DateTime)ViewSt.ShiftStart.AddHours(24);
+                            }
+                            else
+                            {
+                                ViewBag.Result = "The selected assistant is not available for the entered date range, has appointment and shift.";
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    newShift.AssistantR = assisTemp;
+                    newShift.ShiftStart = (DateTime)ViewSt.ShiftStart;
+                    newShift.ShiftEnd = (DateTime)ViewSt.ShiftStart.AddHours(24);
+                }
+            }
+
         }
 
 
         private void AssignControl(Shift newShift, Shift ViewSt)
         {
+
             // bir departman için girilen zaman diliminde sadece bir nöbet ataması yapılmış olması gerekir
-            Department tempDepart = ViewSt.DepartmentR;
+            Department tempDepart = db.Departments.Where(dep => dep.DepartmentID == ViewSt.DepartmentID).ToList().FirstOrDefault();
             List<Shift> shiftLdep = tempDepart.ShiftList.ToList();
-            foreach (Shift shifTemp in shiftLdep)
+            if (shiftLdep.Count > 0)
             {
-                if (shiftLdep != null)
+                foreach (Shift shifTemp in shiftLdep)
                 {
                     // eklenecek nöbetin ya bitişi departmana ait nöbetlerin başlangıç zamanından önce olmalı ya da başlangıcı departmana ait nöbetlerin bitiş tarihinden sonra olmalı
-                    if (shifTemp.ShiftStart > ViewSt.ShiftEnd || shifTemp.ShiftEnd < ViewSt.ShiftStart)
+                    if (shifTemp.ShiftStart > (DateTime)ViewSt.ShiftStart.AddHours(24) || shifTemp.ShiftEnd < (DateTime)ViewSt.ShiftStart)
                     {
-                        newShift.DepartmentR = ViewSt.DepartmentR;
+                        newShift.DepartmentID = ViewSt.DepartmentID;
                         AssistantControl(newShift, ViewSt);
                     }
                     else
                     {
-                        ViewBag.ShiftDepError = "An shift is already scheduled for the department in the assigned time slot.";
+                        ViewBag.Result = "An shift is already scheduled for the department in the assigned time slot.";
                     }
                 }
+            }
+            else
+            {
+                newShift.DepartmentID = ViewSt.DepartmentID;
+                AssistantControl(newShift, ViewSt);
             }
         }
 
@@ -191,6 +221,37 @@ namespace Web_Prog_Odev.Controllers
 
 
 
+
+
+        public ActionResult ShiftPage(int? assistId)
+        {
+            if (assistId != null)
+            {
+                List<Shift> shifts = db.Shifts.Where(s => s.AssistantID == assistId).ToList();
+                return View(shifts);
+            }
+            else
+            {
+                List<Shift> shifts = db.Shifts.ToList();
+                return View(shifts);
+            }
+        }
+
+
+
+
+
+
+        public ActionResult AddData()
+        {
+            List<Assistant> assistants = db.Assistants.ToList();
+            ViewBag.Assistants = assistants;
+            List<Department> departments = db.Departments.ToList();
+            ViewBag.DepData = departments;
+
+            return View();
+        }
+
         // View'dan Contrellar'a veri göndermek için post metodu tanımlanır
         [HttpPost]
         // Nöbetleri tutacak tabloya view'dan girilen verilerin eklenmesini sağlayacak metod
@@ -198,36 +259,51 @@ namespace Web_Prog_Odev.Controllers
         {
             Shift newShift = new Shift();
         
-            AssignControl(newShift, ViewSt);
+            if(ViewSt.AssistantID != 0 &&  ViewSt.DepartmentID != 0)
+            {
+                AssignControl(newShift, ViewSt);
+
+                if (newShift.ShiftStart == null)
+                {
+                    return RedirectToAction("AddData");
+                }
+                else
+                {
+                    db.Shifts.Add(newShift);
+                    int result = db.SaveChanges();
+
+                    ControlViewBags(result, "scheduled");
+
+                    return RedirectToAction("ShiftPage");
+                }
+            }
+            else
+            {
+                ViewBag.Result = "Make sure that you enter all the values.";
+                return RedirectToAction("AddData");
+            }
             
-            db.Shifts.Add(newShift);
-            int result = db.SaveChanges();
-
-            ControlViewBags(result, "scheduled");
-
-            return View();
         }
 
 
+
+
+
+
         // Controller'dan View'a veriler gönderilir ki sayfada gösterilsin
-        [HttpGet]
-        public ActionResult GetDataToEdit(int? stID)
+        public ActionResult EditData(int? shiftId)
         {
-            Shift shifData = null;
-            shifData = db.Shifts.Where(x => x.ShiftID == stID).FirstOrDefault();
+            Shift shifData = db.Shifts.Where(x => x.ShiftID == shiftId).FirstOrDefault();
+            List<Assistant> assistants = db.Assistants.ToList();
+
+            ViewBag.Assistants = assistants;
+            List<Department> departments = db.Departments.ToList();
+            ViewBag.DepData = departments;
 
             if (shifData != null)
             {
                 // sayfada nöbet ile eşleşen asistanların bilgisinin de görülmesi isteniyor, ViewBag ile bunlar gönderilir
-                ViewBag.Shift_AssistID = shifData.AssistantR.AssistantID;
-                ViewBag.Shift_AssistName = shifData.AssistantR.AssistName;
-                ViewBag.Shift_AssistSur = shifData.AssistantR.AssistSurname;
-                ViewBag.Shift_AssistMail = shifData.AssistantR.AssistMail;
-
-                // sayfada tarih ve departman adı de görünmeli mantıken
-                ViewBag.Shift_DateStart = shifData.ShiftStart;
-                ViewBag.Shift_DateEnd = shifData.ShiftEnd;
-                ViewBag.Shift_DepName = shifData.DepartmentR.DepartmentName;
+                ViewBag.Assistants = assistants;
             }
             else
             {
@@ -239,34 +315,43 @@ namespace Web_Prog_Odev.Controllers
 
 
         [HttpPost]
-        public ActionResult Edit(Shift ViewSt)
+        public ActionResult Edit(Shift ViewSt, int? shiftId)
         {
-            // viewdan gelen ıd ile eşleşen shift için değişikliklerin yapılması sağlanacak
-            Shift newShift = db.Shifts.Where(x => x.ShiftID == ViewSt.ShiftID).FirstOrDefault();
+            if (ModelState.IsValid)
+            {
+                if (shiftId != null && ViewSt.AssistantID != 0 && ViewSt.DepartmentID != 0)
+                {
+                    // viewdan gelen ıd ile eşleşen shift için değişikliklerin yapılması sağlanacak
+                    Shift newShift = db.Shifts.Where(x => x.ShiftID == shiftId).FirstOrDefault();
 
-            AssignControl(newShift, ViewSt);
+                    AssignControl(newShift, ViewSt);
 
-            int result = db.SaveChanges();
+                    int result = db.SaveChanges();
 
-            ControlViewBags(result, "edited");
+                    ControlViewBags(result, "edited");
 
-            return RedirectToAction("Index");
+                    return RedirectToAction("ShiftPage");
+                }
+            }
+            return RedirectToAction("EditData", new { shiftId });
+
         }
 
 
-        [HttpPost]
-        public ActionResult Delete(int? stID)
+
+
+
+        public ActionResult Delete(int? shiftId)
         {
-            Shift shiftDel = db.Shifts.Where(x => x.ShiftID == stID).FirstOrDefault();
+            Shift shiftDel = db.Shifts.Where(x => x.ShiftID == shiftId).FirstOrDefault();
 
             db.Shifts.Remove(shiftDel);
-            ResetIdentity("Shift");
 
             int result = db.SaveChanges();
 
             ControlViewBags(result, "deleted");
 
-            return View();
+            return RedirectToAction("ShiftPage");
         }
     }
 }

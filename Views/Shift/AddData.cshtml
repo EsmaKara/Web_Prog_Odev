@@ -1,6 +1,6 @@
 ﻿
 @using Web_Prog_Odev.Models
-@model Web_Prog_Odev.Models.Available_Prof
+@model Web_Prog_Odev.Models.Shift
 
 @{
     Layout = "~/Views/Shared/_LayoutNavbarFooter.cshtml";
@@ -96,26 +96,33 @@
 <body>
     <div class="card-center">
         <div class="card">
-            @using (Html.BeginForm("Add", "AvailableProf", FormMethod.Post))
+            @using (Html.BeginForm("Add", "Shift", FormMethod.Post))
             {
                 @Html.AntiForgeryToken()
 
                 <div class="form-group">
-                    <span id="startTime">Start Time: </span>
-                    @Html.TextBoxFor(model => model.AvailableProfDateStart, new { @type = "date", @class = "form-control", aria_label = "startTime" })
+                    <span id="ShiftStart">Shift Start: </span>
+                    @Html.TextBoxFor(model => model.ShiftStart, new { @type = "date", @class = "form-control", aria_label = "ShiftStart" })
                 </div>
                 <div class="form-group">
-                    <span id="endTime">The Appointment time will be one and a half hours long.</span>
+                    <span id="ShiftEnd">The Shift length is 24 hours long and is adjusted automatically.</span>
                 </div>
 
-
-
-                // Hangi professor için ayarlanıyor, selectList
+                // Hangi department'tan olacak selectList
                 <div class="form-group">
-                    <span id="ProfessorID">Professor: </span>
-                    @Html.DropDownListFor(model => model.ProfessorID,
-                        new SelectList(ViewBag.Professors, "ProfessorID", "ProfName"),
-                        "Select Professor", // Varsayılan seçenek      /dropdown ilk yüklendiğinde seçili olur.
+                    <span id="DepartmentID">Department: </span>
+                    @Html.DropDownListFor(model => model.DepartmentID,
+                        new SelectList(ViewBag.DepData, "DepartmentID", "DepartmentName"),
+                        "Select Department", // Varsayılan seçenek      /dropdown ilk yüklendiğinde seçili olur.
+                        new { @class = "form-control" })
+                </div>
+
+                // Hangi assistant için tanımlanıyor, selectList
+                <div class="form-group">
+                    <span id="AssistantID">Assistant: </span>
+                    @Html.DropDownListFor(model => model.AssistantID,
+                        new SelectList(ViewBag.Assistants, "AssistantID", "AssistName"),
+                        "Select Assistant", // Varsayılan seçenek      /dropdown ilk yüklendiğinde seçili olur.
                         new { @class = "form-control" })
                 </div>
 
@@ -131,6 +138,7 @@
                 </div>
             }
         </div>
+
     </div>
 </body>
 </html>

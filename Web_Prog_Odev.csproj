@@ -212,6 +212,9 @@
     <Content Include="Views\Shift\SchedulePage.cshtml" />
     <Content Include="Scripts\moment.min.js.map" />
     <Content Include="Scripts\moment-with-locales.min.js.map" />
+    <Content Include="Views\Shift\ShiftPage.cshtml" />
+    <Content Include="Views\Shift\AddData.cshtml" />
+    <Content Include="Views\Shift\EditData.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -1,5 +1,5 @@
 ﻿@using Web_Prog_Odev.Models
-@model List<Web_Prog_Odev.Models.Professor>
+@model List<Web_Prog_Odev.Models.Shift>
 
 @{
     Layout = "~/Views/Shared/_LayoutNavbarFooter.cshtml";
@@ -12,7 +12,7 @@
     <title>Professor Page</title>
 
     <style>
-        @{ 
+        @{
             Html.RenderPartial("~/Views/Shared/PartialPages/CSS/CardsCSS.cshtml");
             Html.RenderPartial("~/Views/Shared/PartialPages/CSS/CRUDButtonsCSS.cshtml");
         }
@@ -30,31 +30,6 @@
                 font-size: 18px; /* Yazı boyutu */
                 cursor: pointer; /* İmleç tipi */
             }
-
-        .button-container {
-            display: flex;
-            justify-content: center; /* Yatayda ortalama */
-            align-items: center; /* Dikeyde ortalama (div'in yüksekliği ayarlanmışsa) */
-            width: 100%; /* Tam genişlik */
-            padding: 20px 0; /* Üst-alt boşluk */
-        }
-
-        .appointment-button {
-            background-color: #007bff; /* Butonun arka plan rengi */
-            color: #fff; /* Yazı rengi */
-            border: none; /* Çerçeveyi kaldır */
-            border-radius: 5px; /* Yuvarlatılmış köşeler */
-            padding: 10px 20px; /* İç boşluklar */
-            font-size: 18px; /* Yazı boyutu */
-            cursor: pointer; /* İmleç tipi */
-            transition: background-color 0.3s ease; /* Hover efekti için geçiş */
-            margin: 5px 0;
-        }
-
-            .appointment-button:hover {
-                background-color: #0056b3; /* Hover durumunda buton rengi */
-            }
-        
     </style>
 
 </head>
@@ -62,7 +37,7 @@
 
     <!-- Kart yapısı -->
     <div>
-        <h1 style="text-align: center; color: #333333;">Our Professors</h1>
+        <h1 style="text-align: center; color: #333333;">Shifts</h1>
 
         @{
             if (Session["IsAdmin"] == null || !(bool)Session["IsAdmin"])
@@ -74,7 +49,7 @@
                 // yeni bir veri eklemek için
                 <div class="add-data">
                     @{
-                        ViewBag.AddUrl = Url.Action("AddData", "Professor");
+                        ViewBag.AddUrl = Url.Action("AddData", "Shift");
 
                         Html.RenderPartial("~/Views/Shared/PartialPages/AddButton.cshtml");
                     }
@@ -89,26 +64,26 @@
                 // admin girişi yapılmadıysa sadece verileri görüntüler
                 if (Session["IsAdmin"] == null || !(bool)Session["IsAdmin"])
                 {
-                    foreach (Professor professor in Model.ToList())
+                    foreach (Shift shift in Model.ToList())
                     {
                         <div class="card">
 
-                            <h3 style="display:inline; text-align:center;">@professor.ProfName @professor.ProfSurname</h3>
+                            <h3 style="display:inline; text-align:center;">@shift.AssistantR.AssistName @shift.AssistantR.AssistSurname</h3>
 
                             <div class="information">
-                                <b>Contact Number: </b><span>@professor.ProfTel</span>
+                                <b>Shift Start: </b><span>@shift.ShiftStart</span>
                             </div>
                             <div class="information">
-                                <b>Mail Address: </b><span>@professor.ProfMail</span>
+                                <b>Shift End: </b><span>@shift.ShiftEnd</span>
                             </div>
                             <div class="information">
-                                <b>Department: </b><span>@professor.DepartmentR.DepartmentName</span>
+                                <b>Assistant Contact Number: </b><span>@shift.AssistantR.AssistTel</span>
                             </div>
-
-                            <div class="button-container">
-                                <button class="appointment-button" onclick="location.href='@Url.Action("AppointmentPage", "Appointment", new { profId = professor.ProfessorID })'">
-                                    Randevu Al
-                                </button>
+                            <div class="information">
+                                <b>Assistant Mail: </b><span>@shift.AssistantR.AssistMail</span>
+                            </div>
+                            <div class="information">
+                                <b>Department: </b><span>@shift.DepartmentR.DepartmentName</span>
                             </div>
 
                         </div>
@@ -120,25 +95,31 @@
                 {
 
                     // Düzenlemek için ilgili card yapısı
-                    foreach (Professor professor in Model.ToList())
+                    foreach (Shift shift in Model.ToList())
                     {
                         <div class="card">
-                            <h3 style="display:inline; text-align:center;">@professor.ProfName @professor.ProfSurname</h3>
 
+                            <h3 style="display:inline; text-align:center;">@shift.AssistantR.AssistName @shift.AssistantR.AssistSurname</h3>
                             <div class="information">
-                                <b>Contact Number: </b><span>@professor.ProfTel</span>
+                                <b>Shift Start: </b><span>@shift.ShiftStart</span>
                             </div>
                             <div class="information">
-                                <b>Mail Address: </b><span>@professor.ProfMail</span>
+                                <b>Shift End: </b><span>@shift.ShiftEnd</span>
                             </div>
                             <div class="information">
-                                <b>Department: </b><span>@professor.DepartmentR.DepartmentName</span>
+                                <b>Assistant Contact Number: </b><span>@shift.AssistantR.AssistTel</span>
+                            </div>
+                            <div class="information">
+                                <b>Assistant Mail: </b><span>@shift.AssistantR.AssistMail</span>
+                            </div>
+                            <div class="information">
+                                <b>Department: </b><span>@shift.DepartmentR.DepartmentName</span>
                             </div>
 
                             @{
                                 // ViewBag ile admin CRUD işlemleri butonları URL'leri tanımlanıyor
-                                ViewBag.EditUrl = Url.Action("EditData", "Professor", new { profId = professor.ProfessorID });
-                                ViewBag.DeleteUrl = Url.Action("Delete", "Professor", new { profId = professor.ProfessorID });
+                                ViewBag.EditUrl = Url.Action("EditData", "Shift", new { shiftId = shift.ShiftID });
+                                ViewBag.DeleteUrl = Url.Action("Delete", "Shift", new { shiftId = shift.ShiftID });
 
                                 Html.RenderPartial("~/Views/Shared/PartialPages/CRUDButtons.cshtml");
                             }

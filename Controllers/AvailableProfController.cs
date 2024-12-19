@@ -50,10 +50,10 @@ namespace Web_Prog_Odev.Controllers
             Available_Prof newAP = new Available_Prof();
 
             // bugünün tarihinden daha eski veya 15 gün sonrasından daha ileri bir tarih atanamaz, eğer şartlar sağlanırsa atama gerçekleşir
-            if (ViewAvaiProf.AvailableProfDateStart >= DateTime.Now && ViewAvaiProf.AvailableProfDateStart <= DateTime.Now.AddHours(360))
+            if ((DateTime)ViewAvaiProf.AvailableProfDateStart >= DateTime.Now && (DateTime)ViewAvaiProf.AvailableProfDateStart <= DateTime.Now.AddHours(360))
             {
-                newAP.AvailableProfDateStart = ViewAvaiProf.AvailableProfDateStart;
-                newAP.AvailableProfDateEnd = ViewAvaiProf.AvailableProfDateStart.AddMinutes(90);
+                newAP.AvailableProfDateStart = (DateTime) ViewAvaiProf.AvailableProfDateStart;
+                newAP.AvailableProfDateEnd = (DateTime) ViewAvaiProf.AvailableProfDateStart.AddMinutes(90);
                 newAP.IsAvailable = true;
                 // ıd ile eşleşen profesör atanır
                 newAP.ProfessorID = ViewAvaiProf.ProfessorID;

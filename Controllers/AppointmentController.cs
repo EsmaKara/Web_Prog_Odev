@@ -55,6 +55,9 @@ namespace Web_Prog_Odev.Controllers
             {
                 Professor professor = db.Professors.Where(prof => prof.ProfessorID == profId).ToList().FirstOrDefault();
                 List<Available_Prof> avaiProfList = professor.AvailableProfList;
+
+                List<Available_Prof> falseAvaiList = avaiProfList.Where(x => x.IsAvailable == false).ToList();
+                ViewBag.falseAvaiList = falseAvaiList;
                 return View(avaiProfList);
             }
         }
