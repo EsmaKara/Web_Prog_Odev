@@ -20,17 +20,16 @@ namespace Web_Prog_Odev.Controllers
         // Gerekli Fonksiyon Tanımlamaları;
         private void ControlViewBags(int result, string state)
         {
+            // İşlemin gerçekleştiği durumda döndürülen değer sıfırdan farklı olur
             if (result != 0)
             {
-                ViewBag.Result = "The shift has been " + state + ".";
-                ViewBag.Success = true;
-                ViewBag.Status = "Success :)";
+                TempData["Result"] = "The Professor has been " + state + ".";
+                TempData["Status"] = "Success :)";
             }
             else
             {
-                ViewBag.Result = "The shift could not be " + state + ".";
-                ViewBag.Success = false;
-                ViewBag.Status = "Fail !";
+                TempData["Result"] = "The Professor could not be " + state + ".";
+                TempData["Status"] = "Fail !";
             }
         }
 
@@ -75,7 +74,7 @@ namespace Web_Prog_Odev.Controllers
                                             }
                                             else
                                             {
-                                                ViewBag.Result = "The selected assistant is not available for the entered date range, has appointment and shift.";
+                                                TempData["Result"] = "The selected assistant is not available for the entered date range, has appointment and shift.";
                                             }
                                         }
                                         // randevusu yoksa da atama yapılabilir 
@@ -88,7 +87,7 @@ namespace Web_Prog_Odev.Controllers
                                         // hiçbir şekilde atama yapılamadıysa doğru bir tarih girilmemiştir
                                         else
                                         {
-                                            ViewBag.Result = "The selected assistant is not available for the entered date range, has shift.";
+                                            TempData["Result"] = "The selected assistant is not available for the entered date range, has shift.";
                                         }
                                     }
                                 }
@@ -117,7 +116,7 @@ namespace Web_Prog_Odev.Controllers
                             }
                             else
                             {
-                                ViewBag.Result = "The selected assistant is not available for the entered date range, has appointment and shift.";
+                                TempData["Result"] = "The selected assistant is not available for the entered date range, has appointment and shift.";
                             }
                         }
                     }
@@ -151,7 +150,7 @@ namespace Web_Prog_Odev.Controllers
                     }
                     else
                     {
-                        ViewBag.Result = "An shift is already scheduled for the department in the assigned time slot.";
+                        TempData["Result"] = "An shift is already scheduled for the department in the assigned time slot.";
                     }
                 }
             }
@@ -282,7 +281,7 @@ namespace Web_Prog_Odev.Controllers
             }
             else
             {
-                ViewBag.Result = "Make sure that you enter all the values.";
+                TempData["Result"] = "Make sure that you enter all the values.";
                 return RedirectToAction("AddData");
             }
             
@@ -310,7 +309,7 @@ namespace Web_Prog_Odev.Controllers
             }
             else
             {
-                ViewBag.Appo_Error = "No shift found.";
+                TempData["Result"] = "No shift found.";
             }
 
             return View(shifData);
@@ -334,6 +333,11 @@ namespace Web_Prog_Odev.Controllers
                     ControlViewBags(result, "edited");
 
                     return RedirectToAction("ShiftPage");
+                }
+                else
+                {
+                    TempData["Result"] = "Make sure that the values you entered are Valid.";
+                    return RedirectToAction("EditData", new { shiftId });
                 }
             }
             return RedirectToAction("EditData", new { shiftId });

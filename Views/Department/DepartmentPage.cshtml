@@ -111,7 +111,7 @@
                                 <b>Empty Bed: </b><span>@department.Dep_NumberOfEmptyBed</span>
                             </div>
                             <div class="button-container">
-                                <button onclick="location.href='@Url.Action("ProfessorPage", "Professor", new { id = department.DepartmentID })'">
+                                <button onclick="location.href='@Url.Action("ProfessorPage", "Professor", new { depId = department.DepartmentID })'">
                                     Professors
                                 </button>
                             </div>

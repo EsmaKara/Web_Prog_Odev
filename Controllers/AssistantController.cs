@@ -17,17 +17,16 @@ namespace Web_Prog_Odev.Controllers
         // Gerekli Fonksiyon Tanımlamaları;
         private void ControlViewBags(int result, string state)
         {
+            // İşlemin gerçekleştiği durumda döndürülen değer sıfırdan farklı olur
             if (result != 0)
             {
-                ViewBag.Result = "The Assistant has been " + state + ".";
-                ViewBag.Success = true;
-                ViewBag.Status = "Success :)";
+                TempData["Result"] = "The Professor has been " + state + ".";
+                TempData["Status"] = "Success :)";
             }
             else
             {
-                ViewBag.Result = "The Assistant could not be " + state + ".";
-                ViewBag.Success = false;
-                ViewBag.Status = "Fail !";
+                TempData["Result"] = "The Professor could not be " + state + ".";
+                TempData["Status"] = "Fail !";
             }
         }
 
@@ -111,7 +110,7 @@ namespace Web_Prog_Odev.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit(Assistant ViewAssistant, int? assistId)
         {
-            if (ModelState.IsValid)
+            if (ModelState.IsValid && IsValidEmail(ViewAssistant.AssistMail) && ViewAssistant.AssistTel.Length == 12)
             {
                 if (assistId != null)
                 {
@@ -126,8 +125,13 @@ namespace Web_Prog_Odev.Controllers
                     return RedirectToAction("AssistantPage");
 
                 }
+                else
+                {
+                    TempData["Result"] = "Make sure that the values you entered are Valid.";
+                    return RedirectToAction("EditData", new { assistId });
+                }
             }
-            return RedirectToAction("EditData");
+            return RedirectToAction("EditData", new { assistId });
         }
 
 

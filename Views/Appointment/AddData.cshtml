@@ -120,9 +120,9 @@
                     <button type="submit">Submit</button>
 
                     <div class="form-group">
-                        @if (ViewBag.Result != null)
+                        @if (TempData["Result"] != null)
                         {
-                            <div class="alert alert-@ViewBag.Status m-5" role="alert">@ViewBag.Result</div>
+                            <div class="alert alert-@TempData["Status"] m-5" role="alert">@TempData["Result"]</div>
                         }
                     </div>
                 </div>

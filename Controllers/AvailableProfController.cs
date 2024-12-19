@@ -14,19 +14,18 @@ namespace Web_Prog_Odev.Controllers
         private DatabaseContext db = new DatabaseContext();
 
         // Gerekli Fonksiyon Tanımlamaları;
-        private void ControlViewBags (int result, string state)
+        private void ControlViewBags(int result, string state)
         {
+            // İşlemin gerçekleştiği durumda döndürülen değer sıfırdan farklı olur
             if (result != 0)
             {
-                ViewBag.Result = "The available time slot for professors has been " + state + ".";
-                ViewBag.Success = true;
-                ViewBag.Status = "Success :)";
+                TempData["Result"] = "The Professor has been " + state + ".";
+                TempData["Status"] = "Success :)";
             }
             else
             {
-                ViewBag.Result = "The available time slot for professors could not be " + state + ".";
-                ViewBag.Success = false;
-                ViewBag.Status = "Fail !";
+                TempData["Result"] = "The Professor could not be " + state + ".";
+                TempData["Status"] = "Fail !";
             }
         }
 
@@ -67,7 +66,7 @@ namespace Web_Prog_Odev.Controllers
             }
             else
             {
-                ViewBag.Avai_DateError = "An incorrect date/time entry has been detected.";
+                TempData["Result"] = "An incorrect date/time entry has been detected.";
                 return RedirectToAction("AddData");
             }
         }
@@ -94,8 +93,8 @@ namespace Web_Prog_Odev.Controllers
             }
             else
             {
-                ViewBag.Result = "No professor is available.";
-                return RedirectToAction("EditData");
+                TempData["Result"] = "No professor is available.";
+                return RedirectToAction("EditData", new { avaiId });
             }
         }
 
@@ -119,9 +118,14 @@ namespace Web_Prog_Odev.Controllers
 
                     ControlViewBags(result, "edited");
                     return RedirectToAction("AppointmentPage", "Appointment");
-                }             
+                }
+                else
+                {
+                    TempData["Result"] = "Make sure that the values you entered are Valid.";
+                    return RedirectToAction("EditData", new { avaiId });
+                }
             }
-            return RedirectToAction("EditData", new { avaiId = ViewAp.AvailableProfID });
+            return RedirectToAction("EditData", new { avaiId });
 
         }
 

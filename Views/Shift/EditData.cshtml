@@ -15,6 +15,10 @@
 
     <style>
 
+        .card-center {
+            display: flex;
+            justify-content: center;
+        }
         .card {
             background-color: #ffffff; /* Beyaz kart arka planı */
             border: 2px solid #ffd633; /* Tema rengine uygun kenarlık */
@@ -30,7 +34,8 @@
             }
 
                 .card .form-group input[type="text"],
-                .card .form-group textarea {
+                .card .form-group textarea,
+                .form-control {
                     width: 100%;
                     padding: 10px;
                     border: 1px solid #ffd633;
@@ -132,9 +137,9 @@
                 <button type="submit">Submit</button>
 
                 <div class="form-group">
-                    @if (ViewBag.Result != null)
+                    @if (TempData["Result"] != null)
                     {
-                        <div class="alert alert-@ViewBag.Status m-5" role="alert">@ViewBag.Result</div>
+                        <div class="alert alert-@TempData["Status"] m-5" role="alert">@TempData["Result"]</div>
                     }
                 </div>
             }
