@@ -17,6 +17,46 @@
     <style>
         @{ Html.RenderPartial("~/Views/Shared/PartialPages/CSS/CardsCSS.cshtml");
             Html.RenderPartial("~/Views/Shared/PartialPages/CSS/CRUDButtonsCSS.cshtml"); }
+
+        button {
+            background-color: #ffd633;
+            color: #333333;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 5px 0;
+        }
+
+            button:hover {
+                background-color: #ffcc00;
+                box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+            }
+
+            button:disabled {
+                background-color: #dddddd;
+                color: #aaaaaa;
+                cursor: not-allowed;
+            }
+
+        .button-container {
+            display: flex;
+            justify-content: center; /* Yatayda ortalama */
+            align-items: center; /* Dikeyde ortalama (div'in yüksekliği ayarlanmışsa) */
+            width: 100%; /* Tam genişlik */
+            padding: 20px 0; /* Üst-alt boşluk */
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: center; /* Yatayda ortalama */
+            align-items: center; /* Dikeyde ortalama (div'in yüksekliği ayarlanmışsa) */
+            width: 100%; /* Tam genişlik */
+            padding: 20px 0; /* Üst-alt boşluk */
+        }
     </style>
 
 </head>
@@ -49,10 +89,11 @@
                             <div class="information">
                                 <b>Empty Bed: </b><span>@department.Dep_NumberOfEmptyBed</span>
                             </div>
-
-                            <button onclick="location.href='@Url.Action("ProfessorPage", "Professor", new { id = department.DepartmentID })'">
-                                Professors
-                            </button>
+                            <div class="button-container">
+                                <button onclick="location.href='@Url.Action("ProfessorPage", "Professor", new { id = department.DepartmentID })'">
+                                    Professors
+                                </button>
+                            </div>
                         </div>
                     }
                 }

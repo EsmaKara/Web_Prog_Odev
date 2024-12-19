@@ -17,18 +17,28 @@
             Html.RenderPartial("~/Views/Shared/PartialPages/CSS/CRUDButtonsCSS.cshtml");
         }
 
-
-        .add-data{
-            display:block;
+        button {
+            background-color: #ffd633;
+            color: #333333;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 5px 0;
         }
-            .add-data btn {
-                background-color: #007bff;
-                color: #fff; /* Yazı rengi */
-                border: none; /* Çerçeveyi kaldır */
-                border-radius: 5px; /* Yuvarlatılmış köşeler */
-                padding: 10px 20px; /* İç boşluklar */
-                font-size: 18px; /* Yazı boyutu */
-                cursor: pointer; /* İmleç tipi */
+
+            button:hover {
+                background-color: #ffcc00;
+                box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+            }
+
+            button:disabled {
+                background-color: #dddddd;
+                color: #aaaaaa;
+                cursor: not-allowed;
             }
 
         .button-container {

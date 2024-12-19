@@ -18,13 +18,29 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
 
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+        }
+
         .banner {
-            background-image: url('https://via.placeholder.com/1920x600');
+            /* Resorucec for the image url('https://tr.pinterest.com/pin/1019713540627114886/');*/
+            background-image: url('/Content/background_img.jpg');
             background-size: cover;
             background-position: center;
+            background-repeat: no-repeat;
             color: white;
+            height: 300px;
+            /* Add the blur effect */
+            /*filter: blur(1px);
+            -webkit-filter: blur(1px);*/
+
+            border: 5px solid #332900;
+            border-radius: 15px;
             text-align: center;
             padding: 100px 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
         .quick-access {
@@ -95,8 +111,10 @@
 
     <!-- Banner Alanı -->
     <div class="banner">
-        <h1>Pediatrics Assistant-Shift Management System</h1>
-        <p>Easily find information about departments, appointments and shift times.</p>
+        <div class="banner-text">
+            <h1>Pediatrics Assistant-Shift Management System</h1>
+            <p>Easily find information about departments, appointments and shift times.</p>
+        </div>
     </div>
 
     <!-- Hızlı Erişim Alanı -->
@@ -138,44 +156,46 @@
     <div>
         <h1 style="text-align: center">Emergency Calls</h1>
         <div class="emergency-flex">
-            <div class="emergency">
-                @{
-                    List<Emergency> emergencies = Model.ToList();
-                    foreach (Emergency emg in emergencies)
-                    {
-                                <div class="emergency-info">
-                                    <h2>@emg.EmergencyName</h2>
-                                    <p>@emg.EmergencyDescription</p>
-                                    <div class="information">
-                                        <h4>@emg.DepartmentR.DepartmentName</h4>
-                                    </div>
-                                    <div class="information">
-                                        <b>Entered Time: </b><span>@emg.EmergencyDate</span>
-                                    </div>
-                                    @{
-                                        Shift shift = emg.DepartmentR.ShiftList.Where(s => s.ShiftStart <= emg.EmergencyDate && s.ShiftEnd >= emg.EmergencyDate).FirstOrDefault();
-                                        if (shift != null)
-                                        {
-                                            <div class="information">
-                                                <b>Details of the on-shift Assistant: </b>
+
+            @{
+                List<Emergency> emergencies = Model.ToList();
+                foreach (Emergency emg in emergencies)
+                {
+                        <div class="emergency">
+                            <div class="emergency-info">
+                                <h2 style="text-align: center">@emg.EmergencyName</h2>
+                                <p>@emg.EmergencyDescription</p>
+                                <div class="information">
+                                    <h4>@emg.DepartmentR.DepartmentName</h4>
+                                </div>
+                                <div class="information">
+                                    <b>Entered Time: </b><span>@emg.EmergencyDate</span>
+                                </div>
+                                @{
+                                    Shift shift = emg.DepartmentR.ShiftList.Where(s => s.ShiftStart <= emg.EmergencyDate && s.ShiftEnd >= emg.EmergencyDate).FirstOrDefault();
+                                    if (shift != null)
+                                    {
+                                        <div class="information">
+                                            <b>Details of the on-shift Assistant: </b>
+                                            <div>
+                                                @shift.AssistantR.AssistName
+                                                @shift.AssistantR.AssistSurname
                                                 <div>
-                                                    @shift.AssistantR.AssistName
-                                                    @shift.AssistantR.AssistSurname
-                                                    <div>
-                                                        <span>Contact: </span>
-                                                        @shift.AssistantR.AssistTel ;
-                                                        @shift.AssistantR.AssistMail
-                                                    </div>
+                                                    <span>Contact: </span>
+                                                    @shift.AssistantR.AssistTel ;
+                                                    @shift.AssistantR.AssistMail
                                                 </div>
                                             </div>
-                                        }
+                                        </div>
                                     }
+                                }
 
-                                </div>
-                    }
+                            </div>
+                        </div>
                 }
-            </div>
+        }
         </div>
+                
     </div>
 
     <!-- Bootstrap JS -->
